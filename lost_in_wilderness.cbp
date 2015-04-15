@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="gaiacraft" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Option virtualFolders="Renderer\;Renderer\Resources\;Utils\;World\Blocks\;Client\;World\Items\;World\Biomes\;World\;World\Generators\;" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/gaiacraft-dbg" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-Wall" />
+					<Add option="-pg" />
+					<Add option="-g" />
+					<Add option="-ffast-math" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_LINUX" />
+				</Compiler>
+				<Linker>
+					<Add option="-pg" />
+					<Add option="-lm" />
+					<Add option="-lGL" />
+					<Add option="-lglfw3" />
+					<Add option="-lGLEW" />
+					<Add option="-lX11" />
+					<Add option="-lXxf86vm" />
+					<Add option="-lXrandr" />
+					<Add option="-lpthread" />
+					<Add option="-lXi" />
+					<Add option="-lpng" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/gaiacraft" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-std=c++11" />
+					<Add option="-ffast-math" />
+					<Add option="-O6" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_LINUX" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lm" />
+					<Add option="-lGL" />
+					<Add option="-lglfw3" />
+					<Add option="-lGLEW" />
+					<Add option="-lX11" />
+					<Add option="-lXxf86vm" />
+					<Add option="-lXrandr" />
+					<Add option="-lpthread" />
+					<Add option="-lXi" />
+					<Add option="-lpng" />
+				</Linker>
+			</Target>
+			<Target title="Debug-Win32">
+				<Option output="bin/glescraft-dbg" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="-ffast-math" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-DGLEW_STATIC" />
+				</Compiler>
+				<Linker>
+					<Add option="-pg" />
+					<Add option="-lm" />
+					<Add option="-lglew32s" />
+					<Add option="-lglfw3" />
+					<Add option="-lopengl32" />
+					<Add option="-lgdi32" />
+					<Add option="-luser32" />
+					<Add option="-lkernel32" />
+					<Add option="-lpng" />
+				</Linker>
+			</Target>
+			<Target title="Release-Win32">
+				<Option output="bin/gaiacraft" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-ffast-math" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-DGLEW_STATIC" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lm" />
+					<Add option="-lglew32s" />
+					<Add option="-lglfw3" />
+					<Add option="-lopengl32" />
+					<Add option="-lgdi32" />
+					<Add option="-luser32" />
+					<Add option="-lkernel32" />
+					<Add option="-lpng" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-DGLM_FORCE_RADIANS" />
+		</Compiler>
+		<Unit filename="Biome.h">
+			<Option virtualFolder="World/Biomes/" />
+		</Unit>
+		<Unit filename="BiomeDesert.cpp">
+			<Option virtualFolder="World/Biomes/" />
+		</Unit>
+		<Unit filename="BiomeDesert.h">
+			<Option virtualFolder="World/Biomes/" />
+		</Unit>
+		<Unit filename="BiomeForest.cpp">
+			<Option virtualFolder="World/Biomes/" />
+		</Unit>
+		<Unit filename="BiomeForest.h">
+			<Option virtualFolder="World/Biomes/" />
+		</Unit>
+		<Unit filename="BiomeWoods.cpp">
+			<Option virtualFolder="World/Biomes/" />
+		</Unit>
+		<Unit filename="BiomeWoods.h">
+			<Option virtualFolder="World/Biomes/" />
+		</Unit>
+		<Unit filename="Block.h">
+			<Option virtualFolder="World/Blocks/" />
+		</Unit>
+		<Unit filename="BlockDirt.h">
+			<Option virtualFolder="World/Blocks/" />
+		</Unit>
+		<Unit filename="BlockInfo.h">
+			<Option virtualFolder="World/Blocks/" />
+		</Unit>
+		<Unit filename="BlockSaltWater.h">
+			<Option virtualFolder="World/Blocks/" />
+		</Unit>
+		<Unit filename="Buffer.cpp">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="Buffer.h">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="Chunk.cpp">
+			<Option virtualFolder="World/" />
+		</Unit>
+		<Unit filename="Chunk.h">
+			<Option virtualFolder="World/" />
+		</Unit>
+		<Unit filename="Config.cpp">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="Config.h">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="Exceptions.h">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="GaiaCraft.cpp">
+			<Option virtualFolder="Client/" />
+		</Unit>
+		<Unit filename="GaiaCraft.h">
+			<Option virtualFolder="Client/" />
+		</Unit>
+		<Unit filename="Item.h">
+			<Option virtualFolder="World/Items/" />
+		</Unit>
+		<Unit filename="ItemInfo.h">
+			<Option virtualFolder="World/Items/" />
+		</Unit>
+		<Unit filename="Noise.cpp">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="Noise.h">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="Renderer.cpp">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="Renderer.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="ResourceManager.cpp" />
+		<Unit filename="ResourceManager.h" />
+		<Unit filename="Shader.cpp">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="Shader.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="TextFont.cpp">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="TextFont.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="Texture.cpp">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="Texture.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="Vertex.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="VertexBuffer.cpp">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="VertexBuffer.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="World.cpp">
+			<Option virtualFolder="World/" />
+		</Unit>
+		<Unit filename="World.h">
+			<Option virtualFolder="World/" />
+		</Unit>
+		<Unit filename="WorldGenerator.cpp">
+			<Option virtualFolder="World/Generators/" />
+		</Unit>
+		<Unit filename="WorldGenerator.h">
+			<Option virtualFolder="World/Generators/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/glescraft.fs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/glescraft.vs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="vectors.h">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<lib_finder disable_auto="1" />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
