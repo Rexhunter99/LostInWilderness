@@ -1,6 +1,8 @@
 
 #include "Buffer.h"
 
+#include <exception>
+
 
 
 Buffer::Buffer()
@@ -22,11 +24,16 @@ Buffer::Buffer( const void *copy_data, size_t byte_length )
 
 Buffer::~Buffer()
 {
-	this->clear();
+    this->clear();
 }
 
 unsigned char Buffer::operator [] ( unsigned index ) const
 {
+    if ( index >= this->buffer.size() )
+    {
+        throw custom_exception( "Buffer overflow." );
+    }
+
     return this->buffer[ index ];
 }
 
