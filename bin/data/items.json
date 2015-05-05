@@ -1,0 +1,18 @@
+{
+  "dirt": { "name": "dirt", "maxstacksize": 64, "type": "block" },
+  "sand": { "name": "sand", "maxstacksize": 64, "type": "block" },
+  "log_oak": { "name": "log_oak", "maxstacksize": 32, "type": "block" },
+  "stone": { "name": "stone", "maxstacksize": 64, "type": "block" },
+  "ore_coal": { "name": "ore_coal", "maxstacksize": 64, "type": "block" },
+  "ore_copper": { "name": "ore_copper", "maxstacksize": 64, "type": "block" },
+
+  "stick": { "name": "stick", "maxstacksize": 64, "type": "item" },
+  "leaves": { "name": "leaves", "maxstacksize": 64, "type": "item" },
+  "raw_pork": { "name": "raw_pork", "maxstacksize": 24, "type": "food" },
+  "raw_duck": { "name": "raw_duck", "maxstacksize": 24, "type": "food" },
+  "hide": { "name": "hide", "maxstacksize": 32, "type": "item" },
+  "feather": { "name": "feather", "maxstacksize": 64, "type": "item" },
+  "seeds": { "name": "seeds", "maxstacksize": 64, "type": "item" },
+
+  "crude_oak_plank": { "name": "crude_oak_plank", "maxstacksize": 24, "type": "item" }
+}

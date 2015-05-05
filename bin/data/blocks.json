@@ -1,0 +1,11 @@
+{
+  "dirt": { "name": "dirt", "hardness": 2 },
+  "sand": { "name": "sand", "hardness": 2, "gravity": true },
+  "oak_log": { "name": "oak_log", "hardness": 4 },
+  "oak_leaves": { "name": "oak_leaves", "hardness": 1, "flags": [ "OPACITY" ] },
+  "stone": { "name": "stone", "hardness": 8 },
+  "ore_coal": { "name": "ore_coal", "hardness": 8 },
+  "ore_copper": { "name": "ore_copper", "hardness": 12 },
+  "salt_water": { "name": "salt_water", "hardness": 0, "flags": [ "TRANSLUCENT", "FLOWING" ], }
+  "fresh_water": { "name": "fresh_water", "hardness": 0, "flags": [ "TRANSLUCENT", "FLOWING" ], }
+}

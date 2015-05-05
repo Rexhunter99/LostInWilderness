@@ -1,2 +1,8 @@
-bin/
+bin/LostInWilderness.exe
+bin/LostInWilderness-dbg.exe
+bin/LostInWilderness
+bin/LostInWilderness-dbg
+bin/LostInWilderness.x64
+bin/LostInWilderness-dbg.x64
+bin/world/*
 obj/

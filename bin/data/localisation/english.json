@@ -1,0 +1,11 @@
+{
+  "items.stick": "Stick",
+  "items.stick.desc": "A long, thin length of wood",
+  "items.dirt": "Dirt",
+  "items.dirt.desc": "A clump of dirt",
+  "items.crude_oak_plank": "Crude Oak Plank",
+  "items.crude_oak_plank.desc": "A crudely cut plank of Oak",
+  "achievements.first_steps": "One small step...",
+  "achievements.make_fire": "Fie fie!",
+  "achievements.dummy": "Dummy"
+}

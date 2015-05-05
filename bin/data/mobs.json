@@ -1,0 +1,14 @@
+{
+  "boar": {
+    "name": "boar",
+    "health": 6,
+    "hostile": false,
+    "drops": [ "raw_pork", [0,2], "hide", [0,1] ]
+  },
+  "duck": {
+    "name": "duck",
+    "health": 4,
+    "hostile": false,
+    "drops": [ "raw_duck", [1,0], "feather", [0,3] ]
+  }
+}

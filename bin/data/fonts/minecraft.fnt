@@ -1,0 +1,112 @@
+// Properties
+name	Minecraft
+scale	1.0
+spacing	1
+width	5
+height	8
+
+// Character Glyphs
+//		c	l	t	r	b	w	h
+//char	 	0	0	0	0	5	8
+char	!	8	16	13	24	5	8
+char	"	16	16	21	24	5	8
+char	#	24	16	29	24	5	8
+char	$	32	16	37	24	5	8
+char	%	40	16	45	24	5	8
+char	&	48	16	53	24	5	8
+char	'	56	16	61	24	5	8
+char	(	64	16	69	24	5	8
+char	)	72	16	77	24	5	8
+char	*	80	16	85	24	5	8
+char	+	88	16	93	24	5	8
+char	,	96	16	101	24	5	8
+char	-	104	16	109	24	5	8
+char	.	112	16	117	24	5	8
+char	/	120	16	125	24	5	8
+
+char	0	0	24	5	32	5	8
+char	1	8	24	13	32	5	8
+char	2	16	24	21	32	5	8
+char	3	24	24	29	32	5	8
+char	4	32	24	37	32	5	8
+char	5	40	24	45	32	5	8
+char	6	48	24	53	32	5	8
+char	7	56	24	61	32	5	8
+char	8	64	24	69	32	5	8
+char	9	72	24	77	32	5	8
+
+char	:	80	24	82	32	2	8
+char	;	88	24	90	32	2	8
+char	<	96	24	101	32	5	8
+char	=	104	24	109	32	5	8
+char	>	112	24	117	32	5	8
+char	?	120	24	125	32	5	8
+
+char	@	0	32	6	40	6	8
+char	A	8	32	13	40	5	8
+char	B	16	32	21	40	5	8
+char	C	24	32	29	40	5	8
+char	D	32	32	37	40	5	8
+char	E	40	32	45	40	5	8
+char	F	48	32	53	40	5	8
+char	G	56	32	61	40	5	8
+char	H	64	32	69	40	5	8
+char	I	72	32	77	40	5	8
+char	J	80	32	85	40	5	8
+char	K	88	32	93	40	5	8
+char	L	96	32	101	40	5	8
+char	M	104	32	109	40	5	8
+char	N	112	32	117	40	5	8
+char	O	120	32	125	40	5	8
+
+char	P	0	40	5	48	5	8
+char	Q	8	40	13	48	5	8
+char	R	16	40	21	48	5	8
+char	S	24	40	29	48	5	8
+char	T	32	40	37	48	5	8
+char	U	40	40	45	48	5	8
+char	V	48	40	53	48	5	8
+char	W	56	40	61	48	5	8
+char	X	64	40	69	48	5	8
+char	Y	72	40	77	48	5	8
+char	Z	80	40	85	48	5	8
+char	[	88	40	93	48	5	8
+char	\	96	40	101	48	5	8
+char	]	104	40	109	48	5	8
+char	^	112	40	117	48	5	8
+char	_	120	40	125	48	5	8
+
+char	`	0	48	5	56	5	8
+char	a	8	48	13	56	5	8
+char	b	16	48	21	56	5	8
+char	c	24	48	29	56	5	8
+char	d	32	48	37	56	5	8
+char	e	40	48	45	56	5	8
+char	f	48	48	53	56	5	8
+char	g	56	48	61	56	5	8
+char	h	64	48	69	56	5	8
+char	i	72	48	74	56	2	8
+char	j	80	48	85	56	5	8
+char	k	88	48	93	56	5	8
+char	l	96	48	101	56	5	8
+char	m	104	48	109	56	5	8
+char	n	112	48	117	56	5	8
+char	o	120	48	125	56	5	8
+
+char	p	0	56	5	64	5	8
+char	q	8	56	13	64	5	8
+char	r	16	56	21	64	5	8
+char	s	24	56	29	64	5	8
+char	t	32	56	37	64	5	8
+char	u	40	56	45	64	5	8
+char	v	48	56	53	64	5	8
+char	w	56	56	61	64	5	8
+char	x	64	56	69	64	5	8
+char	y	72	56	77	64	5	8
+char	z	80	56	85	64	5	8
+
+char	{	88	56	93	64	5	8
+char	|	96	56	98	64	2	8
+char	}	104	56	109	64	5	8
+char	~	112	56	117	64	5	8
+
