@@ -2,10 +2,10 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="gaiacraft" />
+		<Option title="Lost In Wilderness" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="Renderer\;Renderer\Resources\;Utils\;World\Blocks\;Client\;World\Items\;World\Biomes\;World\;World\Generators\;" />
+		<Option virtualFolders="Game\;Game\;Game\Blocks\;Game\;Game\Items\;Game\;Game\;Game\;Game\;Game\;Game\;Game\Biomes\;Game\;Game\;Game\;Game\;Game\;Game\Generators\;Game\;Game\;Game\;Client\;Renderer\;Utils\;Renderer\Resources\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/gaiacraft-dbg" prefix_auto="1" extension_auto="1" />
@@ -122,37 +122,37 @@
 			<Add option="-DGLM_FORCE_RADIANS" />
 		</Compiler>
 		<Unit filename="Biome.h">
-			<Option virtualFolder="World/Biomes/" />
+			<Option virtualFolder="Game/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeDesert.cpp">
-			<Option virtualFolder="World/Biomes/" />
+			<Option virtualFolder="Game/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeDesert.h">
-			<Option virtualFolder="World/Biomes/" />
+			<Option virtualFolder="Game/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeForest.cpp">
-			<Option virtualFolder="World/Biomes/" />
+			<Option virtualFolder="Game/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeForest.h">
-			<Option virtualFolder="World/Biomes/" />
+			<Option virtualFolder="Game/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeWoods.cpp">
-			<Option virtualFolder="World/Biomes/" />
+			<Option virtualFolder="Game/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeWoods.h">
-			<Option virtualFolder="World/Biomes/" />
+			<Option virtualFolder="Game/Biomes/" />
 		</Unit>
 		<Unit filename="Block.h">
-			<Option virtualFolder="World/Blocks/" />
+			<Option virtualFolder="Game/Blocks/" />
 		</Unit>
 		<Unit filename="BlockDirt.h">
-			<Option virtualFolder="World/Blocks/" />
+			<Option virtualFolder="Game/Blocks/" />
 		</Unit>
 		<Unit filename="BlockInfo.h">
-			<Option virtualFolder="World/Blocks/" />
+			<Option virtualFolder="Game/Blocks/" />
 		</Unit>
 		<Unit filename="BlockSaltWater.h">
-			<Option virtualFolder="World/Blocks/" />
+			<Option virtualFolder="Game/Blocks/" />
 		</Unit>
 		<Unit filename="Buffer.cpp">
 			<Option virtualFolder="Utils/" />
@@ -161,10 +161,10 @@
 			<Option virtualFolder="Utils/" />
 		</Unit>
 		<Unit filename="Chunk.cpp">
-			<Option virtualFolder="World/" />
+			<Option virtualFolder="Game/" />
 		</Unit>
 		<Unit filename="Chunk.h">
-			<Option virtualFolder="World/" />
+			<Option virtualFolder="Game/" />
 		</Unit>
 		<Unit filename="Config.cpp">
 			<Option virtualFolder="Utils/" />
@@ -175,17 +175,17 @@
 		<Unit filename="Exceptions.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>
-		<Unit filename="GaiaCraft.cpp">
-			<Option virtualFolder="Client/" />
-		</Unit>
-		<Unit filename="GaiaCraft.h">
-			<Option virtualFolder="Client/" />
-		</Unit>
 		<Unit filename="Item.h">
-			<Option virtualFolder="World/Items/" />
+			<Option virtualFolder="Game/Items/" />
 		</Unit>
 		<Unit filename="ItemInfo.h">
-			<Option virtualFolder="World/Items/" />
+			<Option virtualFolder="Game/Items/" />
+		</Unit>
+		<Unit filename="LostInWilderness.cpp">
+			<Option virtualFolder="Client/" />
+		</Unit>
+		<Unit filename="LostInWilderness.h">
+			<Option virtualFolder="Client/" />
 		</Unit>
 		<Unit filename="Noise.cpp">
 			<Option virtualFolder="Utils/" />
@@ -229,16 +229,16 @@
 			<Option virtualFolder="Renderer/" />
 		</Unit>
 		<Unit filename="World.cpp">
-			<Option virtualFolder="World/" />
+			<Option virtualFolder="Game/" />
 		</Unit>
 		<Unit filename="World.h">
-			<Option virtualFolder="World/" />
+			<Option virtualFolder="Game/" />
 		</Unit>
 		<Unit filename="WorldGenerator.cpp">
-			<Option virtualFolder="World/Generators/" />
+			<Option virtualFolder="Game/Generators/" />
 		</Unit>
 		<Unit filename="WorldGenerator.h">
-			<Option virtualFolder="World/Generators/" />
+			<Option virtualFolder="Game/Generators/" />
 		</Unit>
 		<Unit filename="bin/data/shaders/glescraft.fs">
 			<Option virtualFolder="Renderer/Resources/" />
