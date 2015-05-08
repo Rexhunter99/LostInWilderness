@@ -32,6 +32,13 @@ public:
 	 */
 	//void add( std::vector<Vertex*>::iterator first, std::vector<Vertex*>::iterator last );
 
+	/** @fn remove( first, last )
+	 ** @param first An iterator for the first element to add to the vertex buffer
+	 ** @param last An iterator that is the very last element to add to the vertex buffer
+	 ** Adds the contents of the Vertex vector to the internal Vertex Buffer
+	 */
+	//void remove( std::vector<Vertex*>::iterator first, std::vector<Vertex*>::iterator last );
+
 	/** @fn clear()
 	 ** Clear the buffer to empty status, freeing all used memory.
 	 */
