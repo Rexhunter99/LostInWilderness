@@ -25,8 +25,6 @@ public:
 	static void *	getWindow( std::string name );
 	static void		addWindow( std::string name, void *window );
 
-	void	blockVertexBuffer( float x, float y, float z, float width, float height, float length );
-
 	void initLights();
 
 };

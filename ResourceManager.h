@@ -17,9 +17,9 @@ public:
 	BlockInfo air;
 	std::map<std::string,BlockInfo>		block_info;
 	std::map<std::string,ItemInfo>		item_info;
-	std::map<std::string,Texture>		textures;
+	std::map<std::string,Texture>		  textures;
 	std::map<std::string,TextFont>		fonts;
-	std::vector<WorldGenerator*>		worldgens;
+	std::vector<WorldGenerator*>		  worldgens;
 
 	ResourceManager();
 	~ResourceManager();
