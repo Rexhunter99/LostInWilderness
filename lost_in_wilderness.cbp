@@ -175,17 +175,17 @@
 		<Unit filename="Exceptions.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>
-		<Unit filename="GaiaCraft.cpp">
-			<Option virtualFolder="Client/" />
-		</Unit>
-		<Unit filename="GaiaCraft.h">
-			<Option virtualFolder="Client/" />
-		</Unit>
 		<Unit filename="Item.h">
 			<Option virtualFolder="World/Items/" />
 		</Unit>
 		<Unit filename="ItemInfo.h">
 			<Option virtualFolder="World/Items/" />
+		</Unit>
+		<Unit filename="LostInWilderness.cpp">
+			<Option virtualFolder="Client/" />
+		</Unit>
+		<Unit filename="LostInWilderness.h">
+			<Option virtualFolder="Client/" />
 		</Unit>
 		<Unit filename="Noise.cpp">
 			<Option virtualFolder="Utils/" />

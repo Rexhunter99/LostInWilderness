@@ -532,7 +532,9 @@ void Chunk::render()
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glVertexAttribPointer( shader->getAttrib( "v_position" ), 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0 );
-	glVertexAttribPointer( shader->getAttrib( "v_texcoord" ), 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) (sizeof(float) * 4) );
+	glVertexAttribPointer( shader->getAttrib( "v_normal" ), 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) (sizeof(float) * 4) );
+	glVertexAttribPointer( shader->getAttrib( "v_texcoord" ), 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) (sizeof(float) * 7) );
+	glVertexAttribPointer( shader->getAttrib( "v_diffuse" ), 4, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(Vertex), (void*) (sizeof(float) * 9) );
 	glDrawArrays(GL_TRIANGLES, 0, elements);
 }
 

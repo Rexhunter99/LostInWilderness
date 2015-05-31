@@ -130,7 +130,7 @@ void Shader::addUniform( string name )
 
 	if ( uniformLoc == -1 )
 	{
-		fprintf( stderr, "OpenGL :: Failed to get the Uniform location in the shader program!\n" );
+		fprintf( stderr, "OpenGL :: Failed to get the Uniform \"%s\" location in the shader program!\n", name.c_str() );
 		return;
 	}
 
@@ -155,11 +155,13 @@ void Shader::setUniformMatrix( std::string name, float value[16] )
 
 void Shader::addAttrib( string name )
 {
+	glGetError();
 	int attribLoc = glGetAttribLocation( this->program, name.c_str() );
 
 	if ( attribLoc == -1 )
 	{
-		fprintf( stderr, "OpenGL :: Failed to get the Uniform location in the shader program!\n" );
+		GLenum error = glGetError(); //GL_INVALID_OPERATION
+		fprintf( stderr, "OpenGL :: Failed to get the Attribute \"%s\" location in the shader program!\n", name.c_str() );
 		return;
 	}
 

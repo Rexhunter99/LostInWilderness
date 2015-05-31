@@ -33,13 +33,19 @@ void APIENTRY cbOpenGLError( GLenum _source, GLenum _type, GLuint _id, GLenum _s
 {
 	if ( strstr(_message, "Clear color unsupported") ) return;
 
-	if ( _type != GL_DEBUG_TYPE_ERROR_ARB ) return;
+	//if ( _type != GL_DEBUG_TYPE_ERROR_ARB ) return;
 
 #ifdef _DEBUG
-	if ( _severity == GL_DEBUG_SEVERITY_LOW_ARB ) return;
-#endif // NDEBUG
+	if ( _severity == GL_DEBUG_SEVERITY_LOW_ARB ) {} //return;
+	else
+	{
+		std::cerr << "[OPENGL ERROR] " << " | " << _message << std::endl;
+	}
+#else
 
 	std::cerr << "[OPENGL ERROR] " << " | " << _message << std::endl;
+
+#endif // NDEBUG
 
 	return;
 }

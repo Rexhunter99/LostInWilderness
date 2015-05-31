@@ -1,11 +1,11 @@
-#version 130
+#version 150
 
 in vec3 f_position;
 in vec2 f_texcoord;
 in vec4 f_rgba;
 in vec4 f_world_position;
 uniform sampler2D texture;
-uniform int b_lighting;
+//uniform int b_lighting;
 out vec4 frag_color;
 
 const vec4 fogcolor = vec4(0.6, 0.8, 1.0, 1.0);

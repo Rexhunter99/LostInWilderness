@@ -133,7 +133,7 @@ uint32_t TextFont::getTextHeight( std::wstring text )
 void TextFont::drawString( int x, int y, uint32_t color, float scale, std::wstring text )
 {
 	// -- Use a single std::vector here to avoid overhead.
-	vector< Vertex >		vertices;
+	std::vector< Vertex >		vertices;
 	float		gui_scale = scale;
 	uint32_t	cx = x,
 				cy = y;
@@ -171,6 +171,9 @@ void TextFont::drawString( int x, int y, uint32_t color, float scale, std::wstri
 		vertices.push_back( Vertex( cx * gui_scale, cy * gui_scale, 0, 100, fl, ft ) );
 		vertices.push_back( Vertex( (cx + g->width) * gui_scale, cy * gui_scale, 0, 100, fr, ft ) );
 		vertices.push_back( Vertex( (cx + g->width) * gui_scale, (cy + g->height) * gui_scale, 0, 100, fr, fb ) );
+
+		vertices.push_back( Vertex( cx * gui_scale, cy * gui_scale, 0, 100, fl, ft ) );
+		vertices.push_back( Vertex( (cx + g->width) * gui_scale, (cy + g->height) * gui_scale, 0, 100, fr, fb ) );
 		vertices.push_back( Vertex( cx * gui_scale, (cy + g->height) * gui_scale, 0, 100, fl, fb ) );
 
 		cx += g->width + 1;
@@ -180,8 +183,10 @@ void TextFont::drawString( int x, int y, uint32_t color, float scale, std::wstri
 	glBindBuffer(GL_ARRAY_BUFFER, this->m_vbo );
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_DYNAMIC_DRAW);
 	glVertexAttribPointer( Renderer::default_shader->getAttrib( "v_position" ), 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0 );
-	glVertexAttribPointer( Renderer::default_shader->getAttrib( "v_texcoord" ), 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) (sizeof(int) * 4) );
-	glDrawArrays( GL_QUADS, 0, count );
+	glVertexAttribPointer( Renderer::default_shader->getAttrib( "v_normal" ), 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) (sizeof(float) * 4) );
+	glVertexAttribPointer( Renderer::default_shader->getAttrib( "v_texcoord" ), 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) (sizeof(float) * 7) );
+	glVertexAttribPointer( Renderer::default_shader->getAttrib( "v_diffuse" ), 4, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(Vertex), (void*) (sizeof(float) * 9) );
+	glDrawArrays( GL_TRIANGLES, 0, count );
 
 	//glTexCoordPointer( 2, GL_FLOAT, sizeof(float)*4, &(vertices[1]) );
 	//glVertexPointer( 2, GL_FLOAT, sizeof(float)*4, &(vertices[0]) );

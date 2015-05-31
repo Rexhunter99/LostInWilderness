@@ -152,10 +152,13 @@ int init_resources()
 
 	// -- Make the shader object aware of attributes and uniforms
 	Renderer::default_shader->addAttrib( "v_position" );
+	Renderer::default_shader->addAttrib( "v_normal" );
 	Renderer::default_shader->addAttrib( "v_texcoord" );
+	Renderer::default_shader->addAttrib( "v_diffuse" );
 	Renderer::default_shader->addUniform( "mvp" );
 	Renderer::default_shader->addUniform( "texture" );
 	Renderer::default_shader->addUniform( "b_lighting" );
+	Renderer::default_shader->addUniform( "g_LightSource" );
 	// TODO: Put this into the Shader class
 	Renderer::default_shader->bindFragData( 0, "frag_color" );
 	Renderer::default_shader->setUniform1i( "texture", 0 );

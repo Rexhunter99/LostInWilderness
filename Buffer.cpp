@@ -1,6 +1,7 @@
 
 #include "Buffer.h"
 
+#include "Exceptions.h"
 #include <exception>
 
 
