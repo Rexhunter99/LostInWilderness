@@ -26,7 +26,9 @@ public:
 
 	static void addChunkToGenerateQueue( int x, int y, int z, int seed, Chunk *chunk );
 	static void addChunkToUpdateQueue( Chunk *chunk );
+	static void addChunkToSaveQueue( Chunk *chunk );
 	static void chunkUpdateThread( void );
+	static void chunkFileIOThread( void );
 
 	int run();
 

@@ -73,3 +73,23 @@ size_t Buffer::size() const
 {
 	return this->buffer.size();
 }
+
+size_t Buffer::rle8_compress()
+{
+	return this->size();
+
+	std::vector<unsigned char> compressed_buffer;
+	size_t cursor = 0;
+
+	while ( cursor < this->size() )
+	{
+
+	}
+
+	return this->size();
+}
+
+size_t Buffer::rle16_compress()
+{
+	return this->size();
+}

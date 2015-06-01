@@ -547,11 +547,11 @@ void Chunk::generate( int seed )
 	this->needs_update = true;
 
 	GaiaCraft::addChunkToUpdateQueue( this );
+	GaiaCraft::addChunkToSaveQueue( this );
 }
 
 void Chunk::save()
 {
-	return;
 	// TODO: Implement RLE-8 compression
 	char name[256];
 	sprintf( name, "world/c[%d][%d][%d].chunk", this->ax, this->ay, this->az );
@@ -593,6 +593,10 @@ void Chunk::save()
 		f.write( (const char*)buffer.ptr(), buffer.size() );
 
 		f.close();
+	}
+	else
+	{
+		std::cerr << "Failed to open the file: " << name << std::endl;
 	}
 
 	this->time_last_saved = time( nullptr );

@@ -246,6 +246,12 @@
 		<Unit filename="bin/data/shaders/glescraft.vs">
 			<Option virtualFolder="Renderer/Resources/" />
 		</Unit>
+		<Unit filename="bin/data/shaders/world.120.fs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/world.120.vs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
 		<Unit filename="vectors.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>

@@ -72,9 +72,12 @@ uint32_t chunk_gen_count = 0;
 // Number of VBO slots for chunks
 #define CHUNKSLOTS (SCX * SCY * SCZ)
 
-std::thread g_chunk_updater_thread;
-std::atomic<bool> g_chunk_updater_loop;
+std::thread					g_chunk_updater_thread,
+							g_chunk_fileio_thread;
+std::atomic<bool>			g_chunk_updater_loop,
+							g_chunk_fileio_loop;
 std::queue<Chunk*>			thread_chunk_update_queue;
+std::queue<Chunk*>			thread_chunk_fileio_queue;
 std::queue<ChunkUpdateType>	thread_chunk_gen_queue;
 
 void GaiaCraft::chunkUpdateThread( void )
@@ -92,7 +95,6 @@ void GaiaCraft::chunkUpdateThread( void )
 				thread_chunk_update_queue.pop();
 				//std::cout << "[THREAD] Chunk Update...";
 				//chunk->update();
-				chunk->save();
 				//std::cout << " done!" << endl;
 			}
 			else
@@ -111,7 +113,28 @@ void GaiaCraft::chunkUpdateThread( void )
 
 	glfwMakeContextCurrent( nullptr );
 
-	cout << "[THREAD] Chunk updates finished" << endl;
+	cout << "[THREAD:Updates] Chunk updates finished." << endl;
+}
+
+void GaiaCraft::chunkFileIOThread( void )
+{
+	// -- While the queue is not empty
+	while ( g_chunk_fileio_loop )
+	{
+		if ( !thread_chunk_fileio_queue.empty() )
+		{
+			Chunk *chunk = thread_chunk_fileio_queue.front();
+			thread_chunk_fileio_queue.pop();
+			chunk->save();
+		}
+		else
+		{
+			std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+			continue;
+		}
+	}
+
+	cout << "[THREAD:FileIO] Chunk file operations finished." << endl;
 }
 
 static void free_resources();
@@ -145,8 +168,10 @@ int init_resources()
 
 	// -- Create shaders
 	Renderer::default_shader = new Shader();
-	Renderer::default_shader->addVertexShader( "data/shaders/glescraft.vs" );
-	Renderer::default_shader->addFragmentShader( "data/shaders/glescraft.fs" );
+	//Renderer::default_shader->addVertexShader( "data/shaders/glescraft.vs" );
+	//Renderer::default_shader->addFragmentShader( "data/shaders/glescraft.fs" );
+	Renderer::default_shader->addVertexShader( "data/shaders/world.120.vs" );
+	Renderer::default_shader->addFragmentShader( "data/shaders/world.120.fs" );
 	Renderer::default_shader->compileShaders();
 	Renderer::default_shader->bind();
 
@@ -158,7 +183,7 @@ int init_resources()
 	Renderer::default_shader->addUniform( "mvp" );
 	Renderer::default_shader->addUniform( "texture" );
 	Renderer::default_shader->addUniform( "b_lighting" );
-	Renderer::default_shader->addUniform( "g_LightSource" );
+	Renderer::default_shader->addUniform( "g_SunLightSource" );
 	// TODO: Put this into the Shader class
 	Renderer::default_shader->bindFragData( 0, "frag_color" );
 	Renderer::default_shader->setUniform1i( "texture", 0 );
@@ -655,10 +680,17 @@ void GaiaCraft::addChunkToUpdateQueue( Chunk *chunk )
 	thread_chunk_update_queue.push( chunk );
 }
 
+void GaiaCraft::addChunkToSaveQueue( Chunk *chunk )
+{
+	thread_chunk_fileio_queue.push( chunk );
+}
+
 int GaiaCraft::run()
 {
 	g_chunk_updater_loop = true;
 	g_chunk_updater_thread = thread( GaiaCraft::chunkUpdateThread );
+	g_chunk_fileio_loop = true;
+	g_chunk_fileio_thread = thread( GaiaCraft::chunkFileIOThread );
 
 	if (init_resources())
 	{
@@ -679,8 +711,10 @@ int GaiaCraft::run()
 
 	g_chunk_updater_loop = false;
 	g_chunk_updater_thread.join();
+	g_chunk_fileio_loop = false;
+	g_chunk_fileio_thread.join();
 
-	std::cout << "[INFO] Thread has joined" << std::endl;
+	std::cout << "[INFO] Threads have joined" << std::endl;
 
 	free_resources();
 
