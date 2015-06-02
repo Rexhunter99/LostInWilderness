@@ -177,7 +177,7 @@ void TextFont::drawString( int x, int y, uint32_t color, float scale, std::wstri
 		vertices.push_back( Vertex( cx * gui_scale, (cy + g->height) * gui_scale, 0, 100, fl, fb ) );
 
 		cx += g->width + 1;
-		count += 4;
+		count += 6;
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->m_vbo );

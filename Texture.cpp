@@ -172,11 +172,11 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 	{
 		if (color_type == PNG_COLOR_TYPE_RGB )
 		{
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB16, twidth, theight, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB16, twidth, theight, 0, GL_RGB, GL_UNSIGNED_SHORT, image_data );
 		}
 		else if (color_type == PNG_COLOR_TYPE_RGBA )
 		{
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16, twidth, theight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16, twidth, theight, 0, GL_RGBA, GL_UNSIGNED_SHORT, image_data );
 		}
 		else fprintf( stderr, "loadTexture() :: glTexImage2D 16-bit format is Unknown\n" );
 	}
