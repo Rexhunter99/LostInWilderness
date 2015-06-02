@@ -93,9 +93,8 @@ void GaiaCraft::chunkUpdateThread( void )
 			{
 				Chunk *chunk = thread_chunk_update_queue.front();
 				thread_chunk_update_queue.pop();
-				//std::cout << "[THREAD] Chunk Update...";
+				// NOTE: Uncommenting this line below fixes the weird VBO glitches but causes the game to process a lot more
 				//chunk->update();
-				//std::cout << " done!" << endl;
 			}
 			else
 			{
@@ -168,10 +167,10 @@ int init_resources()
 
 	// -- Create shaders
 	Renderer::default_shader = new Shader();
-	//Renderer::default_shader->addVertexShader( "data/shaders/glescraft.vs" );
-	//Renderer::default_shader->addFragmentShader( "data/shaders/glescraft.fs" );
-	Renderer::default_shader->addVertexShader( "data/shaders/world.120.vs" );
-	Renderer::default_shader->addFragmentShader( "data/shaders/world.120.fs" );
+	//Renderer::default_shader->addVertexShader( "data/shaders/world.120.vs" );
+	//Renderer::default_shader->addFragmentShader( "data/shaders/world.120.fs" );
+	Renderer::default_shader->addVertexShader( "data/shaders/world.150.vs" );
+	Renderer::default_shader->addFragmentShader( "data/shaders/world.150.fs" );
 	Renderer::default_shader->compileShaders();
 	Renderer::default_shader->bind();
 
@@ -185,7 +184,7 @@ int init_resources()
 	Renderer::default_shader->addUniform( "b_lighting" );
 	Renderer::default_shader->addUniform( "g_SunLightSource" );
 	// TODO: Put this into the Shader class
-	Renderer::default_shader->bindFragData( 0, "frag_color" );
+	//Renderer::default_shader->bindFragData( 0, "frag_color" );
 	Renderer::default_shader->setUniform1i( "texture", 0 );
 
 	// -- Create the world
@@ -340,19 +339,19 @@ static void display()
 		else if(pz < mz)
 			face = 5;
 
-		/* If we are looking at air, move the cursor out of sight */
+		// If we are looking at air, move the cursor out of sight
 
 		if(!world->get(mx, my, mz))
 			mx = my = mz = 99999;
 	}
 
-	float bx = mx;
+	/**float bx = mx;
 	float by = my;
 	float bz = mz;
 
-	/* Render a box around the block we are pointing at */
+	// Render a box around the block we are pointing at
 
-	/**Vertex box[24] = {
+	Vertex box[24] = {
 		Vertex(bx + 0, by + 0, bz + 0, 0, 0, 0),
 		Vertex(bx + 1, by + 0, bz + 0, 0, 0, 0),
 		Vertex(bx + 0, by + 1, bz + 0, 0, 0, 0),
@@ -432,9 +431,9 @@ static void display()
 	//Renderer::default_shader->setUniform1i( "b_lighting", false );
 
 	std::wostringstream overlay_s;
-	overlay_s << L"FPS: " << framesPerSecond << L"\nUpdates: " << chunk_update_count << L"\nGens: " << chunk_gen_count;
+	overlay_s << L"FPS: " << framesPerSecond << L"\nUpdates: " << chunk_update_count << L"\nGens: " << chunk_gen_count << L"\nOpenGL 3.2 Core | GLSL 1.50";
 	Renderer::font_texture->bind();
-	Renderer::font_texture->drawString( 2,2, 0xFFFFFFFF, 2.0f, overlay_s.str().c_str() );
+	Renderer::font_texture->drawString( 2, 2, 0xFFFFFFFF, 1.0f, overlay_s.str().c_str() );
 	Renderer::blocks_texture->bind();
 
 
@@ -651,7 +650,7 @@ GaiaCraft::GaiaCraft()
 	GaiaCraft::iGaiaCraft = this;
 
 	this->config						= new Config();
-	Renderer::iRenderer					= new Renderer();
+	Renderer::iRenderer					= new Renderer( Renderer::AV_OPENGL_30 );
     ResourceManager::iResourceManager	= new ResourceManager();
 
     this->config->load( "client.properties" );
