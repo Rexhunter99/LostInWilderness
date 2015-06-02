@@ -42,7 +42,7 @@ WorldGenerator::WorldGenerator()
 
 WorldGenerator::~WorldGenerator()
 {
-	for ( int i=0; i<this->biome_list.size(); i++ )
+	for ( unsigned int i=0; i<this->biome_list.size(); i++ )
 	{
 		delete this->biome_list[i];
 	}
@@ -75,11 +75,12 @@ void WorldGenerator::generate( Chunk *chunk )
 	float temperature	= n_temperature.perlin2D( ( chunk->ax ) / 31.0f, ( chunk->az ) / 31.0f, 3, 0.5f, 50.0f, 50.0f );
 	float rainfall		= n_humidity.perlin2D( ( chunk->ax ) / 31.0f, ( chunk->az ) / 31.0f, 3, 0.5f, 50.0f, 50.0f );
 
-	float dist_min = FLT_MAX;
-	Biome *biome = this->biome_list[0];
+	float	dist_min = FLT_MAX;
+	Biome 	*biome = this->biome_list[0];
+	int		biome_id = 0;
 
 	// -- Iterate through all the biomes to find which is the closest to matching the climate
-	for ( int i=1; i<this->biome_list.size(); i++ )
+	for ( unsigned int i=1; i<this->biome_list.size(); i++ )
 	{
 		Biome *b = this->biome_list[i];
 		if ( b == nullptr ) continue;
@@ -91,6 +92,7 @@ void WorldGenerator::generate( Chunk *chunk )
 		{
 			dist_min = dist;
 			biome = b;
+			biome_id = i;
 		}
 	}
 
@@ -103,6 +105,7 @@ void WorldGenerator::generate( Chunk *chunk )
 	biome->decorate( chunk );
 	this->generateOres( chunk );
 
+	chunk->biome = biome_id;
 	chunk->needs_update = true;
 	chunk->generated = true;
 }

@@ -31,7 +31,8 @@ public:
 	int32_t			ax,
 					ay,
 					az,
-					elements;
+					elements,
+					biome;
 	uint32_t		vbo;
 	time_t			time_last_saved,		// The last time the chunk was cached to disk
 					time_last_updated,		// The last time the chunk was updated

@@ -500,13 +500,7 @@ void Chunk::update()
 	if( !this->elements )
 		return;
 
-	// Upload vertices
-	/*glEnableClientState( GL_VERTEX_ARRAY );
-	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-	glVertexPointer( 4, GL_FLOAT, sizeof( Vertex ), &vertices[0] );
-	glTexCoordPointer( 2, GL_FLOAT, sizeof( Vertex ), (float*)&vertices[0] + 4 );*/
-	//glDrawArrays(GL_TRIANGLES, 0, elements);
-
+	// -- Upload vertices
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_DYNAMIC_DRAW);
 }
@@ -566,8 +560,7 @@ void Chunk::save()
 		// -- Write out header data
 		uint16_t version = 1;
 		f.write( (char*)&version, sizeof(uint16_t) );
-		uint16_t biome = 0;
-		f.write( (char*)&biome, sizeof(uint16_t) );
+		f.write( (char*)&this->biome, sizeof(uint16_t) );
 
 		// -- Loop through all the blocks in the chunk
 		Buffer buffer;
@@ -582,21 +575,24 @@ void Chunk::save()
 			{
 				uint8_t temp_ID = 0;
 				uint8_t temp_data = 0;
-				buffer.add( (void*)&temp_ID, sizeof( temp_ID ) );
-				buffer.add( (void*)&temp_data, sizeof( temp_data ) );
+				buffer.add( (void*)&temp_ID, sizeof( uint8_t ) );
+				buffer.add( (void*)&temp_data, sizeof( uint8_t ) );
 				continue;
 			}
 
 			buffer.add( (void*)&b->info.ID, sizeof( b->info.ID) );
 			buffer.add( (void*)&b->data_value, sizeof( b->data_value) );
 		}
+
+		buffer.rle8_compress();
+
 		f.write( (const char*)buffer.ptr(), buffer.size() );
 
 		f.close();
 	}
 	else
 	{
-		std::cerr << "Failed to open the file: " << name << std::endl;
+		std::cerr << "[ ERROR ] Failed to open the file: " << name << std::endl;
 	}
 
 	this->time_last_saved = time( nullptr );

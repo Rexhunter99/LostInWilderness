@@ -35,7 +35,7 @@ public:
 		this->rainfall	= rainfall;
 		this->worldgen	= worldgen;
 	}
-	~Biome()
+	virtual ~Biome()
 	{}
 
 	virtual void simulateChunk( Chunk *chunk ) {}
