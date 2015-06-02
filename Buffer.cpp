@@ -3,6 +3,7 @@
 
 #include "Exceptions.h"
 #include <exception>
+#include <iostream>
 
 
 
@@ -76,20 +77,52 @@ size_t Buffer::size() const
 
 size_t Buffer::rle8_compress()
 {
-	return this->size();
-
+	/* The command char is special, a value above 0 indicates that the next byte needs to be repeated as many times.
+	 * If the command char is less than zero, the next as many times (without the negative sign) are uncompressed.
+	 * Theoretically this should further reduce the buffer size if there are large sections of non-repeating data.
+	 */
 	std::vector<unsigned char> compressed_buffer;
-	size_t cursor = 0;
+	char			command = 1;
+	unsigned char	held_u8 = this->buffer.at( 0 );
+	size_t			held_cursor = 0;
 
-	while ( cursor < this->size() )
+	for ( size_t i = 1; i < this->buffer.size(); i++ )
 	{
+		// -- If we have read 126 run-length bytes, or we find a byte that is different to our held one
+		if ( ( command == 127 ) || ( this->buffer.at(i) != held_u8 ) )
+		{
+			// Add the command byte and the held byte
+			compressed_buffer.push_back( command );
+			compressed_buffer.push_back( held_u8 );
+			command = 0;
+		}
 
+		held_u8 = this->buffer.at(i);
+		command++;
 	}
 
-	return this->size();
+	// -- Debug builds should generate a warning if the compressed buffer size is larger than the uncompressed buffer
+	#ifdef _DEBUG
+	if ( this->buffer.size() < compressed_buffer.size() )
+	{
+		// TODO: add new iostreams that output to log files
+		std::cout << "[ WARNING ] The size of the compressed buffer (" <<
+		compressed_buffer.size() <<
+		"b) is larger than the uncompressed buffer" <<
+		this->buffer.size() <<
+		"b)" << std::endl;
+	}
+	#endif // _DEBUG
+
+	// -- Replace the buffer contents with the compressed version
+	this->buffer = compressed_buffer;
+
+	return compressed_buffer.size();
 }
 
 size_t Buffer::rle16_compress()
 {
-	return this->size();
+	std::vector<unsigned char> compressed_buffer;
+
+	return compressed_buffer.size();
 }
