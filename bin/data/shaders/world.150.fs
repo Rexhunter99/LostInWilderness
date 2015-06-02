@@ -1,11 +1,10 @@
-#version 150
+#version 150 core
 
 in vec3 f_position;
 in vec2 f_texcoord;
 in vec4 f_rgba;
 in vec4 f_world_position;
 uniform sampler2D texture;
-//uniform int b_lighting;
 out vec4 frag_color;
 
 const vec4 fogcolor = vec4(0.6, 0.8, 1.0, 1.0);
@@ -25,10 +24,10 @@ void main(void)
 		discard;
 
 	// Calculate strength of fog
-	//float z = gl_FragCoord.z / gl_FragCoord.w;
-	//float fog = clamp(exp(-fogdensity * z * z), 0.2, 1.0);
+	float z = gl_FragCoord.z / gl_FragCoord.w;
+	float fog = clamp(exp(-fogdensity * z * z), 0.2, 1.0);
 
 	// Final color is a mix of the actual color and the fog color
-	//frag_color = mix(fogcolor, color, fog);
-	frag_color = color;
+	frag_color = mix(fogcolor, color, fog);
+	//frag_color = color;
 }

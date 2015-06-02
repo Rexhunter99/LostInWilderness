@@ -1,4 +1,4 @@
-#version 150
+#version 150 core
 
 #define MAX_LIGHTS 4
 
@@ -6,7 +6,7 @@ struct SLightParameters
 {
 	vec4 diffuse;
 	vec4 ambient;
-	vec4 specular;
+	float specular;
 	vec4 position;
 };
 
@@ -20,7 +20,7 @@ out vec3 f_position;
 out vec4 f_world_position;
 out vec4 f_rgba;
 
-uniform SLightParameters	g_SunLightSource = { vec4(1.0,1.0,1.0,1.0), vec4(0,0,0,0), 1.0f, vec4(0,0,0,0) };
+uniform SLightParameters	g_SunLightSource;
 uniform mat4 mvp;
 uniform int b_lighting;
 

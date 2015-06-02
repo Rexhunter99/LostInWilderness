@@ -20,7 +20,7 @@ varying vec3 f_position;
 varying vec4 f_world_position;
 varying vec4 f_rgba;
 
-uniform SLightParameters	g_SunLightSource = { vec4(1.0,1.0,1.0,1.0), vec4(0,0,0,0), 1.0f, vec4(0,0,0,0) };
+uniform SLightParameters	g_SunLightSource;// = SLightParameters( vec4(1.0,1.0,1.0,1.0), vec4(0.0,0.0,0.0,0.0), 1.0, vec4(0.0,0.0,0.0,0.0) );
 uniform mat4 mvp;
 uniform int b_lighting;
 

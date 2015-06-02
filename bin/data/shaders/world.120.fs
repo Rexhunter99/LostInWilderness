@@ -6,7 +6,6 @@ varying vec4 f_rgba;
 varying vec4 f_world_position;
 uniform sampler2D texture;
 //uniform int b_lighting;
-out vec4 frag_color;
 
 const vec4 fogcolor = vec4(0.6, 0.8, 1.0, 1.0);
 const float fogdensity = .00003;
@@ -30,5 +29,5 @@ void main(void)
 
 	// Final color is a mix of the actual color and the fog color
 	//frag_color = mix(fogcolor, color, fog);
-	frag_color = color;
+	gl_FragColor = color;
 }
