@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="gaiacraft" />
+		<Option title="Lost In Wilderness" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Option virtualFolders="Renderer\;Renderer\Resources\;Utils\;World\Blocks\;Client\;World\Items\;World\Biomes\;World\;World\Generators\;" />
@@ -240,16 +240,16 @@
 		<Unit filename="WorldGenerator.h">
 			<Option virtualFolder="World/Generators/" />
 		</Unit>
-		<Unit filename="bin/data/shaders/glescraft.fs">
-			<Option virtualFolder="Renderer/Resources/" />
-		</Unit>
-		<Unit filename="bin/data/shaders/glescraft.vs">
-			<Option virtualFolder="Renderer/Resources/" />
-		</Unit>
 		<Unit filename="bin/data/shaders/world.120.fs">
 			<Option virtualFolder="Renderer/Resources/" />
 		</Unit>
 		<Unit filename="bin/data/shaders/world.120.vs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/world.150.fs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/world.150.vs">
 			<Option virtualFolder="Renderer/Resources/" />
 		</Unit>
 		<Unit filename="vectors.h">

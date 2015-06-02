@@ -58,7 +58,7 @@ WorldGenerator & ResourceManager::getWorldGen( std::string worldgen_name )
 {
 	WorldGenerator *wg = this->worldgens[0];
 
-	for ( int i=1; i<this->worldgens.size(); i++ )
+	for ( size_t i=1; i<this->worldgens.size(); i++ )
 	{
 		if ( this->worldgens[i]->name == worldgen_name )
 		{

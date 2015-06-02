@@ -43,7 +43,7 @@ void APIENTRY cbOpenGLError( GLenum _source, GLenum _type, GLuint _id, GLenum _s
 	}
 #else
 
-	std::cerr << "[OPENGL ERROR] " << " | " << _message << std::endl;
+	std::cerr << "[OPENGL DEBUG ERROR] " << " | " << _message << std::endl;
 
 #endif // NDEBUG
 
@@ -51,7 +51,7 @@ void APIENTRY cbOpenGLError( GLenum _source, GLenum _type, GLuint _id, GLenum _s
 }
 
 
-Renderer::Renderer()
+Renderer::Renderer( Renderer::APIVersionEnum version )
 {
 	Renderer::blocks_texture = nullptr;
 	Renderer::items_texture = nullptr;
@@ -65,6 +65,63 @@ Renderer::Renderer()
 		return;
 	}
 
+	int glfw_hints[5][4] = {
+		#if defined( _PORTABLE )
+		{
+			GLFW_OPENGL_ES_API,
+			3, 1,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_ES_API,
+			3, 0,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_ES_API,
+			2, 0,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_ES_API,
+			1, 1,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_ES_API,
+			1, 0,
+			GLFW_OPENGL_ANY_PROFILE,
+		}
+		#else
+		{
+			GLFW_OPENGL_API,
+			3, 2,
+			GLFW_OPENGL_CORE_PROFILE,
+		},
+		{
+			GLFW_OPENGL_API,
+			3, 1,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_API,
+			3, 0,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_API,
+			2, 1,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_API,
+			2, 0,
+			GLFW_OPENGL_ANY_PROFILE,
+		}
+		#endif
+	};
+	const int glfw_hints_num = 5;
+
 	// -- Initialise the monitor pointer to no monitor
 	GLFWmonitor *monitor = nullptr;
 
@@ -72,35 +129,39 @@ Renderer::Renderer()
 	monitor = glfwGetPrimaryMonitor();
 	#endif // defined
 
-	// -- MSAA Samples (default to 0 for now...)
-	glfwWindowHint( GLFW_SAMPLES, 0 );
+	for ( int h=0; h<glfw_hints_num; h++ )
+	{
+		glfwDefaultWindowHints();
 
-	#if defined( _PORTABLE )
-	// -- We're using OpenGL on portables
-	glfwWindowHint( GLFW_CLIENT_API, GLFW_OPENGL_ES_API );
-	#else
-	// -- We're using OpenGL on desktops/laptops
-	glfwWindowHint( GLFW_CLIENT_API, GLFW_OPENGL_API );
-	#endif
+		glfwWindowHint( GLFW_CLIENT_API, glfw_hints[h][0] );
 
-	// -- Default our desired context version to 2.0
-	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 2 );
-	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 1 );
-	//glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_FALSE );
+		// -- Hint at our desired context version
+		glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, glfw_hints[h][1] );
+		glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, glfw_hints[h][2] );
 
-	// -- Core profile context
-	//glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE );
-	//glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+		// -- Core profile context
+		glfwWindowHint( GLFW_OPENGL_PROFILE, glfw_hints[h][3] );
 
-	#ifdef _DEBUG
-	glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE );
-	#endif // _DEBUG
+		#ifdef _DEBUG
+		glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE );
+		#endif // _DEBUG
 
-	g_window = glfwCreateWindow( 1280, 720, "GaiaCraft", monitor, nullptr );
+		// -- MSAA Samples (default to 0 for now...)
+		glfwWindowHint( GLFW_SAMPLES, 0 );
+
+		g_window = glfwCreateWindow( 1280, 720, "Lost In Wilderness - Alpha", monitor, nullptr );
+
+		if ( g_window )
+		{
+			// -- We found a working set of hints!
+			break;
+		}
+	}
+
 	if ( !g_window )
 	{
 		glfwTerminate();
-		throw custom_exception( "GLFW 3 failed to create the window and context." );
+		throw custom_exception( "GLFW 3 failed to create a window/context that matched any of the desired hints." );
 		return;
 	}
 
@@ -122,6 +183,22 @@ Renderer::Renderer()
 		throw custom_exception( std::string("GLEW was unable to initialize! Error message:\n") + std::string((const char*)glewGetErrorString(glew_status)) );
 		return;
 	}
+
+	// -- Version output
+	#ifdef _DEBUG
+	int gl_version[2];
+	glGetIntegerv( GL_MAJOR_VERSION, &gl_version[0] );
+	glGetIntegerv( GL_MINOR_VERSION, &gl_version[1] );
+	std::cout << "GL_VERSION: " << glGetString( GL_VERSION ) << std::endl;
+	std::cout << "GL_VERSION: " << gl_version[0] << "." << gl_version[1] << std::endl;
+	int glsl_version_num = 0;
+	glGetIntegerv( GL_NUM_SHADING_LANGUAGE_VERSIONS, &glsl_version_num );
+
+	for ( int i=0; i<glsl_version_num; i++ )
+	{
+		std::cout << "GLSL VERSION: " << glGetStringi( GL_SHADING_LANGUAGE_VERSION, i ) << std::endl;
+	}
+	#endif // _DEBUG
 
 	// -- Check the minimum version of OpenGL is actually 2.0 or greater
 	if (!GLEW_VERSION_2_0)

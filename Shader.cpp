@@ -1,6 +1,7 @@
 
 
 #include "Shader.h"
+#include "Exceptions.h"
 
 #include <cstdio>
 #include <cstdint>
@@ -43,7 +44,7 @@ void Shader::addProgram( string &text, uint32_t type )
 	// -- Validate that the shader was created
 	if ( shader == 0 )
 	{
-		cerr << "[GL ERROR] Failed to create the shader!" << endl;
+		cerr << "[class:Shader] Failed to create the shader!" << endl;
 		return;
 	}
 
@@ -63,7 +64,7 @@ void Shader::addProgram( string &text, uint32_t type )
 	}
 	else
 	{
-		cerr << "[GL ERROR] Failed to open the shader source \"" << text << "\" for reading!" << endl;
+		cerr << "[class:Shader] Failed to open the shader source \"" << text << "\" for reading!" << endl;
 		glDeleteShader( shader );
 		return;
 	}
@@ -75,10 +76,18 @@ void Shader::addProgram( string &text, uint32_t type )
 	glGetShaderiv( shader, GL_COMPILE_STATUS, &status );
 	if ( status == 0 )
 	{
-		char infolog[1024];
+		int info_log_len = 0;
+		glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &info_log_len );
+
+		char *info_log = new char [ info_log_len ];
+		glGetShaderInfoLog( shader, info_log_len, nullptr, info_log );
+
+		cerr << "[class:Shader] Failed to compile shader source:\n" << text << "\n===========================================\n" << info_log << "\n===========================================" << endl;
+
+		delete [] info_log;
 		glDeleteShader( shader );
-		glGetShaderInfoLog( shader, 1024, nullptr, infolog );
-		cerr << "[GL ERROR] Shader Log:\n" << infolog << endl;
+
+		throw custom_exception( "Failed to compile the shader!" );
 		return;
 	}
 
@@ -99,7 +108,7 @@ void Shader::compileShaders()
 	{
 		char infolog[1024];
 		glGetProgramInfoLog( this->program, 1024, nullptr, infolog );
-        cerr << "[GL ERROR] Failed to link shader program:\n" << infolog << endl;
+        cerr << "[OPENGL ERROR] Failed to link shader program\n===========================================\n" << infolog << "\n===========================================" << endl;
         return;
     }
 }
@@ -160,7 +169,6 @@ void Shader::addAttrib( string name )
 
 	if ( attribLoc == -1 )
 	{
-		GLenum error = glGetError(); //GL_INVALID_OPERATION
 		fprintf( stderr, "OpenGL :: Failed to get the Attribute \"%s\" location in the shader program!\n", name.c_str() );
 		return;
 	}
