@@ -14,6 +14,7 @@ in vec4 v_position;
 in vec3 v_normal;
 in vec2 v_texcoord;
 in vec4 v_diffuse;
+float a_shininess = 0.0;
 
 out vec2 f_texcoord;
 out vec3 f_position;
@@ -43,7 +44,7 @@ void main(void)
 	{
 		vec4 ambient = g_SunLightSource.ambient;
 		vec4 diffuse = g_SunLightSource.diffuse * max(dot(L, N), 0.0);
-		vec4 specular = g_SunLightSource.diffuse * ( g_SunLightSource.specular * pow(max(dot(R, L), 0.0), gl_FrontMaterial.shininess ) );
+		vec4 specular = g_SunLightSource.diffuse * ( g_SunLightSource.specular * pow(max(dot(R, L), 0.0), a_shininess ) );
 		f_rgba *= clamp( ambient + diffuse + specular, vec4(0.0,0.0,0.0,0.0), vec4(1.0,1.0,1.0,1.0) );
 	}
 	else
