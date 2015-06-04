@@ -30,6 +30,7 @@ public:
 	} api_version;
 
 	Renderer( APIVersionEnum version );
+	Renderer( std::string version );
 	~Renderer();
 
 	static void *	getWindow( std::string name );

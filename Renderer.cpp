@@ -51,7 +51,7 @@ void APIENTRY cbOpenGLError( GLenum _source, GLenum _type, GLuint _id, GLenum _s
 }
 
 
-Renderer::Renderer( Renderer::APIVersionEnum version )
+Renderer::Renderer( std::string version )
 {
 	Renderer::blocks_texture = nullptr;
 	Renderer::items_texture = nullptr;

@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "ItemInfo.h"
 #include <string>
 #include <cstdint>
 
@@ -10,8 +11,12 @@ protected:
 
 public:
 
-	std::string			name;
-	std::wstring		locale_name;
+	ItemInfo&			info;
 	uint16_t			id;
+
+	float				x, y, z;
+
+	Item( ItemInfo& item, id, x, y, z );
+	~Item();
 
 };

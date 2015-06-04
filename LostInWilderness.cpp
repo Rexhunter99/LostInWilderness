@@ -32,6 +32,10 @@ using namespace std;
 
 
 typedef struct ChunkUpdateStruct {
+	enum	{
+		CHUNK_GENERATE,
+		CHUNK_UPDATE
+	}		type;
 	Chunk	*chunk;
 	int		x,
 			y,
@@ -61,8 +65,6 @@ static World *world;
 uint32_t chunk_update_count = 0;
 uint32_t chunk_gen_count = 0;
 
-
-#include "Chunk.h"
 
 // Size of one chunk in blocks
 #define CX CHUNK_WIDTH
@@ -215,7 +217,7 @@ void resize( GLFWwindow* wnd, int w, int h)
 	glViewport(0, 0, w, h);
 }
 
-// Not really GLSL fract(), but the absolute distance to the nearest integer value
+// -- Not really GLSL fract(), but the absolute distance to the nearest integer value
 static float fract(float value)
 {
 	float f = value - floorf(value);
@@ -232,7 +234,7 @@ static unsigned int frameCount = 0;
 
 static void display()
 {
-	float fov = 70.0f;
+	float fov = GaiaCraft::iGaiaCraft->config->getFloat( "renderer.field_of_view" );
 	float aspect = (float)ww/(float)wh;
 	float znear = 0.1f;
 	float zfar = 1000.0f;
@@ -650,10 +652,10 @@ GaiaCraft::GaiaCraft()
 	GaiaCraft::iGaiaCraft = this;
 
 	this->config						= new Config();
-	Renderer::iRenderer					= new Renderer( Renderer::AV_OPENGL_30 );
-    ResourceManager::iResourceManager	= new ResourceManager();
+	this->config->load( "client.properties" );
 
-    this->config->load( "client.properties" );
+	Renderer::iRenderer					= new Renderer( GaiaCraft::iGaiaCraft->config->getString( "renderer.api" ) );
+    ResourceManager::iResourceManager	= new ResourceManager();
 }
 
 GaiaCraft::~GaiaCraft()
