@@ -151,6 +151,11 @@ void Shader::setUniform1f( string name, float value )
 	glUniform1f( this->uniforms.find( name )->second, value );
 }
 
+void Shader::setUniform4f( string name, float value[4] )
+{
+	glUniform4f( this->uniforms.find( name )->second, value[0], value[1], value[2], value[3] );
+}
+
 void Shader::setUniform1i( string name, int value )
 {
 	glUniform1i( this->uniforms.find( name )->second, value );

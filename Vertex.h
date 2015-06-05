@@ -57,8 +57,8 @@ public:
 		this->z = z;
 		this->w = w;
 		this->nx = 0;
-		this->ny = 0;
-		this->nz = 1;
+		this->ny = -1;
+		this->nz = 0;
 		this->tx = tx;
 		this->ty = ty;
 		this->r = 255;

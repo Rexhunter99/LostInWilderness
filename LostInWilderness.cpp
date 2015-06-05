@@ -168,33 +168,38 @@ int init_resources()
 	Renderer::font_texture = new TextFont( "data/fonts/minecraft" );
 
 	// -- Create shaders
-	Renderer::default_shader = new Shader();
-	//Renderer::default_shader->addVertexShader( "data/shaders/world.120.vs" );
-	//Renderer::default_shader->addFragmentShader( "data/shaders/world.120.fs" );
-	Renderer::default_shader->addVertexShader( "data/shaders/world.150.vs" );
-	Renderer::default_shader->addFragmentShader( "data/shaders/world.150.fs" );
-	Renderer::default_shader->compileShaders();
-	Renderer::default_shader->bind();
+  Shader *shader_world = new Shader();
+  Renderer::default_shader = shader_world;
+
+	//shader_world->addVertexShader( "data/shaders/world.120.vs" );
+	//shader_world->addFragmentShader( "data/shaders/world.120.fs" );
+	shader_world->addVertexShader( "data/shaders/world.150.vs" );
+	shader_world->addFragmentShader( "data/shaders/world.150.fs" );
+	shader_world->compileShaders();
+	shader_world->bind();
 
 	// -- Make the shader object aware of attributes and uniforms
-	Renderer::default_shader->addAttrib( "v_position" );
-	Renderer::default_shader->addAttrib( "v_normal" );
-	Renderer::default_shader->addAttrib( "v_texcoord" );
-	Renderer::default_shader->addAttrib( "v_diffuse" );
-	Renderer::default_shader->addUniform( "mvp" );
-	Renderer::default_shader->addUniform( "texture" );
-	Renderer::default_shader->addUniform( "b_lighting" );
-	Renderer::default_shader->addUniform( "g_SunLightSource" );
+	shader_world->addAttrib( "v_position" );
+	shader_world->addAttrib( "v_normal" );
+	shader_world->addAttrib( "v_texcoord" );
+	shader_world->addAttrib( "v_diffuse" );
+	shader_world->addUniform( "mvp" );
+	shader_world->addUniform( "texture" );
+	shader_world->addUniform( "b_lighting" );
+	shader_world->addUniform( "g_SunLightSource.position" );
+	shader_world->addUniform( "g_SunLightSource.diffuse" );
+	shader_world->addUniform( "g_SunLightSource.ambient" );
+	shader_world->addUniform( "g_SunLightSource.specular" );
+
 	// TODO: Put this into the Shader class
-	//Renderer::default_shader->bindFragData( 0, "frag_color" );
-	Renderer::default_shader->setUniform1i( "texture", 0 );
+	shader_world->bindFragData( 0, "frag_color" );
 
-	// -- Create the world
-	world = new World( "world" );
-
-	camera.position = glm::vec3(0, CY + 1, 0);
-	camera.angle = glm::vec3(0, -0.5, 0);
-	update_vectors();
+	// -- Default the uniforms/attribs
+	shader_world->setUniform1i( "texture", 0 );
+	shader_world->setUniform4f( "g_SunLightSource.position", (float*)glm::value_ptr( glm::vec4( 0, -1, 0, 0 ) ) );
+	shader_world->setUniform4f( "g_SunLightSource.diffuse", (float*)glm::value_ptr( glm::vec4( 1, 1, 1, 1 ) ) );
+	shader_world->setUniform4f( "g_SunLightSource.ambient", (float*)glm::value_ptr( glm::vec4( 0.4, 0.4, 0.4, 1 ) ) );
+	shader_world->setUniform1f( "g_SunLightSource.specular", 1.0f );
 
 	// -- Create a VBO for the cursor
 	glGenVertexArrays(1, &default_vao);
@@ -204,8 +209,21 @@ int init_resources()
 	// -- OpenGL settings that do not change while running this program
 	glClearColor(0.6, 0.8, 1.0, 0.0);
 	glPolygonOffset(1, 1);
-	glEnableVertexAttribArray( Renderer::default_shader->getAttrib( "v_position" ) );
-	glEnableVertexAttribArray( Renderer::default_shader->getAttrib( "v_texcoord" ) );
+	glEnableVertexAttribArray( shader_world->getAttrib( "v_position" ) );
+	glEnableVertexAttribArray( shader_world->getAttrib( "v_normal" ) );
+	glEnableVertexAttribArray( shader_world->getAttrib( "v_texcoord" ) );
+	glEnableVertexAttribArray( shader_world->getAttrib( "v_diffuse" ) );
+
+	// -- Create the world
+	world = new World( "world" );
+
+	// -- Pre-generate the terrain here
+
+
+  // TODO: place the camera on the terrain
+	camera.position = glm::vec3(0, CY / 2, 0);
+	camera.angle = glm::vec3(0, -0.5, 0);
+	update_vectors();
 
 	return 1;
 }
@@ -234,7 +252,7 @@ static unsigned int frameCount = 0;
 
 static void display()
 {
-	float fov = GaiaCraft::iGaiaCraft->config->getFloat( "renderer.field_of_view" );
+	float fov = 70.0;//GaiaCraft::iGaiaCraft->config->getFloat( "renderer.field_of_view" );
 	float aspect = (float)ww/(float)wh;
 	float znear = 0.1f;
 	float zfar = 1000.0f;
@@ -244,7 +262,7 @@ static void display()
 	glm::mat4 mvp = projection * view;
 
 	Renderer::default_shader->setUniformMatrix( "mvp", glm::value_ptr(mvp) );
-	//Renderer::default_shader->setUniform1i( "b_lighting", true );
+	Renderer::default_shader->setUniform1i( "b_lighting", true );
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	glDisable( GL_BLEND );
