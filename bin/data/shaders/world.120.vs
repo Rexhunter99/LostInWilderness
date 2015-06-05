@@ -42,13 +42,13 @@ void main(void)
 	if ( b_lighting == 1 )
 	{
 		vec4 ambient = g_SunLightSource.ambient;
-		vec4 diffuse = g_SunLightSource.diffuse * max(dot(L, N), 0.0);
-		vec4 specular = g_SunLightSource.diffuse * ( g_SunLightSource.specular * pow(max(dot(R, L), 0.0), gl_FrontMaterial.shininess ) );
-		f_rgba *= clamp( ambient + diffuse + specular, vec4(0.0,0.0,0.0,0.0), vec4(1.0,1.0,1.0,1.0) );
+		vec4 diffuse = ( v_diffuse * g_SunLightSource.diffuse ) * max(dot(L, N), 0.0);
+		vec4 specular = v_position.w * g_SunLightSource.diffuse * ( pow(max(dot(R, L), 0.0), g_SunLightSource.specular ) );
+		f_rgba = clamp( ambient + diffuse + specular, vec4(0.0), vec4(1.0) );
 	}
 	else
 	{
-		f_rgba = vec4( 1.0, 1.0, 1.0, 1.0 );
+		f_rgba = vec4( 1.0 );
 	}
 
 	// -- Apply the model-view-projection matrix to the xyz components of the vertex coordinates

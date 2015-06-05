@@ -1,4 +1,8 @@
 {
+  "menu.singleplayer": "Singleplayer",
+  "menu.multiplayer": "Multiplayer",
+  "menu.options": "Options",
+  "menu.quit_game": "Quit Game",
   "items.stick": "Stick",
   "items.stick.desc": "A long, thin length of wood",
   "items.dirt": "Dirt",
@@ -7,5 +11,5 @@
   "items.crude_oak_plank.desc": "A crudely cut plank of Oak",
   "achievements.first_steps": "One small step...",
   "achievements.make_fire": "Fie fie!",
-  "achievements.dummy": "Dummy"
+  "dummy": "Dummy"
 }
