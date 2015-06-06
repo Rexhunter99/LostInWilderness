@@ -79,7 +79,7 @@ public:
 		else if ( direction == 3 ) // Positive Z direction
 		{
 			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, 0, 0, -1, left_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, 0, -1, 0, right_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, 0, 0, -1, right_u, top_v ) );
 			vertex_buffer.push_back( Vertex( x, top, z + 1, 0, 0, 0, -1, left_u, bottom_v ) );
 			vertex_buffer.push_back( Vertex( x, top, z + 1, 0, 0, 0, -1, left_u, bottom_v ) );
 			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, 0, 0, -1, right_u, top_v ) );

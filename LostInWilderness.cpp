@@ -252,10 +252,10 @@ static unsigned int frameCount = 0;
 
 static void display()
 {
-	float fov = 70.0;//GaiaCraft::iGaiaCraft->config->getFloat( "renderer.field_of_view" );
+	float fov = 75.0f / 180.0f * 3.14f;//GaiaCraft::iGaiaCraft->config->getFloat( "renderer.field_of_view" );
 	float aspect = (float)ww/(float)wh;
 	float znear = 0.1f;
-	float zfar = 1000.0f;
+	float zfar = 512.0f;
 
 	glm::mat4 view = glm::lookAt(camera.position, camera.position + camera.lookat, camera.up);
 	glm::mat4 projection = glm::perspective( fov, aspect, znear, zfar );
@@ -671,6 +671,8 @@ GaiaCraft::GaiaCraft()
 
 	this->config						= new Config();
 	this->config->load( "client.properties" );
+
+	GaiaCraft::iGaiaCraft->config->getFloat( "renderer.field_of_view" );
 
 	Renderer::iRenderer					= new Renderer( GaiaCraft::iGaiaCraft->config->getString( "renderer.api" ) );
     ResourceManager::iResourceManager	= new ResourceManager();

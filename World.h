@@ -5,6 +5,8 @@
 
 #include <cstdlib>
 #include <string>
+#include <tuple>
+#include <unordered_map>
 
 #include <glm/fwd.hpp>
 
@@ -28,6 +30,7 @@ class World
 public:
 	// Loaded chunks
 	Chunk		*c[SCX][SCY][SCZ];
+	//std::unordered_map< std::tuple<uint64_t,uint64_t,uint64_t>, Chunk*> c;
 	// The world seed
 	time_t		seed;
 	// The internal name of the world

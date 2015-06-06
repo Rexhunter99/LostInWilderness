@@ -20,30 +20,25 @@ public:
 	static Texture *items_texture;
 	static TextFont *font_texture;
 
-	enum APIVersionEnum {
-		AV_OPENGL_20,
-		AV_OPENGL_21,
-		AV_OPENGL_30,
-		AV_OPENGL_31,
-		AV_OPENGL_32,
-		AV_OPENGL_33
-		// TODO: Perhaps OpenGL 4.x?
-	} api_version;
-
-	Renderer( APIVersionEnum version );
 	Renderer( std::string version );
 	~Renderer();
 
 	static void *	getWindow( std::string name );
 	static void		addWindow( std::string name, void *window );
-	static const char * getDriverVendor() const;
-	static const char * getShaderVersion()
+
+	static const char * getDriverVendor();
+	static const char * getShaderVersion();
+
 
 	void initLights();
 
-	void setDirectionalLight( glm::vec3 position, glm::vec4 diffuse, glm::vec4 ambient, float specular_strength );
+	uint32_t  addPointLight( );
+	uint32_t  addDirectionalLight( );
+	uint32_t  addSpotLight( );
 
-	uint32_t  addPointLight( .. );
+	void setDirectionalLight( uint32_t light_index, glm::vec3 position, glm::vec4 diffuse, glm::vec4 ambient, float specular_strength );
+	void setPointLight( uint32_t light_index, glm::vec3 position, glm::vec4 diffuse, glm::vec4 ambient, float specular_strength );
+	void setSpotLight( uint32_t light_index, glm::vec3 position, glm::vec3 at_angle, float cone_angle, glm::vec4 diffuse, glm::vec4 ambient, float specular_strength );
 
 	/** @fn updateLights();
 	 ** @brief Update all the lights in the scene to the GPU.

@@ -50,6 +50,7 @@ bool Config::load( std::string file_name )
 		{
 			char key[256];
 			char value[256];
+
 			f.getline( key, 255, '=' );
 
 			if ( key[0] == '#' ) continue;
@@ -76,6 +77,7 @@ uint64_t Config::getInteger( std::string key )
 double Config::getFloat( std::string key )
 {
 	std::string s_value = this->getString( key );
+	std::cout << key << "=" << s_value << std::endl;
 	return std::strtod( s_value.c_str(), nullptr );
 }
 

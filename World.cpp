@@ -43,6 +43,14 @@ World::World( std::string name )
 		if(z < SCZ - 1)
 			c[x][y][z]->back = c[x][y][z + 1];
 	}
+
+	// -- Pre-generate the chunks
+	for (int x = 0; x < SCX; x++)
+	for (int y = 0; y < SCY; y++)
+	for (int z = 0; z < SCZ; z++)
+	{
+		this->c[x][y][z]->generate( this->seed );
+	}
 }
 
 World::~World()
@@ -118,7 +126,7 @@ void World::render(const glm::mat4 &pv)
 					continue;
 
 				// If this chunk is not initialized, skip it
-				if( !c[x][y][z]->initialized)
+				if( !c[x][y][z]->initialized )
 				{
 					// But if it is the closest to the camera, mark it for initialization
 					if(ux < 0 || d < ud)

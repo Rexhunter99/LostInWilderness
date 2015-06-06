@@ -40,9 +40,9 @@ Chunk::Chunk()
 	this->az = 0;
 }
 
-Chunk::Chunk(int x, int y, int z)
+Chunk::Chunk( int x, int y, int z, bool manual_gen )
 {
-	this->init();
+	this->init( manual_gen );
 	this->ax = x;
 	this->ay = y;
 	this->az = z;
@@ -66,7 +66,7 @@ Chunk::~Chunk()
 	glDeleteBuffers( 1, &this->vbo );
 }
 
-void Chunk::init()
+void Chunk::init( bool manual_gen )
 {
 	//memset( blk, 0, sizeof(blk) );
 	for(int x = 0; x < CHUNK_WIDTH; x++)
@@ -82,12 +82,14 @@ void Chunk::init()
 
 	// -- Initialize the neighbour chunk pointers to nullptr
 	left = right = below = above = front = back = nullptr;
+
 	// -- Initialize the time the chunk was last used to 'now'
 	this->time_last_saved	= std::time( nullptr );
+
 	// -- Initialize the flags (1 bit each)
-	needs_update					= true;
+	needs_update			= true;
 	initialized				= false;
-	generated				= false;
+	generated				= manual_gen;
 	generating				= false;
 	glGenBuffers(1, &this->vbo);
 }
@@ -215,8 +217,9 @@ void Chunk::set( int x, int y, int z, Block *new_block )
 	this->blk[x][y][z] = new_block;
 	needs_update = true;
 
-	/* When updating blocks at the edge of this WorldChunk,
-	   visibility of blocks in the neighbouring WorldChunk might change. */
+	// When updating blocks at the edge of this WorldChunk,
+	//   visibility of blocks in the neighbouring WorldChunk might change.
+
 	if(x == 0 && left)
 		left->needs_update = true;
 	if(x == CHUNK_WIDTH - 1 && right)
