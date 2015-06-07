@@ -672,6 +672,8 @@ GaiaCraft::GaiaCraft()
 	this->config						= new Config();
 	this->config->load( "client.properties" );
 
+	cout << "Test" << endl;
+	this->config->getFloat( "renderer.field_of_view" );
 	GaiaCraft::iGaiaCraft->config->getFloat( "renderer.field_of_view" );
 
 	Renderer::iRenderer					= new Renderer( GaiaCraft::iGaiaCraft->config->getString( "renderer.api" ) );

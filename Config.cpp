@@ -6,13 +6,15 @@
 #include <sstream>
 #include <string>
 #include <cstdlib>
+#include <memory.h>
+#include <cstdlib>
 
 typedef std::map<std::string,std::string> keyval_t;
 
 
 Config::Config()
 {
-
+	this->m_items.clear();
 }
 
 Config::~Config()
@@ -50,17 +52,22 @@ bool Config::load( std::string file_name )
 		{
 			char key[256];
 			char value[256];
+			memset( key, 0, 255 );
+			memset( value, 0, 255 );
 
 			f.getline( key, 255, '=' );
-
-			if ( key[0] == '#' ) continue;
-
 			f.getline( value, 255 );
 
-			this->m_items.insert( keyval_t::value_type( key, value ) );
+			// -- Abort this line if it has the comment pre-pends
+			if ( key[0] == '#' ) continue;
+			if ( key[0] == ';' ) continue;
+			if ( key[0] == '/' && key[1] == '/' ) continue;
+
+			this->m_items[ std::string(key) ] = std::string(value);
 		}
 
 		f.close();
+
 		return true;
 	}
 
@@ -71,13 +78,14 @@ bool Config::load( std::string file_name )
 uint64_t Config::getInteger( std::string key )
 {
 	std::string s_value = this->getString( key );
+	s_value = ( s_value=="" ) ? "0" : s_value;
 	return std::strtol( s_value.c_str(), nullptr, 10 );
 }
 
 double Config::getFloat( std::string key )
 {
 	std::string s_value = this->getString( key );
-	std::cout << key << "=" << s_value << std::endl;
+	s_value = ( s_value=="" ) ? "0.0" : s_value;
 	return std::strtod( s_value.c_str(), nullptr );
 }
 
@@ -93,7 +101,6 @@ std::string Config::getString( std::string key )
 
 void Config::setInteger( std::string key, uint64_t value )
 {
-	// TODO: Find if the key exists, if it does, replace the key value instead
 	std::stringstream s_value;
 	s_value << value;
 
@@ -102,7 +109,6 @@ void Config::setInteger( std::string key, uint64_t value )
 
 void Config::setFloat( std::string key, double value )
 {
-	// TODO: Find if the key exists, if it does, replace the key value instead
 	std::stringstream s_value;
 	s_value << value;
 

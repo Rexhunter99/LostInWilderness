@@ -9,6 +9,7 @@
 #include <unordered_map>
 
 #include <glm/fwd.hpp>
+#include <vector.h>
 
 #define SCX 12
 #define SCY 1
@@ -30,11 +31,14 @@ class World
 public:
 	// Loaded chunks
 	Chunk		*c[SCX][SCY][SCZ];
-	//std::unordered_map< std::tuple<uint64_t,uint64_t,uint64_t>, Chunk*> c;
+	std::unordered_map< vector3<uint64_t>, Chunk*> c;
+
 	// The world seed
 	time_t		seed;
+
 	// The internal name of the world
 	std::string	name;
+
 	// The locale name of the world
 	std::wstring locale_name;
 
