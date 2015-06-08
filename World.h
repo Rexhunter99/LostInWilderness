@@ -30,8 +30,8 @@ class World
 {
 public:
 	// Loaded chunks
-	Chunk		*c[SCX][SCY][SCZ];
-	std::unordered_map< vector3<uint64_t>, Chunk*> c;
+	Chunk		**chunk_array[SCX][SCY][SCZ];
+	std::unordered_map< vector3<uint64_t>, Chunk*> chunk_map;
 
 	// The world seed
 	time_t		seed;

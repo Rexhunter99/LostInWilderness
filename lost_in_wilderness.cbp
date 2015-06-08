@@ -187,6 +187,12 @@
 		<Unit filename="LostInWilderness.h">
 			<Option virtualFolder="Client/" />
 		</Unit>
+		<Unit filename="Network.cpp">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="Network.h">
+			<Option virtualFolder="Utils/" />
+		</Unit>
 		<Unit filename="Noise.cpp">
 			<Option virtualFolder="Utils/" />
 		</Unit>
