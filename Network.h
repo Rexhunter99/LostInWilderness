@@ -2,7 +2,11 @@
 #pragma once
 
 #include <stdint.h>
+#include <array>
+#include <map>
 #include <string>
+#include <thread>
+#include <vector>
 
 namespace Network {
 
@@ -13,19 +17,38 @@ namespace Network {
  ** @note Spec: http://www.w3.org/TR/XMLHttpRequest/ */
 class HttpRequest
 {
+private:
+
+	int			m_socket;
+	uint32_t	m_method;
+	std::string	m_host,
+				m_url,
+				m_username,
+				m_password,
+				m_response_header,
+				m_request_header;
+	bool		m_asynchronous;
+	std::thread	*m_thread;
+
 public:
 
-	enum HttpRequestEnum
+	enum HttpMethodEnum
 	{
 		HTTP_GET			= 0,
 		HTTP_POST			= 1,
-
-		STATE_NOTINIT		= 0,
-		STATE_CONNECTED		= 1,
-		STATE_RECEIVED		= 2,
-		STATE_PROCESSING	= 3,
-		STATE_READY			= 4
 	};
+
+	enum HttpRequestEnum
+	{
+		STATE_UNSENT			= 0,
+		STATE_OPENED			= 1,
+		STATE_HEADERS_RECEIVED	= 2,
+		STATE_DOWNLOADING		= 3,
+		STATE_DONE				= 4
+	};
+
+	HttpRequest();
+	~HttpRequest();
 
 	// -- Cancels the current request
 	void abort();
@@ -33,9 +56,11 @@ public:
 	// or not, and other optional attributes of a request
 	void open( uint32_t method, std::string url, bool async = false, std::string uname = "", std::string pswd = "" );
 	// -- Sends the request off to the server.
-	void send( std::string p_post = "" );
-	//getAllResponseHeaders();	//Returns header information
-	//getResponseHeader();	//Returns specific header information
+	void send( std::string data = "" );
+	void send( std::wstring data = L"" );
+	void send( const void *data );
+	//std::string getAllResponseHeaders();	//Returns header information
+	//std::string getResponseHeader();	//Returns specific header information
 	//setRequestHeader()	Adds a label/value pair to the header to be sent
 
 
@@ -58,8 +83,8 @@ public:
 class TCPSocket
 {
 public:
-	Network();
-	~Network();
+	TCPSocket();
+	~TCPSocket();
 
 	bool init();
 	bool shutdown();
@@ -68,8 +93,8 @@ public:
 class UDPSocket
 {
 public:
-	Network();
-	~Network();
+	v();
+	~UDPSocket();
 
 	bool init();
 	bool shutdown();
