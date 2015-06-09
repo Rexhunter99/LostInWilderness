@@ -9,7 +9,7 @@
 #include <unordered_map>
 
 #include <glm/fwd.hpp>
-#include <vector.h>
+#include "vectors.h"
 
 #define SCX 12
 #define SCY 1
@@ -31,7 +31,7 @@ class World
 public:
 	// Loaded chunks
 	Chunk		**chunk_array[SCX][SCY][SCZ];
-	std::unordered_map< vector3<uint64_t>, Chunk*> chunk_map;
+	std::unordered_map< vector3i, Chunk*> chunk_map;
 
 	// The world seed
 	time_t		seed;

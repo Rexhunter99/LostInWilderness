@@ -168,4 +168,13 @@ public:
 
 };
 
+typedef vector3<float>				vector3f;
+typedef vector3<double>				vector3d;
+typedef vector3<char>				vector3c;
+typedef vector3<unsigned char>		vector3ub;
+typedef vector3<short>				vector3s;
+typedef vector3<unsigned short>		vector3us;
+typedef vector3<long>				vector3i;
+typedef vector3<unsigned long>		vector3ui;
+
 #endif // __VECTORS_H__

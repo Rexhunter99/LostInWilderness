@@ -78,6 +78,8 @@
 					<Add option="-D_DEBUG" />
 					<Add option="-D_WINDOWS" />
 					<Add option="-DGLEW_STATIC" />
+					<Add option="-D_WIN32_WINNT=0x0601" />
+					<Add option="-DWINVER=0x0601" />
 				</Compiler>
 				<Linker>
 					<Add option="-pg" />

@@ -28,7 +28,7 @@ private:
 				m_response_header,
 				m_request_header;
 	bool		m_asynchronous;
-	std::thread	*m_thread;
+	std::thread	m_thread;
 
 public:
 
@@ -93,7 +93,7 @@ public:
 class UDPSocket
 {
 public:
-	v();
+	UDPSocket();
 	~UDPSocket();
 
 	bool init();
