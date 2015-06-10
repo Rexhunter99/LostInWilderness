@@ -22,7 +22,7 @@ World::World( std::string name )
 	for (int y = 0; y < SCY; y++)
 	for (int z = 0; z < SCZ; z++)
 	{
-		this->c[x][y][z] = new Chunk(x - SCX / 2, y - SCY / 2, z - SCZ / 2);
+		this->chunk_map[ vector3i(x,y,z) ] = new Chunk(x - SCX / 2, y - SCY / 2, z - SCZ / 2);
 	}
 
 	// -- Assign sibling pointers
@@ -65,19 +65,19 @@ World::~World()
 }
 
 
-Block * World::get(int x, int y, int z) const
+Block * World::getBlock(int64_t x, int64_t y, int64_t z) const
 {
-	int cx = (x + CHUNK_WIDTH * (SCX / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (SCY / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_LENGTH * (SCZ / 2)) / CHUNK_LENGTH;
+	int64_t cx = (x + CHUNK_WIDTH * (SCX / 2)) / CHUNK_WIDTH;
+	int64_t cy = (y + CHUNK_HEIGHT * (SCY / 2)) / CHUNK_HEIGHT;
+	int64_t cz = (z + CHUNK_LENGTH * (SCZ / 2)) / CHUNK_LENGTH;
 
 	if(cx < 0 || cx >= SCX || cy < 0 || cy >= SCY || cz <= 0 || cz >= SCZ)
 		return nullptr;
 
-	return c[cx][cy][cz]->get(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_LENGTH - 1));
+	return this->chunk_map[vector3i(cx,cy,cz)]->get(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_LENGTH - 1));
 }
 
-void World::set(int x, int y, int z, Block *block )
+void World::setBlock(int x, int y, int z, Block *block )
 {
 	int cx = (x + CHUNK_WIDTH * (SCX / 2)) / CHUNK_WIDTH;
 	int cy = (y + CHUNK_HEIGHT * (SCY / 2)) / CHUNK_HEIGHT;

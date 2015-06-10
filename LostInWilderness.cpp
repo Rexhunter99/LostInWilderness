@@ -336,7 +336,7 @@ static void display()
 
 			/* If we find a block that is not air, we are done */
 
-			if(world->get(mx, my, mz))
+			if(world->getBlock(mx, my, mz))
 				break;
 		}
 
