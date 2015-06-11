@@ -30,18 +30,19 @@ World::World( std::string name )
 	for(int y = 0; y < SCY; y++)
 	for(int z = 0; z < SCZ; z++)
 	{
+		Chunk *c = this->chunk_map[ vector3i(x,y,z) ];
 		if(x > 0)
-			c[x][y][z]->left = c[x - 1][y][z];
+			c->left = c[x - 1][y][z];
 		if(x < SCX - 1)
-			c[x][y][z]->right = c[x + 1][y][z];
+			c->right = c[x + 1][y][z];
 		if(y > 0)
-			c[x][y][z]->below = c[x][y - 1][z];
+			c->below = c[x][y - 1][z];
 		if(y < SCY - 1)
-			c[x][y][z]->above = c[x][y + 1][z];
+			c->above = c[x][y + 1][z];
 		if(z > 0)
-			c[x][y][z]->front = c[x][y][z - 1];
+			c->front = c[x][y][z - 1];
 		if(z < SCZ - 1)
-			c[x][y][z]->back = c[x][y][z + 1];
+			c->back = c[x][y][z + 1];
 	}
 
 	// -- Pre-generate the chunks
@@ -49,7 +50,7 @@ World::World( std::string name )
 	for (int y = 0; y < SCY; y++)
 	for (int z = 0; z < SCZ; z++)
 	{
-		this->c[x][y][z]->generate( this->seed );
+		this->chunk_map[ vector3i(x,y,z) ]->generate( this->seed );
 	}
 }
 
@@ -77,16 +78,16 @@ Block * World::getBlock(int64_t x, int64_t y, int64_t z) const
 	return this->chunk_map[vector3i(cx,cy,cz)]->get(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_LENGTH - 1));
 }
 
-void World::setBlock(int x, int y, int z, Block *block )
+void World::setBlock(int64_t x, int64_t y, int64_t z, Block *block )
 {
-	int cx = (x + CHUNK_WIDTH * (SCX / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (SCY / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_LENGTH * (SCZ / 2)) / CHUNK_LENGTH;
+	int64_t cx = (x + CHUNK_WIDTH * (SCX / 2)) / CHUNK_WIDTH;
+	int64_t cy = (y + CHUNK_HEIGHT * (SCY / 2)) / CHUNK_HEIGHT;
+	int64_t cz = (z + CHUNK_LENGTH * (SCZ / 2)) / CHUNK_LENGTH;
 
 	if(cx < 0 || cx >= SCX || cy < 0 || cy >= SCY || cz <= 0 || cz >= SCZ)
 		return;
 
-	c[cx][cy][cz]->set( x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_LENGTH - 1), block );
+	this->chunk_map[vector3i(cx,cy,cz)]->set( x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_LENGTH - 1), block );
 }
 
 void World::render(const glm::mat4 &pv)

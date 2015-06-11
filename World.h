@@ -26,16 +26,21 @@ class World
 {
 public:
 	// Loaded chunks
-	Chunk		**chunk_array;
 	std::unordered_map<vector3i, Chunk*, vector3i_hash, vector3i_hash> chunk_map;
 
-	// The world seed
+	/** @var seed
+	 ** The seed this world uses for randomly generating its terrain
+	 **/
 	time_t		seed;
 
-	// The internal name of the world
+	/** @var name
+	 ** The internal name of the world, usually in English.
+	 **/
 	std::string	name;
 
-	// The locale name of the world
+	/** @var locale_name
+	 ** The name of the world in the 'locale' text
+	 **/
 	std::wstring locale_name;
 
 
@@ -84,6 +89,7 @@ public:
 	void preGenerate( int x, int y, int z, int distance );
 
 	/** @fn render( const glm::mat4 &pv )
+	 ** @param pv Projection*View Matrix to apply to the rendering
 	 **/
 	void render(const glm::mat4 &pv);
 };
