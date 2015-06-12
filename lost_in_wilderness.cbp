@@ -177,6 +177,8 @@
 		<Unit filename="Exceptions.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>
+		<Unit filename="Framebuffer.cpp" />
+		<Unit filename="Framebuffer.h" />
 		<Unit filename="Item.h">
 			<Option virtualFolder="World/Items/" />
 		</Unit>

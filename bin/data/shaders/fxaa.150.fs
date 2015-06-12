@@ -1,19 +1,15 @@
-#version 150 core
 /** Fragment shader for FXAA post-processing on a framebuffer texture object
+ ** @version 150 core
+ ** @author Rexhunter99
  **/
 
 #define FXAA_REDUCE_MIN (1.0/128.0)
 #define FXAA_REDUCE_MUL (1.0/8.0)
 #define FXAA_SPAN_MAX 8.0
 
-uniform sampler2D framebuffer;
-uniform vec2 resolution;
-
-out vec4 o_frag_color;
-
-void main()
+vec4 get( sampler2D framebuffer, vec2 resolution )
 {
-	vec2 inverse_resolution=vec2(1.0/resolution.x,1.0/resolution.y);
+	vec2 inverse_resolution = vec2(1.0/resolution.x,1.0/resolution.y);
 
 	vec3 rgbNW = texture2D(framebuffer, gl_TexCoord[0].xy + (vec2(-1.0,-1.0)) * inverse_resolution).xyz;
 	vec3 rgbNE = texture2D(framebuffer, gl_TexCoord[0].xy + (vec2(1.0,-1.0)) * inverse_resolution).xyz;
@@ -45,12 +41,12 @@ void main()
 
 	float lumaB = dot(rgbB, luma);
 
-	if((lumaB < lumaMin) || (lumaB > lumaMax))
+	if ( (lumaB < lumaMin) || (lumaB > lumaMax) )
 	{
-		o_frag_color = vec4(rgbA,1.0);
+		return vec4(rgbA,1.0);
 	}
 	else
 	{
-		o_frag_color = vec4(rgbB,1.0);
+		return vec4(rgbB,1.0);
 	}
 }
