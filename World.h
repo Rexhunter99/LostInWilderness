@@ -26,7 +26,8 @@ class World
 {
 public:
 	// Loaded chunks
-	std::unordered_map<vector3i, Chunk*, vector3i_hash, vector3i_hash> chunk_map;
+	typedef std::unordered_map<vector3i, Chunk*, vector3i_hash, vector3i_hash> chunk_map_t;
+	chunk_map_t chunk_map;
 
 	/** @var seed
 	 ** The seed this world uses for randomly generating its terrain
@@ -79,14 +80,14 @@ public:
 	 **/
 	void setChunk( int64_t x, int64_t y, int64_t z, Chunk *chunk );
 
-	/** @fn preGenerate( int x, int y, int z, int distance )
+	/** @fn preGenerate( int sx, int sy, int sz, int distance )
 	 ** @brief Pre-generate the world from the supplied co-ordinates in all directions with the supplied distance
-	 ** @param x The x-coordinate in the world to generate from
-	 ** @param y The y-coordinate in the world to generate from
-	 ** @param z The z-coordinate in the world to generate from
+	 ** @param sx The x-coordinate in the world to generate from
+	 ** @param sy The y-coordinate in the world to generate from
+	 ** @param sz The z-coordinate in the world to generate from
 	 ** @param distance The distance in chunks to generate out from x,y,z
 	 **/
-	void preGenerate( int x, int y, int z, int distance );
+	void preGenerate( int sx, int sy, int sz, int distance );
 
 	/** @fn render( const glm::mat4 &pv )
 	 ** @param pv Projection*View Matrix to apply to the rendering

@@ -7,7 +7,7 @@
 #define FXAA_REDUCE_MUL (1.0/8.0)
 #define FXAA_SPAN_MAX 8.0
 
-vec4 get( sampler2D framebuffer, vec2 resolution )
+vec4 getFXAA( sampler2D framebuffer, vec2 texcoord, vec2 resolution )
 {
 	vec2 inverse_resolution = vec2(1.0/resolution.x,1.0/resolution.y);
 

@@ -44,8 +44,14 @@ public:
 	float			humidity,
 					temperature;
 
+	/**
+	 **/
 	Chunk();
+
+	/**
+	 **/
 	Chunk( int x, int y, int z, bool manual_gen = false );
+
 	~Chunk();
 
 	/** @fn get( int x, int y, int z ) const

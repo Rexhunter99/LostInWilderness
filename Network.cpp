@@ -177,13 +177,17 @@ namespace Network {
 				break;
 			}
 			#elif defined( _WINDOWS ) || defined( _WIN32 )
-			int n = recv( (socket_t)this->m_socket, &buffer[0], buffer_len-1, 0 );
+			int n = ::recv( (socket_t)this->m_socket, &buffer[0], buffer_len-1, 0 );
 			if (n < 0)
 			{
-				fprintf( stdout, "HttpRequest::open() :: ERROR receiving from socket" );
+				cerr	<< "ERROR!\n"
+						<< "Function: HttpRequest::send()\n"
+						<< "Source-Line: " << (__LINE__-4)
+						<< "Source-File: " << __FILE__
+						<< "An issue arose when receiving from the socket " << this->m_socket << "\n" << endl;
 				break;
 			}
-			#endif // define
+			#endif
 
 			cout << (char*)&buffer[0];
 

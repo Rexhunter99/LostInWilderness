@@ -359,10 +359,11 @@ static void display()
 		else if(pz < mz)
 			face = 5;
 
-		// If we are looking at air, move the cursor out of sight
-
-		if(!world->get(mx, my, mz))
+		// -- If we are looking at air, move the cursor out of sight
+		if( !world->getBlock(mx, my, mz) )
+		{
 			mx = my = mz = 99999;
+		}
 	}
 
 	/**float bx = mx;
@@ -524,7 +525,7 @@ void key_cb( GLFWwindow* wnd, int key, int scancode, int action, int mods )
 			update_vectors();
 			break;
 		case GLFW_KEY_END:
-			camera.position = glm::vec3(0, CX * SCX, 0);
+			camera.position = glm::vec3(0, CX * Config::getGlobal()->getInteger( "renderer.view_distance" ), 0);
 			camera.angle = glm::vec3(0, -3.14 * 0.49, 0);
 			update_vectors();
 			break;
@@ -669,12 +670,8 @@ GaiaCraft::GaiaCraft()
 {
 	GaiaCraft::iGaiaCraft = this;
 
-	this->config						= new Config();
+	this->config						= Config::getGlobal();
 	this->config->load( "client.properties" );
-
-	cout << "Test" << endl;
-	this->config->getFloat( "renderer.field_of_view" );
-	GaiaCraft::iGaiaCraft->config->getFloat( "renderer.field_of_view" );
 
 	Renderer::iRenderer					= new Renderer( GaiaCraft::iGaiaCraft->config->getString( "renderer.api" ) );
     ResourceManager::iResourceManager	= new ResourceManager();

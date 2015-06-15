@@ -253,7 +253,10 @@
 		<Unit filename="bin/data/shaders/fxaa.150.fs">
 			<Option virtualFolder="Renderer/Resources/" />
 		</Unit>
-		<Unit filename="bin/data/shaders/fxaa.150.vs">
+		<Unit filename="bin/data/shaders/pp.150.fs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/pp.150.vs">
 			<Option virtualFolder="Renderer/Resources/" />
 		</Unit>
 		<Unit filename="bin/data/shaders/world.120.fs">
