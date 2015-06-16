@@ -2,6 +2,7 @@
 #include "LostInWilderness.h"
 #include "Chunk.h"
 #include "Exceptions.h"
+#include "Network.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "World.h"
@@ -167,9 +168,14 @@ int init_resources()
 
 	Renderer::font_texture = new TextFont( "data/fonts/minecraft" );
 
+	// -- Network
+	Network::HttpRequest http;
+	http.open( Network::HttpRequest::HTTP_GET, "www.epiczen.net/" );
+	http.send( std::string("test") );
+
 	// -- Create shaders
-  Shader *shader_world = new Shader();
-  Renderer::default_shader = shader_world;
+	Shader *shader_world = new Shader();
+	Renderer::default_shader = shader_world;
 
 	//shader_world->addVertexShader( "data/shaders/world.120.vs" );
 	//shader_world->addFragmentShader( "data/shaders/world.120.fs" );
@@ -252,10 +258,10 @@ static unsigned int frameCount = 0;
 
 static void display()
 {
-	float fov = 75.0f / 180.0f * 3.14f;//GaiaCraft::iGaiaCraft->config->getFloat( "renderer.field_of_view" );
-	float aspect = (float)ww/(float)wh;
-	float znear = 0.1f;
-	float zfar = 512.0f;
+	float fov = Config::getGlobal()->getFloat( "renderer.field_of_view" ) / 180.0f * 3.14f;
+	float aspect = (float)ww / (float)wh;
+	float znear = 0.25f;
+	float zfar = 16.0f * Config::getGlobal()->getInteger( "renderer.view_distance" );
 
 	glm::mat4 view = glm::lookAt(camera.position, camera.position + camera.lookat, camera.up);
 	glm::mat4 projection = glm::perspective( fov, aspect, znear, zfar );
@@ -318,29 +324,32 @@ static void display()
 			face += 3;
 		if(face == 2 && camera.lookat.z > 0)
 			face += 3;
-	} else {
-		/* Very naive ray casting algorithm to find out which block we are looking at */
+	}
+	else
+	{
+		// -- Very naive ray casting algorithm to find out which block we are looking at
 
 		glm::vec3 testpos = camera.position;
 		glm::vec3 prevpos = camera.position;
 
-		for(int i = 0; i < 100; i++) {
-			/* Advance from our currect position to the direction we are looking at, in small steps */
+		for ( auto i = 0; i < 16 * 4; i++ )
+		{
+			// -- Advance from our currect position to the direction we are looking at, in increments of 1 voxel.
+			// NOTE: 1 voxel is equal to 1.0f / 16.0f
 
 			prevpos = testpos;
-			testpos += camera.lookat * 0.1f;
+			testpos += camera.lookat * (1.0f / 16.0f);
 
 			mx = floorf(testpos.x);
 			my = floorf(testpos.y);
 			mz = floorf(testpos.z);
 
-			/* If we find a block that is not air, we are done */
-
-			if(world->getBlock(mx, my, mz))
+			// -- If this block is not air, then break the loop
+			if ( world->getBlock(mx, my, mz) )
 				break;
 		}
 
-		/* Find out which face of the block we are looking at */
+		// -- Find out which face of the block we are looking at
 
 		int px = floorf(prevpos.x);
 		int py = floorf(prevpos.y);
@@ -360,7 +369,7 @@ static void display()
 			face = 5;
 
 		// -- If we are looking at air, move the cursor out of sight
-		if( !world->getBlock(mx, my, mz) )
+		if ( world->getBlock(mx, my, mz) == nullptr )
 		{
 			mx = my = mz = 99999;
 		}
@@ -673,12 +682,17 @@ GaiaCraft::GaiaCraft()
 	this->config						= Config::getGlobal();
 	this->config->load( "client.properties" );
 
+	// -- Prepare the network API
+	Network::network_initialise();
+
 	Renderer::iRenderer					= new Renderer( GaiaCraft::iGaiaCraft->config->getString( "renderer.api" ) );
     ResourceManager::iResourceManager	= new ResourceManager();
 }
 
 GaiaCraft::~GaiaCraft()
 {
+	Network::network_cleanup();
+
 	delete this->config;
 	delete ResourceManager::iResourceManager;
 	delete Renderer::iRenderer;

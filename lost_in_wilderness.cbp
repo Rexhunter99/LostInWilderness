@@ -91,6 +91,7 @@
 					<Add option="-luser32" />
 					<Add option="-lkernel32" />
 					<Add option="-lpng" />
+					<Add option="-lws2_32" />
 				</Linker>
 			</Target>
 			<Target title="Release-Win32">
@@ -105,6 +106,8 @@
 					<Add option="-DNDEBUG" />
 					<Add option="-D_WINDOWS" />
 					<Add option="-DGLEW_STATIC" />
+					<Add option="-D_WIN32_WINNT=0x0601" />
+					<Add option="-DWINVER=0x0601" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -116,6 +119,7 @@
 					<Add option="-luser32" />
 					<Add option="-lkernel32" />
 					<Add option="-lpng" />
+					<Add option="-lws2_32" />
 				</Linker>
 			</Target>
 		</Build>
@@ -177,8 +181,12 @@
 		<Unit filename="Exceptions.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>
-		<Unit filename="Framebuffer.cpp" />
-		<Unit filename="Framebuffer.h" />
+		<Unit filename="Framebuffer.cpp">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="Framebuffer.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
 		<Unit filename="Item.h">
 			<Option virtualFolder="World/Items/" />
 		</Unit>

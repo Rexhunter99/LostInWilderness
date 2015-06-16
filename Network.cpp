@@ -80,11 +80,13 @@ namespace Network {
 
 		if ( getaddrinfo( this->m_host.c_str(), "80", &host_info, &host_info_list) != 0 )
 		{
+			int e = WSAGetLastError();
 			cerr	<< "ERROR!\n"
 					<< "Function: HttpRequest::open()\n"
-					<< "Source-Line: " << (__LINE__-4)
-					<< "Source-File: " << __FILE__
+					<< "Source-Line: " << (__LINE__-4) << "\n"
+					<< "Source-File: " << __FILE__ << "\n"
 					<< "Failed to getaddrinfo\n" << endl;
+
 			return;
 		}
 
@@ -92,8 +94,8 @@ namespace Network {
 		{
 			cerr	<< "ERROR!\n"
 					<< "Function: HttpRequest::open()\n"
-					<< "Source-Line: " << (__LINE__-4)
-					<< "Source-File: " << __FILE__
+					<< "Source-Line: " << (__LINE__-4) << "\n"
+					<< "Source-File: " << __FILE__ << "\n"
 					<< "Failed to open the socket.\n" << endl;
 			return;
 		}
@@ -102,8 +104,8 @@ namespace Network {
 		{
 			cerr	<< "ERROR!\n"
 					<< "Function: HttpRequest::open()\n"
-					<< "Source-Line: " << (__LINE__-4)
-					<< "Source-File: " << __FILE__
+					<< "Source-Line: " << (__LINE__-4) << "\n"
+					<< "Source-File: " << __FILE__ << "\n"
 					<< "Failed connecting.\n" << endl;
 			return;
 		}
@@ -114,9 +116,12 @@ namespace Network {
 		// -- Initialise the request header
 		string msg = "";
 
+		// FIXME: SIGSEGVs on the second "msg" line if there is no trailing '/' character
 		if ( method == HTTP_GET )
 		{
-			msg += string("GET /") + this->m_url.substr( this->m_url.find('/') ) + string(" HTTP/1.1\n" );
+			msg += string("GET /");
+			msg += this->m_url.substr( this->m_url.find('/') );
+			msg += string(" HTTP/1.1\n" );
 		}
 		else if ( method == HTTP_POST )
 		{
@@ -143,7 +148,7 @@ namespace Network {
 
 	void HttpRequest::send( std::string data )
 	{
-		const int			buffer_len = 32767;
+		const int			buffer_len = 2048;//32767;
 		std::vector<char>	buffer;
 
 		// -- Size the buffer
@@ -164,6 +169,8 @@ namespace Network {
 			#endif
 		}
 
+		this->responseText = "";
+
 		// -- Loop and receive all the data the host sends us
 		while ( true )
 		{
@@ -182,14 +189,15 @@ namespace Network {
 			{
 				cerr	<< "ERROR!\n"
 						<< "Function: HttpRequest::send()\n"
-						<< "Source-Line: " << (__LINE__-4)
-						<< "Source-File: " << __FILE__
+						<< "Source-Line: " << (__LINE__-4) << "\n"
+						<< "Source-File: " << __FILE__ << "\n"
 						<< "An issue arose when receiving from the socket " << this->m_socket << "\n" << endl;
 				break;
 			}
 			#endif
 
-			cout << (char*)&buffer[0];
+			// Process the data that was received, here
+			this->responseText += &buffer[0];
 
 			if ( n == 0 )
 			{
@@ -197,8 +205,6 @@ namespace Network {
 			}
 
 		}
-
-		cout << endl;
 	}
 
 

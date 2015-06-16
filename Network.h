@@ -10,6 +10,9 @@
 
 namespace Network {
 
+	bool network_initialise();
+	void network_cleanup();
+
 
 /** @class HttpRequest
  ** @brief Javascript inspired HttpRequest class
