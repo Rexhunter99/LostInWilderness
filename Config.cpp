@@ -10,6 +10,7 @@
 #include <cstdlib>
 
 typedef std::map<std::string,std::string> keyval_t;
+Config Config::__c;
 
 
 Config::Config()
