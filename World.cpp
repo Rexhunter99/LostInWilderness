@@ -1,6 +1,7 @@
 
 #include "World.h"
 #include "Chunk.h"
+#include "Config.h"
 #include "LostInWilderness.h"
 #include "Renderer.h"
 
@@ -133,17 +134,22 @@ void World::preGenerate( int sx, int sy, int sz, int distance )
 void World::render(const glm::mat4 &pv)
 {
 	int vd = Config::getGlobal()->getInteger( "renderer.view_distance" );
+	Camera *camera = GaiaCraft::iGaiaCraft->camera;
 
-	float ud = 1.0 / 0.0;
+	int64_t cx = roundf( camera->position.x / CHUNK_WIDTH );
+	int64_t cy = roundf( camera->position.y / CHUNK_HEIGHT );
+	int64_t cz = roundf( camera->position.z / CHUNK_LENGTH );
+
+	int ud = 0;
 	int ux = -1;
 	int uy = -1;
 	int uz = -1;
 
-	for(int x = 0; x < vd; x++)
+	for(int x = cx - (vd); x < cx + (vd); x++)
 	{
 		for(int y = 0; y < 1; y++)
 		{
-			for(int z = 0; z < vd; z++)
+			for(int z = cz - (vd); z < cz + (vd); z++)
 			{
 				Chunk *chunk = this->getChunk( x, y, z );
 
@@ -151,6 +157,9 @@ void World::render(const glm::mat4 &pv)
 				{
 					continue;
 				}
+
+				//if ( x  > vd/2 || z > vd/2 )sion
+				//	continue;
 
 				glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(chunk->ax * CHUNK_WIDTH, chunk->ay * CHUNK_HEIGHT, chunk->az * CHUNK_LENGTH));
 				glm::mat4 mvp = pv * model;

@@ -1,24 +1,42 @@
 
 #pragma once
 
+#if !defined( __LOSTINWILDERNESS_H__ )
+#define __LOSTINWILDERNESS_H__
+
 #include <ctime>
 #include <map>
 #include <string>
 #include <thread>
 
-#include "Config.h"
+#include <glm/glm.hpp>
+
 #include "ResourceManager.h"
 #include "Renderer.h"
 
 
-class Chunk;
+class Camera
+{
+public:
 
+	glm::vec3 position;
+	glm::vec3 forward;
+	glm::vec3 right;
+	glm::vec3 up;
+	glm::vec3 lookat;
+	glm::vec3 angle;
+};
+
+class Chunk;
+class Config;
+class World;
 
 class GaiaCraft
 {
 public:
 	static GaiaCraft					*iGaiaCraft;
-	class Config						*config;
+	Config								*config;
+	Camera								*camera;
 	std::map<std::string,std::thread>	threads;
 
 	GaiaCraft();
@@ -34,3 +52,5 @@ public:
 
 	static GaiaCraft * getInstance() { return iGaiaCraft; }
 };
+
+#endif

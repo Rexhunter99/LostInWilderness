@@ -1,6 +1,7 @@
 
 #include "LostInWilderness.h"
 #include "Chunk.h"
+#include "Config.h"
 #include "Exceptions.h"
 #include "Network.h"
 #include "Shader.h"
@@ -35,7 +36,9 @@ using namespace std;
 typedef struct ChunkUpdateStruct {
 	enum	{
 		CHUNK_GENERATE,
-		CHUNK_UPDATE
+		CHUNK_UPDATE,
+		CHUNK_UPDATE_LIGHTING,
+		CHUNK_UPDATE_GRAPHIC
 	}		type;
 	Chunk	*chunk;
 	int		x,
@@ -44,36 +47,26 @@ typedef struct ChunkUpdateStruct {
 	int		seed;
 } ChunkUpdateType;
 
-static struct CameraStruct {
-	glm::vec3 position;
-	glm::vec3 forward;
-	glm::vec3 right;
-	glm::vec3 up;
-	glm::vec3 lookat;
-	glm::vec3 angle;
-} camera;
-
-static GLuint cursor_vbo;
-static GLuint default_vao;
-static int ww, wh;
-static int mx, my, mz;
-static int face;
-static uint8_t buildtype = 1;
+static Camera		g_camera;
+static World		*world;
+static GLuint		cursor_vbo;
+static GLuint		default_vao;
+static int			ww, wh;
+static int			mx, my, mz;
+static int			face;
+static uint8_t		buildtype = 1;
 static unsigned int keys;
-static bool select_using_depthbuffer = false;
-static World *world;
+static bool			select_using_depthbuffer = false;
 
 uint32_t chunk_update_count = 0;
 uint32_t chunk_gen_count = 0;
 
 
-// Size of one chunk in blocks
+// Shorthand: Size of one chunk in blocks
 #define CX CHUNK_WIDTH
 #define CY CHUNK_HEIGHT
 #define CZ CHUNK_LENGTH
 
-// Number of VBO slots for chunks
-#define CHUNKSLOTS (SCX * SCY * SCZ)
 
 std::thread					g_chunk_updater_thread,
 							g_chunk_fileio_thread;
@@ -144,19 +137,19 @@ static void free_resources();
 // Calculate the forward, right and lookat vectors from the angle vector
 static void update_vectors()
 {
-	camera.forward.x = std::sin(camera.angle.x);
-	camera.forward.y = 0;
-	camera.forward.z = std::cos(camera.angle.x);
+	g_camera.forward.x = std::sin(g_camera.angle.x);
+	g_camera.forward.y = 0;
+	g_camera.forward.z = std::cos(g_camera.angle.x);
 
-	camera.right.x = -std::cos(camera.angle.x);
-	camera.right.y = 0;
-	camera.right.z = std::sin(camera.angle.x);
+	g_camera.right.x = -std::cos(g_camera.angle.x);
+	g_camera.right.y = 0;
+	g_camera.right.z = std::sin(g_camera.angle.x);
 
-	camera.lookat.x = std::sin(camera.angle.x) * std::cos(camera.angle.y);
-	camera.lookat.y = std::sin(camera.angle.y);
-	camera.lookat.z = std::cos(camera.angle.x) * std::cos(camera.angle.y);
+	g_camera.lookat.x = std::sin(g_camera.angle.x) * std::cos(g_camera.angle.y);
+	g_camera.lookat.y = std::sin(g_camera.angle.y);
+	g_camera.lookat.z = std::cos(g_camera.angle.x) * std::cos(g_camera.angle.y);
 
-	camera.up = glm::cross(camera.right, camera.lookat);
+	g_camera.up = glm::cross(g_camera.right, g_camera.lookat);
 }
 
 int init_resources()
@@ -227,8 +220,8 @@ int init_resources()
 
 
   // TODO: place the camera on the terrain
-	camera.position = glm::vec3(0, CY / 2, 0);
-	camera.angle = glm::vec3(0, -0.5, 0);
+	g_camera.position = glm::vec3(0, CY / 2, 0);
+	g_camera.angle = glm::vec3(0, -0.5, 0);
 	update_vectors();
 
 	return 1;
@@ -261,9 +254,9 @@ static void display()
 	float fov = Config::getGlobal()->getFloat( "renderer.field_of_view" ) / 180.0f * 3.14f;
 	float aspect = (float)ww / (float)wh;
 	float znear = 0.25f;
-	float zfar = 16.0f * Config::getGlobal()->getInteger( "renderer.view_distance" );
+	float zfar = 16.0f * (Config::getGlobal()->getInteger( "renderer.view_distance" ) + 1);
 
-	glm::mat4 view = glm::lookAt(camera.position, camera.position + camera.lookat, camera.up);
+	glm::mat4 view = glm::lookAt(g_camera.position, g_camera.position + g_camera.lookat, g_camera.up);
 	glm::mat4 projection = glm::perspective( fov, aspect, znear, zfar );
 	glm::mat4 mvp = projection * view;
 
@@ -277,14 +270,15 @@ static void display()
 	glEnable( GL_CULL_FACE );
 	glCullFace( GL_BACK );
 
-	/* Then draw chunks */
+	// -- Then draw chunks
 
 	world->render(mvp);
 
-	/* At which voxel are we looking? */
+	// -- At which voxel are we looking?
 
-	if(select_using_depthbuffer) {
-		/* Find out coordinates of the center pixel */
+	if ( select_using_depthbuffer )
+	{
+		// -- Find out coordinates of the center pixel
 
 		float depth;
 		glReadPixels(ww / 2, wh / 2, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
@@ -293,7 +287,7 @@ static void display()
 		glm::vec3 wincoord = glm::vec3(ww / 2, wh / 2, depth);
 		glm::vec3 objcoord = glm::unProject(wincoord, view, projection, viewport);
 
-		/* Find out which block it belongs to */
+		// -- Find out which block it belongs to
 
 		mx = objcoord.x;
 		my = objcoord.y;
@@ -305,7 +299,7 @@ static void display()
 		if(objcoord.z < 0)
 			mz--;
 
-		/* Find out which face of the block we are looking at */
+		// -- Find out which face of the block we are looking at
 
 		if(fract(objcoord.x) < fract(objcoord.y))
 			if(fract(objcoord.x) < fract(objcoord.z))
@@ -318,19 +312,19 @@ static void display()
 			else
 				face = 2; // Z
 
-		if(face == 0 && camera.lookat.x > 0)
+		if(face == 0 && g_camera.lookat.x > 0)
 			face += 3;
-		if(face == 1 && camera.lookat.y > 0)
+		if(face == 1 && g_camera.lookat.y > 0)
 			face += 3;
-		if(face == 2 && camera.lookat.z > 0)
+		if(face == 2 && g_camera.lookat.z > 0)
 			face += 3;
 	}
 	else
 	{
 		// -- Very naive ray casting algorithm to find out which block we are looking at
 
-		glm::vec3 testpos = camera.position;
-		glm::vec3 prevpos = camera.position;
+		glm::vec3 testpos = g_camera.position;
+		glm::vec3 prevpos = g_camera.position;
 
 		for ( auto i = 0; i < 16 * 4; i++ )
 		{
@@ -338,7 +332,7 @@ static void display()
 			// NOTE: 1 voxel is equal to 1.0f / 16.0f
 
 			prevpos = testpos;
-			testpos += camera.lookat * (1.0f / 16.0f);
+			testpos += g_camera.lookat * (1.0f / 16.0f);
 
 			mx = floorf(testpos.x);
 			my = floorf(testpos.y);
@@ -529,13 +523,13 @@ void key_cb( GLFWwindow* wnd, int key, int scancode, int action, int mods )
 			keys |= 32;
 			break;
 		case GLFW_KEY_HOME:
-			camera.position = glm::vec3(0, CY + 1, 0);
-			camera.angle = glm::vec3(0, -0.5, 0);
+			g_camera.position = glm::vec3(0, CY + 1, 0);
+			g_camera.angle = glm::vec3(0, -0.5, 0);
 			update_vectors();
 			break;
 		case GLFW_KEY_END:
-			camera.position = glm::vec3(0, CX * Config::getGlobal()->getInteger( "renderer.view_distance" ), 0);
-			camera.angle = glm::vec3(0, -3.14 * 0.49, 0);
+			g_camera.position = glm::vec3(0, CX * Config::getGlobal()->getInteger( "renderer.view_distance" ), 0);
+			g_camera.angle = glm::vec3(0, -3.14 * 0.49, 0);
 			update_vectors();
 			break;
 		case GLFW_KEY_F1:
@@ -571,17 +565,17 @@ static void idle()
 	pt = t;
 
 	if(keys & 1)
-		camera.position -= camera.right * movespeed * dt;
+		g_camera.position -= g_camera.right * movespeed * dt;
 	if(keys & 2)
-		camera.position += camera.right * movespeed * dt;
+		g_camera.position += g_camera.right * movespeed * dt;
 	if(keys & 4)
-		camera.position += camera.forward * movespeed * dt;
+		g_camera.position += g_camera.forward * movespeed * dt;
 	if(keys & 8)
-		camera.position -= camera.forward * movespeed * dt;
+		g_camera.position -= g_camera.forward * movespeed * dt;
 	if(keys & 16)
-		camera.position.y += movespeed * dt;
+		g_camera.position.y += movespeed * dt;
 	if(keys & 32)
-		camera.position.y -= movespeed * dt;
+		g_camera.position.y -= movespeed * dt;
 }
 
 void motion(GLFWwindow *wnd, double x, double y)
@@ -597,17 +591,17 @@ void motion(GLFWwindow *wnd, double x, double y)
 
 	if(!warp)
 	{
-		camera.angle.x -= (x - (((float)ww / 2.0f)) ) * mousespeed;
-		camera.angle.y -= (y - (((float)wh / 2.0f)) ) * mousespeed;
+		g_camera.angle.x -= (x - (((float)ww / 2.0f)) ) * mousespeed;
+		g_camera.angle.y -= (y - (((float)wh / 2.0f)) ) * mousespeed;
 
-		if(camera.angle.x < -3.14)
-			camera.angle.x += 3.14 * 2;
-		if(camera.angle.x > 3.14)
-			camera.angle.x -= 3.14 * 2;
-		if(camera.angle.y < -3.14 / 2)
-			camera.angle.y = -3.14 / 2;
-		if(camera.angle.y > 3.14 / 2)
-			camera.angle.y = 3.14 / 2;
+		if(g_camera.angle.x < -3.14)
+			g_camera.angle.x += 3.14 * 2;
+		if(g_camera.angle.x > 3.14)
+			g_camera.angle.x -= 3.14 * 2;
+		if(g_camera.angle.y < -3.14 / 2)
+			g_camera.angle.y = -3.14 / 2;
+		if(g_camera.angle.y > 3.14 / 2)
+			g_camera.angle.y = 3.14 / 2;
 
 		update_vectors();
 
@@ -679,6 +673,7 @@ GaiaCraft::GaiaCraft()
 {
 	GaiaCraft::iGaiaCraft = this;
 
+	this->camera						= &g_camera;
 	this->config						= Config::getGlobal();
 	this->config->load( "client.properties" );
 

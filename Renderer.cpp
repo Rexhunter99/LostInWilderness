@@ -1,5 +1,6 @@
 
 #include "Renderer.h"
+#include "Config.h"
 #include "Exceptions.h"
 #include "LostInWilderness.h"
 
