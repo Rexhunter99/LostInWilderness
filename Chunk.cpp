@@ -19,9 +19,11 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <string>
+#include <sstream>
 #include <vector>
-#include <memory.h>
 #include <cmath>
+#include <memory.h>
 #include <stdint.h>
 
 typedef glm::detail::tvec4<GLbyte, glm::precision::defaultp> byte4;
@@ -559,12 +561,12 @@ void Chunk::generate( int seed )
 void Chunk::save()
 {
 	// TODO: Implement RLE-8 compression
-	char name[256];
-	sprintf( name, "world/c[%d][%d][%d].chunk", this->ax, this->ay, this->az );
+	std::stringstream name;
+	name << "world/" << this->ax << "," << this->ay << "," << this->az << ".chunk";
 
 	// -- Open the file stream for binary output
 	std::fstream f;
-	f.open( name, std::ios::out | std::ios::binary );
+	f.open( name.str().c_str(), std::ios::out | std::ios::binary );
 
 	// -- If the file stream opened properly then we write to it
 	if ( f.is_open() )
@@ -596,7 +598,8 @@ void Chunk::save()
 			buffer.add( (void*)&b->data_value, sizeof( b->data_value) );
 		}
 
-		buffer.rle8_compress();
+		// FIXME: Get rle8_uncompress() working so we can store these files as compressed rle8
+		//buffer.rle8_compress();
 
 		f.write( (const char*)buffer.ptr(), buffer.size() );
 
@@ -607,5 +610,61 @@ void Chunk::save()
 		std::cerr << "[ ERROR ] Failed to open the file: " << name << std::endl;
 	}
 
+	this->time_last_saved = time( nullptr );
+}
+
+void Chunk::load()
+{
+	// TODO: Implement RLE-8 compression
+	std::stringstream name;
+	name << "world/" << this->ax << "," << this->ay << "," << this->az << ".chunk";
+
+	// -- Open the file stream for binary output
+	std::fstream f;
+	f.open( name.str().c_str(), std::ios::in | std::ios::binary );
+
+	// -- If the file stream opened properly then we write to it
+	if ( !f.is_open() )
+	{
+		std::cerr << "[ ERROR ] File doex not exist, or is corrupt: \"" << name << "\"" << std::endl;
+	}
+	else
+	{
+		// -- Write out header data
+		uint16_t version = 1;
+		f.read( (char*)&version, sizeof(uint16_t) );
+		f.read( (char*)&this->biome, sizeof(uint16_t) );
+
+		// -- Loop through all the blocks in the chunk
+		Buffer buffer( CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * sizeof(uint16_t) );
+
+		// -- Read the chunk data from the file then close the file
+		f.read( (char*)buffer.ptr(), buffer.size() );
+		f.close();
+
+		// FIXME: Uncompress the RLE8 data
+		//buffer.rle8_uncompress();
+
+		for( int x=0; x<CHUNK_WIDTH; x++)
+		for( int z=0; z<CHUNK_LENGTH; z++)
+		for( int y=0; y<CHUNK_HEIGHT; y++)
+		{
+			uint8_t temp_ID = 0;
+			uint8_t temp_data = 0;
+
+			f.read( (char*)&temp_ID, sizeof(uint8_t) );
+			f.read( (char*)&temp_data, sizeof(uint8_t) );
+
+			//this->blk[x][y][z] = new Block( temp_ID );
+			//this->blk[x][y][z]->data_value = temp_data;
+		}
+
+		// FIXME: Get rle8_uncompress() working so we can store these files as compressed rle8
+		//buffer.rle8_uncompress();
+
+		f.close();
+	}
+
+	// -- Set the time_last_saved to now.
 	this->time_last_saved = time( nullptr );
 }

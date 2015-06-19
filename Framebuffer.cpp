@@ -19,4 +19,5 @@ uint32_t createRenderBuffer()
 	uint32_t rbo;
 	glGenRenderbuffers( 1, &rbo );
 	//glRenderbufferStorage();
+	return rbo;
 }

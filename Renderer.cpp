@@ -238,14 +238,20 @@ Renderer::Renderer( std::string version )
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
 	// -- Enable Swap Control Tear over Swap Interval (control tear does not vsync if fps is behind)
-	if ( GaiaCraft::iGaiaCraft->config->getInteger( "renderer.vertical_sync" ) > 0 )
+	if ( Config::getGlobal()->getInteger( "renderer.vertical_sync" ) > 0 )
 	{
 		if ( glfwExtensionSupported( "GLX_EXT_swap_control" ) || glfwExtensionSupported( "WGL_EXT_swap_control" ) )
 		{
 			if ( glfwExtensionSupported( "GLX_EXT_swap_control_tear" ) || glfwExtensionSupported( "WGL_EXT_swap_control_tear" ) )
+			{
 				glfwSwapInterval( -1 );
+				std::cout << "Adaptive Vertical Sync: Enabled" << std::endl;
+			}
 			else
+			{
 				glfwSwapInterval( 1 );
+				std::cout << "1:1 Vertical Sync: Enabled" << std::endl;
+			}
 		}
 	}
 }

@@ -26,9 +26,9 @@ void main(void)
 	// Calculate strength of fog
 	float z = gl_FragCoord.z / gl_FragCoord.w;
 	// Linear
-	float fog = clamp( 1.0 - (z/256.0), 0.6, 0.9 );
+	//float fog = clamp( ( 0.9 - z ) / ( 0.9 - 0.6 ), 0.0, 1.0 );
 	// Exponential
-	//float fog = clamp(exp(-fogdensity * fogdensity * z * z), 0.6, 0.9);
+	float fog = clamp(exp(-fogdensity * z * z), 0.6, 0.9);
 
 	// Final color is a mix of the actual color and the fog color
 	frag_color = mix(fogcolor, color, fog);

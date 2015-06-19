@@ -25,6 +25,7 @@ public:
 	~ResourceManager();
 
 	const BlockInfo &	getBlockInfo( std::string block_name );
+	const BlockInfo &	getBlockInfo( size_t block_id );
 	void				addBlockInfo( BlockInfo new_block_info );
 	const ItemInfo &	getItemInfo( std::string item_name );
 	void				addItemInfo( ItemInfo new_item_info );

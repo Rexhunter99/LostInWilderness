@@ -79,10 +79,6 @@ Block * World::getBlock(int64_t x, int64_t y, int64_t z) const
 
 void World::setBlock(int64_t x, int64_t y, int64_t z, Block *block )
 {
-	int vd = Config::getGlobal()->getInteger( "renderer.view_distance" );
-	//int64_t cx = (x + CHUNK_WIDTH * (vd / 2)) / CHUNK_WIDTH;
-	//int64_t cy = (y + CHUNK_HEIGHT * (1 / 2)) / CHUNK_HEIGHT;
-	//int64_t cz = (z + CHUNK_LENGTH * (vd / 2)) / CHUNK_LENGTH;
 	int64_t cx = x / CHUNK_WIDTH;
 	int64_t cy = y / CHUNK_HEIGHT;
 	int64_t cz = z / CHUNK_LENGTH;

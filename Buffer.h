@@ -27,6 +27,7 @@ public:
 
 	Buffer();
 	Buffer( const Buffer &copy_buffer );
+	Buffer( size_t byte_length );
 	Buffer( const void *copy_data, size_t byte_length );
 	~Buffer();
 

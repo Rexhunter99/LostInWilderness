@@ -96,4 +96,9 @@ public:
 	 ** Saves the chunk onto the hard drive
 	 **/
 	void save();
+
+	/** @fn load()
+	 ** Load the chunk from the hard drive
+	 **/
+	void load();
 };

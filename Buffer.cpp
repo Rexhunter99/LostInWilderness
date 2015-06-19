@@ -16,8 +16,15 @@ Buffer::Buffer( const Buffer &copy_buffer )
 	this->buffer.insert( this->buffer.end(), copy_buffer.buffer.begin(), copy_buffer.buffer.end() );
 }
 
+Buffer::Buffer( size_t byte_length )
+{
+	this->buffer.resize( byte_length );
+}
+
 Buffer::Buffer( const void *copy_data, size_t byte_length )
 {
+	this->buffer.resize( byte_length );
+
 	for ( size_t i=0; i<byte_length; i++ )
 	{
 		this->buffer.push_back( *((unsigned char*)copy_data + i) );

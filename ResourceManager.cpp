@@ -42,6 +42,19 @@ const BlockInfo & ResourceManager::getBlockInfo( std::string block_name )
 		return it->second;
 }
 
+const BlockInfo & ResourceManager::getBlockInfo( size_t block_id )
+{
+	for ( auto it = block_info.begin(); it != block_info.end(); it++ )
+	{
+		if ( it->second.ID == block_id )
+		{
+			return it->second;
+		}
+	}
+
+	return air;
+}
+
 void ResourceManager::addBlockInfo( BlockInfo new_block_info )
 {
 	// -- IDs will be set to the index that the instance is in the map
