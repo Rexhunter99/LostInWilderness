@@ -5,7 +5,7 @@
 		<Option title="Lost In Wilderness" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="Renderer\;Renderer\Resources\;Utils\;World\Blocks\;Client\;World\Items\;World\Biomes\;World\;World\Generators\;" />
+		<Option virtualFolders="Renderer/;Renderer/Resources/;Utils/;World/Blocks/;Client/;World/Items/;World/Biomes/;World/;World/Generators/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/gaiacraft-dbg" prefix_auto="1" extension_auto="1" />
@@ -24,16 +24,19 @@
 				</Compiler>
 				<Linker>
 					<Add option="-pg" />
-					<Add option="-lm" />
+					<Add option="-lpng" />
 					<Add option="-lGL" />
 					<Add option="-lglfw3" />
 					<Add option="-lGLEW" />
 					<Add option="-lX11" />
-					<Add option="-lXxf86vm" />
-					<Add option="-lXrandr" />
-					<Add option="-lpthread" />
 					<Add option="-lXi" />
-					<Add option="-lpng" />
+					<Add option="-lXrandr" />
+					<Add option="-lXxf86vm" />
+					<Add option="-lXinerama" />
+					<Add option="-lXcursor" />
+					<Add option="-lrt" />
+					<Add option="-lm" />
+					<Add option="-lpthread" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -52,16 +55,19 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lm" />
+					<Add option="-lpng" />
 					<Add option="-lGL" />
 					<Add option="-lglfw3" />
 					<Add option="-lGLEW" />
 					<Add option="-lX11" />
-					<Add option="-lXxf86vm" />
-					<Add option="-lXrandr" />
-					<Add option="-lpthread" />
 					<Add option="-lXi" />
-					<Add option="-lpng" />
+					<Add option="-lXrandr" />
+					<Add option="-lXxf86vm" />
+					<Add option="-lXinerama" />
+					<Add option="-lXcursor" />
+					<Add option="-lrt" />
+					<Add option="-lm" />
+					<Add option="-lpthread" />
 				</Linker>
 			</Target>
 			<Target title="Debug-Win32">

@@ -8,6 +8,8 @@
 #	include <netinet/in.h>
 #	include <arpa/inet.h>
 #	include <netdb.h>
+#	include <string.h>
+#	include <unistd.h>
 
 typedef int socket_t;
 
@@ -25,6 +27,7 @@ WSADATA		wsaData;
 #endif
 
 #include <cstdio>
+#include <cstdlib>
 #include <array>
 #include <iostream>
 
@@ -80,7 +83,7 @@ namespace Network {
 
 		if ( getaddrinfo( this->m_host.c_str(), "80", &host_info, &host_info_list) != 0 )
 		{
-			int e = WSAGetLastError();
+			//int e = WSAGetLastError();
 			cerr	<< "ERROR!\n"
 					<< "Function: HttpRequest::open()\n"
 					<< "Source-Line: " << (__LINE__-4) << "\n"
