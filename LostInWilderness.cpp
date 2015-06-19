@@ -251,10 +251,11 @@ static unsigned int frameCount = 0;
 
 static void display()
 {
+	GaiaCraft *client = GaiaCraft::iGaiaCraft;
 	float fov = Config::getGlobal()->getFloat( "renderer.field_of_view" ) / 180.0f * 3.14f;
 	float aspect = (float)ww / (float)wh;
 	float znear = 0.25f;
-	float zfar = 16.0f * (Config::getGlobal()->getInteger( "renderer.view_distance" ) + 1);
+	float zfar = 16.0f * 16;
 
 	glm::mat4 view = glm::lookAt(g_camera.position, g_camera.position + g_camera.lookat, g_camera.up);
 	glm::mat4 projection = glm::perspective( fov, aspect, znear, zfar );
@@ -452,12 +453,18 @@ static void display()
 	mvp			= view * projection;
 
 	Renderer::default_shader->setUniformMatrix( "mvp", glm::value_ptr(mvp) );
-	//Renderer::default_shader->setUniform1i( "b_lighting", false );
+	Renderer::default_shader->setUniform1i( "b_lighting", false );
 
 	std::wostringstream overlay_s;
-	overlay_s << L"FPS: " << framesPerSecond << L"\nUpdates: " << chunk_update_count << L"\nGens: " << chunk_gen_count << L"\nOpenGL 3.2 Core | GLSL 1.50";
+	overlay_s	<< L"FPS: " << framesPerSecond
+				<< L" Updates: " << chunk_update_count
+				<< L" Gens: " << chunk_gen_count
+				<< L"\nX,Y,Z: " << client->camera->position.x << "," << client->camera->position.y << "," << client->camera->position.z
+				<< L"\nCX,CY,CZ: " << (client->camera->position.x/CHUNK_WIDTH) << "," << (client->camera->position.y/CHUNK_HEIGHT) << "," << (client->camera->position.z/CHUNK_LENGTH)
+				<< L"\nOpenGL 3.2 Core | GLSL 1.50";
+
 	Renderer::font_texture->bind();
-	Renderer::font_texture->drawString( 2, 2, 0xFFFFFFFF, 1.0f, overlay_s.str().c_str() );
+	Renderer::font_texture->drawString( 2, 2, 0xFFFFFFFF, 2.0f, overlay_s.str().c_str() );
 	Renderer::blocks_texture->bind();
 
 
@@ -523,7 +530,7 @@ void key_cb( GLFWwindow* wnd, int key, int scancode, int action, int mods )
 			keys |= 32;
 			break;
 		case GLFW_KEY_HOME:
-			g_camera.position = glm::vec3(0, CY + 1, 0);
+			g_camera.position = glm::vec3(0, CY / 2, 0);
 			g_camera.angle = glm::vec3(0, -0.5, 0);
 			update_vectors();
 			break;

@@ -537,11 +537,20 @@ void Chunk::render()
 
 void Chunk::generate( int seed )
 {
+	if ( this->generated == true )
+	{
+		return;
+	}
+
+	this->generating = true;
+
 	ResourceManager::iResourceManager->getWorldGen( "default" ).generate( this );
 
 	// -- Set flags for the chunk having been generated & initialized
 	this->initialized = true;
 	this->needs_update = true;
+	this->generated = true;
+	this->generating = false;
 
 	GaiaCraft::addChunkToUpdateQueue( this );
 	GaiaCraft::addChunkToSaveQueue( this );

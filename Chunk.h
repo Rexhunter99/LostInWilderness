@@ -28,7 +28,7 @@ public:
 							*front,
 							*back;
 
-	int32_t			ax,
+	int64_t			ax,
 					ay,
 					az,
 					elements,

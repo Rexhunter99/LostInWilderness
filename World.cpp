@@ -100,17 +100,17 @@ void World::preGenerate( int sx, int sy, int sz, int distance )
 	int vd = Config::getGlobal()->getInteger( "renderer.view_distance" );
 
 	// -- Allocate the chunks
-	for (int x = 0; x < vd; x++)
+	for (int x = sx - vd; x <= sx + vd; x++)
 	for (int y = 0; y < 1; y++)
-	for (int z = 0; z < vd; z++)
+	for (int z = sz - vd; z <= sz + vd; z++)
 	{
-		this->chunk_map[ vector3i(x,y,z) ] = new Chunk(x - vd / 2, y - 1 / 2, z - vd / 2);
+		this->chunk_map[ vector3i(x,y,z) ] = new Chunk(x, y, z);
 	}
 
 	// -- Assign sibling pointers
-	for(int x = 0; x < vd; x++)
-	for(int y = 0; y < 1; y++)
-	for(int z = 0; z < vd; z++)
+	for (int x = sx - vd; x <= sx + vd; x++)
+	for (int y = 0; y < 1; y++)
+	for (int z = sz - vd; z <= sz + vd; z++)
 	{
 		Chunk *c = this->chunk_map[ vector3i(x,y,z) ];
 
@@ -123,9 +123,9 @@ void World::preGenerate( int sx, int sy, int sz, int distance )
 	}
 
 	// -- Pre-generate the chunks
-	for (int x = 0; x < vd; x++)
+	for (int x = sx - vd; x <= sx + vd; x++)
 	for (int y = 0; y < 1; y++)
-	for (int z = 0; z < vd; z++)
+	for (int z = sz - vd; z <= sz + vd; z++)
 	{
 		this->chunk_map[ vector3i(x,y,z) ]->generate( this->seed );
 	}
@@ -133,85 +133,55 @@ void World::preGenerate( int sx, int sy, int sz, int distance )
 
 void World::render(const glm::mat4 &pv)
 {
-	int vd = Config::getGlobal()->getInteger( "renderer.view_distance" );
+	int64_t vd = Config::getGlobal()->getInteger( "renderer.view_distance" );
 	Camera *camera = GaiaCraft::iGaiaCraft->camera;
 
-	int64_t cx = roundf( camera->position.x / CHUNK_WIDTH );
-	int64_t cy = roundf( camera->position.y / CHUNK_HEIGHT );
-	int64_t cz = roundf( camera->position.z / CHUNK_LENGTH );
+	int64_t cx = floorf( (float)camera->position.x / (float)CHUNK_WIDTH );
+	int64_t cy = floorf( (float)camera->position.y / (float)CHUNK_HEIGHT );
+	int64_t cz = floorf( (float)camera->position.z / (float)CHUNK_LENGTH );
+	Chunk *chunk = nullptr;
 
-	int ud = 0;
-	int ux = -1;
-	int uy = -1;
-	int uz = -1;
-
-	for(int x = cx - (vd); x < cx + (vd); x++)
+	for ( int64_t x = cx - vd; x <= cx + vd; x++)
 	{
-		for(int y = 0; y < 1; y++)
+		for ( int64_t y = cy; y < 1; y++)
 		{
-			for(int z = cz - (vd); z < cz + (vd); z++)
+			for ( int64_t z = cz - vd; z <= cz + (vd); z++)
 			{
-				Chunk *chunk = this->getChunk( x, y, z );
+				chunk = this->getChunk( x, y, z );
 
 				if ( chunk == nullptr )
 				{
+					chunk = this->chunk_map[ vector3i(x,y,z) ] = new Chunk(x, y, z);
+					chunk->left = this->getChunk( x - 1, y, z );
+					chunk->right = this->getChunk( x + 1, y, z );
+					chunk->below = this->getChunk( x, y - 1, z );
+					chunk->above = this->getChunk( x, y + 1, z );
+					chunk->front = this->getChunk( x, y, z - 1 );
+					chunk->back = this->getChunk( x, y, z + 1 );
+					GaiaCraft::addChunkToGenerateQueue( x, y, z, (int)this->seed, this->getChunk( x, y, z ) );
 					continue;
 				}
 
-				//if ( x  > vd/2 || z > vd/2 )sion
-				//	continue;
+				// -- Is the chunk inside the view frustum?
+				//if ( camera->boxInFrustum(...) != false )
+				//{
+				//	return;
+				//}
 
 				glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(chunk->ax * CHUNK_WIDTH, chunk->ay * CHUNK_HEIGHT, chunk->az * CHUNK_LENGTH));
 				glm::mat4 mvp = pv * model;
 
-				// Is this chunk on the screen?
-				glm::vec4 center = mvp * glm::vec4(CHUNK_WIDTH / 2, CHUNK_HEIGHT / 2, CHUNK_LENGTH / 2, 1);
-
-				float d = glm::length(center);
-				center.x /= center.w;
-				center.y /= center.w;
-
-				// If it is behind the camera, don't bother drawing it
-				if(center.z < -CHUNK_HEIGHT / 2)
-					continue;
-
-				// If it is outside the screen, don't bother drawing it
-				if(std::fabs(center.x) > 1 + std::fabs(CHUNK_HEIGHT * 2 / center.w) || std::fabs(center.y) > 1 + std::fabs(CHUNK_HEIGHT * 2 / center.w))
-					continue;
-
 				// If this chunk is not initialized, skip it
 				if( !chunk->initialized )
 				{
-					// But if it is the closest to the camera, mark it for initialization
-					if(ux < 0 || d < ud)
-					//if ( d < ud )
-					{
-						ud = d;
-						ux = x;
-						uy = y;
-						uz = z;
-						//GaiaCraft::addChunkToGenerateQueue( ux, uy, uz, (int)this->seed, this->c[ux][uy][uz] );
-					}
+					GaiaCraft::addChunkToGenerateQueue( x, y, z, (int)this->seed, this->getChunk( x, y, z ) );
 					continue;
 				}
-
-				// If this chunk has not yet been generated, add it to the queue
-				/*if ( chunk->generated == false && chunk->generating == false )
-				{
-					GaiaCraft::addChunkToGenerateQueue( x, y, z, (int)this->seed, this->chunk );
-					chunk->generating = true;
-				}*/
 
 				Renderer::default_shader->setUniformMatrix( "mvp", glm::value_ptr(mvp) );
 
 				chunk->render();
 			}
 		}
-	}
-
-	// TODO: Add to a queue of chunks to update in a second thread
-	if ( ux >= 0 )
-	{
-		GaiaCraft::addChunkToGenerateQueue( ux, uy, uz, (int)this->seed, this->getChunk( ux, uy, uz ) );
 	}
 }
