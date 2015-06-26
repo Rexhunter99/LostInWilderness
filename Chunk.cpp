@@ -502,7 +502,11 @@ void Chunk::update()
 	this->time_last_updated = std::time( nullptr );
 
 	// -- If this Chunk is empty, no need to allocate a Chunk slot.
-	if( !this->elements )
+	if ( !this->elements )
+		return;
+
+	// -- NOTE: I put this here to try and stop a SIGSEGV that happens sometimes due to underrun/overrun
+	if ( vertices.empty() )
 		return;
 
 	// -- Upload vertices
@@ -615,7 +619,6 @@ void Chunk::save()
 
 void Chunk::load()
 {
-	// TODO: Implement RLE-8 compression
 	std::stringstream name;
 	name << "world/" << this->ax << "," << this->ay << "," << this->az << ".chunk";
 
@@ -626,7 +629,7 @@ void Chunk::load()
 	// -- If the file stream opened properly then we write to it
 	if ( !f.is_open() )
 	{
-		std::cerr << "[ ERROR ] File doex not exist, or is corrupt: \"" << name << "\"" << std::endl;
+		std::cerr << "[ ERROR ] File does not exist, or is corrupt: \"" << name << "\"" << std::endl;
 	}
 	else
 	{
@@ -655,12 +658,9 @@ void Chunk::load()
 			f.read( (char*)&temp_ID, sizeof(uint8_t) );
 			f.read( (char*)&temp_data, sizeof(uint8_t) );
 
-			//this->blk[x][y][z] = new Block( temp_ID );
-			//this->blk[x][y][z]->data_value = temp_data;
+			this->blk[x][y][z] = new Block( ResourceManager::iResourceManager->getBlockInfo( (size_t)temp_ID ) );
+			this->blk[x][y][z]->data_value = temp_data;
 		}
-
-		// FIXME: Get rle8_uncompress() working so we can store these files as compressed rle8
-		//buffer.rle8_uncompress();
 
 		f.close();
 	}

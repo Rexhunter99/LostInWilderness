@@ -93,6 +93,10 @@ public:
 	 ** @param pv Projection*View Matrix to apply to the rendering
 	 **/
 	void render(const glm::mat4 &pv);
+
+	/** @fn update()
+	 **/
+	void update();
 };
 
 #endif // __WORLD_H__

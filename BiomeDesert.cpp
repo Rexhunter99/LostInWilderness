@@ -23,7 +23,7 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 			int rx = x + (chunk->ax * CHUNK_WIDTH);
 			int rz = z + (chunk->az * CHUNK_LENGTH);
 
-			int height = 64 + noise->perlin2D( rx / 16.0f, rz / 16.0f, 3, 0.5f );
+			int height = 64 + worldgen->getTerrainHeight( rx, rz, 0.0f );
 			int y = 0;
 
 			// Land blocks

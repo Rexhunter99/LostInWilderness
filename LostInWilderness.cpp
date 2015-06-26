@@ -90,7 +90,7 @@ void GaiaCraft::chunkUpdateThread( void )
 				Chunk *chunk = thread_chunk_update_queue.front();
 				thread_chunk_update_queue.pop();
 				// NOTE: Uncommenting this line below fixes the weird VBO glitches but causes the game to process a lot more
-				//chunk->update();
+				chunk->update();
 			}
 			else
 			{
@@ -272,6 +272,8 @@ static void display()
 	glCullFace( GL_BACK );
 
 	// -- Then draw chunks
+
+	world->update();
 
 	world->render(mvp);
 
