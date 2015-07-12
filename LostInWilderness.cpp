@@ -22,6 +22,7 @@
 #include <sstream>
 #include <thread>
 #include <sys/stat.h>
+#include <mutex>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -58,7 +59,7 @@ static int			face;
 static uint8_t		buildtype = 1;
 static unsigned int keys;
 static bool			select_using_depthbuffer = false;
-struct stat info;
+struct stat         info;
 
 uint32_t chunk_update_count = 0;
 uint32_t chunk_gen_count = 0;
@@ -72,6 +73,8 @@ uint32_t chunk_gen_count = 0;
 
 std::thread					g_chunk_updater_thread,
 							g_chunk_fileio_thread;
+std::mutex                  g_chunk_updater_mutex,
+                            g_chunk_fileio_mutex;
 std::atomic<bool>			g_chunk_updater_loop,
 							g_chunk_fileio_loop;
 std::queue<Chunk*>			thread_chunk_update_queue;
@@ -89,6 +92,7 @@ void GaiaCraft::chunkUpdateThread( void )
 		{
 			if ( !thread_chunk_update_queue.empty() )
 			{
+                std::lock_guard<std::mutex> lock(g_chunk_updater_mutex);
 				Chunk *chunk = thread_chunk_update_queue.front();
 				thread_chunk_update_queue.pop();
 				// NOTE: Uncommenting this line below fixes the weird VBO glitches but causes the game to process a lot more
@@ -102,6 +106,7 @@ void GaiaCraft::chunkUpdateThread( void )
 		}
 		else
 		{
+            std::lock_guard<std::mutex> lock(g_chunk_updater_mutex);
 			ChunkUpdateType chunk_data = thread_chunk_gen_queue.front();
 			thread_chunk_gen_queue.pop();
 			chunk_data.chunk->generate( chunk_data.seed );
@@ -120,6 +125,7 @@ void GaiaCraft::chunkFileIOThread( void )
 	{
 		if ( !thread_chunk_fileio_queue.empty() )
 		{
+            std::lock_guard<std::mutex> lock(g_chunk_fileio_mutex);
 			Chunk *chunk = thread_chunk_fileio_queue.front();
 			thread_chunk_fileio_queue.pop();
 			chunk->save();
