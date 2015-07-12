@@ -1,6 +1,6 @@
 #############################################################################
 #
-# Makefile for Lost in Wilderness
+# Makefile for Lost in Wilderness (Release)
 # Original template by whyglinux <whyglinux@gmail.com>
 # Modified by TambourineReindeer
 #
@@ -35,10 +35,14 @@ LDFLAGS   = $(LIBS)
 # If not specified, only the current directory will be serached.
 SRCDIRS   =
 
-# The executable file name.
+# The target name.
 # If not specified, current directory name or `a.out' will be used.
+UNAME	 := $(shell uname)
+ifeq ($(UNAME), Linux)
 PROGRAM   = bin/gaiacraft
-# bin/gaiacraft.exe
+else
+PROGRAM	  = bin/gaiacraft.exe
+endif
 
 # Compiler
 CC     = gcc
@@ -96,36 +100,11 @@ all: $(PROGRAM)
 
 # Rules for creating dependency files (.d).
 #------------------------------------------
-
-%.d:%.c
-	@echo -n $(dir $<) > $@
-	@$(DEPEND.d) $< >> $@
-
-%.d:%.C
-	@echo -n $(dir $<) > $@
-	@$(DEPEND.d) $< >> $@
-
-%.d:%.cc
-	@echo -n $(dir $<) > $@
-	@$(DEPEND.d) $< >> $@
-
 %.d:%.cpp
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
 
 %.d:%.CPP
-	@echo -n $(dir $<) > $@
-	@$(DEPEND.d) $< >> $@
-
-%.d:%.c++
-	@echo -n $(dir $<) > $@
-	@$(DEPEND.d) $< >> $@
-
-%.d:%.cp
-	@echo -n $(dir $<) > $@
-	@$(DEPEND.d) $< >> $@
-
-%.d:%.cxx
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
 
@@ -165,7 +144,7 @@ endif
 endif
 
 clean:
-	$(RM) $(OBJS) $(PROGRAM) $(PROGRAM).exe
+	$(RM) $(OBJS) $(PROGRAM) *.exe *.d
 
 distclean: clean
 	$(RM) $(DEPS) TAGS

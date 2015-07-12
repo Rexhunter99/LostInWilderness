@@ -21,6 +21,7 @@
 #include <string>
 #include <sstream>
 #include <thread>
+#include <sys/stat.h>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -57,6 +58,7 @@ static int			face;
 static uint8_t		buildtype = 1;
 static unsigned int keys;
 static bool			select_using_depthbuffer = false;
+struct stat info;
 
 uint32_t chunk_update_count = 0;
 uint32_t chunk_gen_count = 0;
@@ -729,6 +731,8 @@ int GaiaCraft::run()
 	g_chunk_updater_thread = thread( GaiaCraft::chunkUpdateThread );
 	g_chunk_fileio_loop = true;
 	g_chunk_fileio_thread = thread( GaiaCraft::chunkFileIOThread );
+    if(!(info.st_mode & S_IFDIR))
+        mkdir("./world",S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
 	if (init_resources())
 	{
