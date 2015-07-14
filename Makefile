@@ -24,7 +24,7 @@ CFLAGS = -Wall
 # The linker options. Note: lglfw is glfw3 but the filename is the same as
 # previous versions so -lglfw3 won't find it unless a symbolic link is made.
 # May make a permanent solution to this in the future.
-LIBS   = -lpng -lGL -lglfw -lGLEW -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -lpthread
+LIBS   = -lpng  -lglfw -lm 
 
 # The pre-processor options used by the cpp (man cpp for more).
 CPPFLAGS  = $(CFLAGS) -std=c++11 -ffast-math
@@ -45,34 +45,36 @@ PROGRAMR   = bin/gaiacraft
 PROGRAM = $(PROGRAMD) $(PROGRAMR)
 
 ifeq ($(OS),Windows_NT)
-    CFLAGS     += -D WIN32
+    CFLAGS     += -D_WIN32 -DGLEW_STATIC -D_WINDOWS
+    LIBS       += -lglew32s -lopengl32 -lgdi32 -luser32 -lkernel32 -lws2_32
     ifeq ($(or $(PROCESSOR_ARCHITECTURE),$(PROCESSOR_ARCHITEW6432)),AMD64)
-        CFLAGS += -D AMD64
+        CFLAGS += -D_AMD64
     endif
     ifeq ($(PROCESSOR_ARCHITECTURE),x86)
-        CFLAGS += -D IA32
+        CFLAGS += -D_IA32
     endif
 else
     UNAME_S := $(shell uname -s)
-    ifeq ($(UNAME_S), Linux))
-        CFLAGS += -D LINUX
+    LIBS       += -lpthread -lGL -lGLEW -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt
+    ifeq ($(UNAME_S), Linux)
+        CFLAGS += -D_LINUX
     endif
     ifeq ($(UNAME_S),Darwin)
-        CFLAGS += -D OSX
+        CFLAGS += -D_OSX
     endif
     UNAME_P := $(shell uname -p)
     ifeq ($(UNAME_P),x86_64)
-        CFLAGS += -D AMD64
+        CFLAGS += -D_AMD64
     endif
     ifneq ($(filter %86,$(UNAME_P)),)
-        CFLAGS += -D IA32
+        CFLAGS += -D_IA32
     endif
     ifneq ($(filter arm%,$(UNAME_P)),)
-        CFLAGS += -D ARM
+        CFLAGS += -D_ARM
     endif
 endif
 
-$(PROGRAMD): CPPFLAGS += -g -pg -O0 --enable-checking -D_DEBUG -v -da -Q
+$(PROGRAMD): CPPFLAGS += -g -pg -O0 -D_DEBUG -Q -v
 $(PROGRAMD): LIBS += -pg
 $(PROGRAMR): CPPFLAGS += -O3 -O6 -DNDEBUG
 $(PROGRAMR): LIBS += -s
@@ -125,6 +127,7 @@ LINK.c      = $(CC)  $(MY_CFLAGS) $(CFLAGS)   $(CPPFLAGS) $(LDFLAGS)
 LINK.cxx    = $(CXX) $(MY_CFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
 
 .PHONY: all objs tags ctags clean distclean help show
+.INTERMEDIATE: $(OBJS) $(DEPEND)
 
 # Delete the default suffixes
 .SUFFIXES:
