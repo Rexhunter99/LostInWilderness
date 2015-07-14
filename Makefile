@@ -19,12 +19,12 @@
 #===========================================================================
 
 # The pre-processor and compiler options.
-CFLAGS = -Wall
+CFLAGS = -Wall -DGLM_FORCE_RADIANS
 
 # The linker options. Note: lglfw is glfw3 but the filename is the same as
 # previous versions so -lglfw3 won't find it unless a symbolic link is made.
 # May make a permanent solution to this in the future.
-LIBS   = -lpng  -lglfw -lm 
+LIBS   = -lpng -lglfw -lm 
 
 # The pre-processor options used by the cpp (man cpp for more).
 CPPFLAGS  = $(CFLAGS) -std=c++11 -ffast-math
@@ -55,7 +55,7 @@ ifeq ($(OS),Windows_NT)
     endif
 else
     UNAME_S := $(shell uname -s)
-    LIBS       += -lpthread -lGL -lGLEW -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt
+    LIBS       += -lGL -lGLEW -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lpthread
     ifeq ($(UNAME_S), Linux)
         CFLAGS += -D_LINUX
     endif
@@ -127,7 +127,7 @@ LINK.c      = $(CC)  $(MY_CFLAGS) $(CFLAGS)   $(CPPFLAGS) $(LDFLAGS)
 LINK.cxx    = $(CXX) $(MY_CFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
 
 .PHONY: all objs tags ctags clean distclean help show
-.INTERMEDIATE: $(OBJS) $(DEPEND)
+.INTERMEDIATE: $(OBJS)
 
 # Delete the default suffixes
 .SUFFIXES:
