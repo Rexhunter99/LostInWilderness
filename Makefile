@@ -1,6 +1,6 @@
 #############################################################################
 #
-# Makefile for Lost in Wilderness (Release)
+# Makefile for Lost in Wilderness
 # Original template by whyglinux <whyglinux@gmail.com>
 # Modified by TambourineReindeer
 #
@@ -19,13 +19,15 @@
 #===========================================================================
 
 # The pre-processor and compiler options.
-CFLAGS =
+CFLAGS = -Wall
 
-# The linker options. Note glfw is glfw3 but the filename is the same as previous versions so -lglfw3 won't find it
-LIBS   = -s -lpng -lGL -lglfw -lGLEW -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -lpthread
+# The linker options. Note: lglfw is glfw3 but the filename is the same as
+# previous versions so -lglfw3 won't find it unless a symbolic link is made.
+# May make a permanent solution to this in the future.
+LIBS   = -lpng -lGL -lglfw -lGLEW -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -lpthread
 
 # The pre-processor options used by the cpp (man cpp for more).
-CPPFLAGS  = $(CFLAGS) -std=c++11 -ffast-math -D_DEBUG -D_LINUX
+CPPFLAGS  = $(CFLAGS) -std=c++11 -ffast-math
 CXXFLAGS  = $(CPPFLAGS)
 
 # The options used in linking as well as in any direct use of ld.
@@ -35,14 +37,45 @@ LDFLAGS   = $(LIBS)
 # If not specified, only the current directory will be serached.
 SRCDIRS   =
 
-# The target name.
-# If not specified, current directory name or `a.out' will be used.
-UNAME	 := $(shell uname)
-ifeq ($(UNAME), Linux)
-PROGRAM   = bin/gaiacraft
+# The target name and architecture/OS checks.
+# If the name is not specified, current directory name or `a.out' will be used.
+
+PROGRAMD   = bin/gaiacraft-dbg
+PROGRAMR   = bin/gaiacraft
+PROGRAM = $(PROGRAMD) $(PROGRAMR)
+
+ifeq ($(OS),Windows_NT)
+    CFLAGS     += -D WIN32
+    ifeq ($(or $(PROCESSOR_ARCHITECTURE),$(PROCESSOR_ARCHITEW6432)),AMD64)
+        CFLAGS += -D AMD64
+    endif
+    ifeq ($(PROCESSOR_ARCHITECTURE),x86)
+        CFLAGS += -D IA32
+    endif
 else
-PROGRAM	  = bin/gaiacraft.exe
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S), Linux))
+        CFLAGS += -D LINUX
+    endif
+    ifeq ($(UNAME_S),Darwin)
+        CFLAGS += -D OSX
+    endif
+    UNAME_P := $(shell uname -p)
+    ifeq ($(UNAME_P),x86_64)
+        CFLAGS += -D AMD64
+    endif
+    ifneq ($(filter %86,$(UNAME_P)),)
+        CFLAGS += -D IA32
+    endif
+    ifneq ($(filter arm%,$(UNAME_P)),)
+        CFLAGS += -D ARM
+    endif
 endif
+
+$(PROGRAMD): CPPFLAGS += -g -pg -O0 --enable-checking -D_DEBUG -v -da -Q
+$(PROGRAMD): LIBS += -pg
+$(PROGRAMR): CPPFLAGS += -O3 -O6 -DNDEBUG
+$(PROGRAMR): LIBS += -s
 
 # Compiler
 CC     = gcc
@@ -100,6 +133,7 @@ all: $(PROGRAM)
 
 # Rules for creating dependency files (.d).
 #------------------------------------------
+
 %.d:%.cpp
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
@@ -144,7 +178,7 @@ endif
 endif
 
 clean:
-	$(RM) $(OBJS) $(PROGRAM) *.exe *.d
+	$(RM) $(OBJS) $(PROGRAM) *.chunk
 
 distclean: clean
 	$(RM) $(DEPS) TAGS
