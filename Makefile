@@ -3,8 +3,6 @@
 # Original template by whyglinux <whyglinux@gmail.com>
 # Modified by TambourineReindeer
 #
-# Make Targets:
-# ------------
 # The Makefile provides the following targets to make:
 #   $ make           compile and link
 #   $ make NODEP=yes compile and link without generating dependencies
@@ -127,7 +125,6 @@ LINK.cxx    = $(CXX) $(MY_CFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
 
 .PHONY: all objs tags ctags clean distclean cleandeps help show
 .INTERMEDIATE: $(OBJS)
-#.SECONDARY: $(DEPS)
 
 # Delete the default suffixes
 .SUFFIXES:
