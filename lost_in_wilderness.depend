@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1437217193 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeDesert.cpp
+1437217193 source:./BiomeDesert.cpp
 	"BiomeDesert.h"
 	"Block.h"
 	"BlockDirt.h"
@@ -10,29 +10,29 @@
 	<cstdlib>
 	<cmath>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeDesert.h
+1437217193 ./BiomeDesert.h
 	"Biome.h"
 	<cstdlib>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Biome.h
+1437217193 ./Biome.h
 	<string>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Block.h
+1437217193 ./Block.h
 	"BlockInfo.h"
 	"Chunk.h"
 	"Renderer.h"
 	<vector>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BlockInfo.h
+1437217193 ./BlockInfo.h
 	<string>
 	<cstdint>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Chunk.h
+1437217193 ./Chunk.h
 	<cstdint>
 	<ctime>
 	<fstream>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Renderer.h
+1437217193 ./Renderer.h
 	"Shader.h"
 	"Texture.h"
 	"TextFont.h"
@@ -41,36 +41,36 @@
 	<string>
 	<unordered_map>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Shader.h
+1437217193 ./Shader.h
 	<unordered_map>
 	<string>
 	<cstdint>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Texture.h
+1437217193 ./Texture.h
 	<string>
 	<glm/fwd.hpp>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/TextFont.h
+1437217193 ./TextFont.h
 	"Texture.h"
 	"vectors.h"
 	<stdint.h>
 	<string>
 	<map>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/vectors.h
+1437217193 ./vectors.h
 	<climits>
 	<unordered_map>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Vertex.h
+1437217193 ./Vertex.h
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BlockDirt.h
+1437217193 ./BlockDirt.h
 	"Block.h"
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BlockSaltWater.h
+1437217193 ./BlockSaltWater.h
 	"Block.h"
 	"ResourceManager.h"
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/ResourceManager.h
+1437217193 ./ResourceManager.h
 	<cstdint>
 	<map>
 	<string>
@@ -80,19 +80,19 @@
 	"TextFont.h"
 	"WorldGenerator.h"
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/ItemInfo.h
+1437217193 ./ItemInfo.h
 	<string>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/WorldGenerator.h
+1437217193 ./WorldGenerator.h
 	"Noise.h"
 	<string>
 	<vector>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Noise.h
+1437217193 ./Noise.h
 	<vector>
 	<glm/fwd.hpp>
 
-1437217193 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeForest.cpp
+1437217193 source:./BiomeForest.cpp
 	"BiomeForest.h"
 	"Block.h"
 	"BlockDirt.h"
@@ -103,10 +103,10 @@
 	<cstdlib>
 	<cmath>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeForest.h
+1437217193 ./BiomeForest.h
 	"Biome.h"
 
-1437217193 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeWoods.cpp
+1437217193 source:./BiomeWoods.cpp
 	"BiomeWoods.h"
 	"Block.h"
 	"BlockDirt.h"
@@ -117,25 +117,25 @@
 	<cstdlib>
 	<cmath>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeWoods.h
+1437217193 ./BiomeWoods.h
 	"Biome.h"
 
-1437240712 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Buffer.cpp
+1437240712 source:./Buffer.cpp
 	"Buffer.h"
 	"Exceptions.h"
 	<exception>
 	<iostream>
 
-1437241803 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Buffer.h
+1437241803 ./Buffer.h
 	<cstdlib>
 	<stdint.h>
 	<vector>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Exceptions.h
+1437217193 ./Exceptions.h
 	<exception>
 	<string>
 
-1437222496 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Chunk.cpp
+1437222496 source:./Chunk.cpp
 	"Chunk.h"
 	"Block.h"
 	"BlockDirt.h"
@@ -161,7 +161,7 @@
 	<memory.h>
 	<stdint.h>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/LostInWilderness.h
+1437217193 ./LostInWilderness.h
 	<ctime>
 	<map>
 	<string>
@@ -170,7 +170,7 @@
 	"ResourceManager.h"
 	"Renderer.h"
 
-1437217193 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Config.cpp
+1437217193 source:./Config.cpp
 	"Config.h"
 	<iostream>
 	<fstream>
@@ -180,16 +180,16 @@
 	<memory.h>
 	<cstdlib>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Config.h
+1437217193 ./Config.h
 	<stdint.h>
 	<map>
 	<string>
 
-1437217193 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Framebuffer.cpp
+1437217193 source:./Framebuffer.cpp
 	"Framebuffer.h"
 	<GL/glew.h>
 
-1437217193 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Framebuffer.h
+1437217193 ./Framebuffer.h
 	<stdint.h>
 	<string>
 	<vector>
