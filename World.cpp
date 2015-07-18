@@ -226,9 +226,9 @@ void World::update()
 		if ( it->first.x > edge_e || it->first.z > edge_s || it->first.x < edge_w || it->first.z < edge_n )
 		{
 			// FIXME: A SIGSEGV occurs here in Windows. Apparently I am deleting a Chunk* that is already deleted/uninitialized (0xFEEEFEEE)
-			if ( it->second != nullptr && (int64_t)it->second != 0xFEEEFEEE )
+			/*if ( it->second != nullptr && (int64_t)it->second != 0xFEEEFEEE )
 				delete it->second;
-			this->chunk_map.erase( it );
+			this->chunk_map.erase( it );*/
 		}
 	}
 }
