@@ -4,5 +4,12 @@ bin/LostInWilderness
 bin/LostInWilderness-dbg
 bin/LostInWilderness.x64
 bin/LostInWilderness-dbg.x64
+bin/gaiacraft.exe
+bin/gaiacraft-dbg.exe
+bin/gaiacraft
+bin/gaiacraft-dbg
+bin/gaiacraft.x64
+bin/gaiacraft-dbg.x64
 bin/world/*
 obj/
+lost_in_wilderness.layout

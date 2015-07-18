@@ -1,10 +1,9 @@
 #############################################################################
-#
 # Makefile for Lost in Wilderness
 # Original template by whyglinux <whyglinux@gmail.com>
 # Modified by TambourineReindeer
 #
-# Make Target:
+# Make Targets:
 # ------------
 # The Makefile provides the following targets to make:
 #   $ make           compile and link
@@ -14,8 +13,8 @@
 #   $ make ctags     create ctags for VI editor
 #   $ make clean     clean objects and the executable file
 #   $ make distclean clean objects, the executable and dependencies
+#   $ make cleandeps clean dependecy files only
 #   $ make help      get the usage of the makefile
-#
 #===========================================================================
 
 # The pre-processor and compiler options.
@@ -24,7 +23,7 @@ CFLAGS = -Wall -DGLM_FORCE_RADIANS
 # The linker options. Note: lglfw is glfw3 but the filename is the same as
 # previous versions so -lglfw3 won't find it unless a symbolic link is made.
 # May make a permanent solution to this in the future.
-LIBS   = -lpng -lglfw -lm 
+LIBS   = -lpng -lglfw -lm
 
 # The pre-processor options used by the cpp (man cpp for more).
 CPPFLAGS  = $(CFLAGS) -std=c++11 -ffast-math
@@ -126,8 +125,9 @@ COMPILE.cxx = $(CXX) $(MY_CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c
 LINK.c      = $(CC)  $(MY_CFLAGS) $(CFLAGS)   $(CPPFLAGS) $(LDFLAGS)
 LINK.cxx    = $(CXX) $(MY_CFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
 
-.PHONY: all objs tags ctags clean distclean help show
+.PHONY: all objs tags ctags clean distclean cleandeps help show
 .INTERMEDIATE: $(OBJS)
+#.SECONDARY: $(DEPS)
 
 # Delete the default suffixes
 .SUFFIXES:
@@ -168,10 +168,10 @@ ctags: $(HEADERS) $(SOURCES)
 $(PROGRAM):$(OBJS)
 ifeq ($(SRC_CXX),)              # C program
 	$(LINK.c)   $(OBJS) $(LIBS) -o $@
-	@echo Type ./$@ to execute the program.
+#	@echo Type ./$@ to execute the program.
 else                            # C++ program
 	$(LINK.cxx) $(OBJS) $(LIBS) -o $@
-	@echo Type ./$@ to execute the program.
+#	@echo Type ./$@ to execute the program.
 endif
 
 ifndef NODEP
@@ -181,16 +181,16 @@ endif
 endif
 
 clean:
-	$(RM) $(OBJS) $(PROGRAM) *.chunk
+	$(RM) $(OBJS) $(PROGRAM)
 
 distclean: clean
 	$(RM) $(DEPS) TAGS
 
+cleandeps:
+	$(RM) $(DEPS)
+
 # Show help.
 help:
-	@echo 'Generic Makefile for C/C++ Programs (gcmakefile) version 0.5'
-	@echo 'Copyright (C) 2007, 2008 whyglinux <whyglinux@hotmail.com>'
-	@echo
 	@echo 'Usage: make [TARGET]'
 	@echo 'TARGETS:'
 	@echo '  all       (=make) compile and link.'
@@ -199,11 +199,10 @@ help:
 	@echo '  tags      create tags for Emacs editor.'
 	@echo '  ctags     create ctags for VI editor.'
 	@echo '  clean     clean objects and the executable file.'
+	@echo '  cleandeps clean dependecy files only'
 	@echo '  distclean clean objects, the executable and dependencies.'
 	@echo '  show      show variables (for debug use only).'
 	@echo '  help      print this message.'
-	@echo
-	@echo 'Report bugs to <whyglinux AT gmail DOT com>.'
 
 # Show variables (for debug use only.)
 show:
