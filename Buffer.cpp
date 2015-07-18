@@ -130,6 +130,34 @@ size_t Buffer::rle8_compress()
 size_t Buffer::rle16_compress()
 {
 	std::vector<unsigned char> compressed_buffer;
+	char			command = 1;
+	unsigned char	held_u16 = this->buffer.at( 0 );
+	size_t			held_cursor = 0;
+
+    this->buffer = compressed_buffer;
 
 	return compressed_buffer.size();
+}
+
+size_t Buffer::rle8_decompress()
+{
+    std::vector<unsigned char> decompressed_buffer;
+    char			command = this->buffer.at( 0 );
+    unsigned char	held_u8 = this->buffer.at( 1 );
+    size_t			held_cursor = 1;
+
+    for ( size_t i = 1; i < this->buffer.size(); i++ )
+	{
+		while(held_cursor < command)
+		{
+			decompressed_buffer.push_back( held_u8 );
+			held_cursor++;
+		}
+		command = this->buffer.at(i+1);
+		held_u8 = this->buffer.at(i+2);
+	}
+
+    this->buffer = decompressed_buffer;
+
+    return decompressed_buffer.size();
 }
