@@ -49,6 +49,7 @@ public:
 	size_t rle8_compress();
 	size_t rle16_compress();
 	size_t rle8_decompress();
+	size_t rle16_decompress();
 };
 
 #endif // __BUFFER_H__

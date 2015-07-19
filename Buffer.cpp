@@ -134,6 +134,21 @@ size_t Buffer::rle16_compress()
 	unsigned char	held_u16 = this->buffer.at( 0 );
 	size_t			held_cursor = 0;
 
+    for ( size_t i = 1; i < this->buffer.size(); i++ )
+	{
+		// -- If we have read 32767 run-length bytes, or we find a byte that is different to our held one
+		if ( ( command == 32767 ) || ( this->buffer.at(i) != held_u8 ) )
+		{
+			// Add the command byte and the held byte
+			compressed_buffer.push_back( command );
+			compressed_buffer.push_back( held_u16 );
+			command = 0;
+		}
+
+		held_u16 = this->buffer.at(i);
+		command++;
+	}
+
     this->buffer = compressed_buffer;
 
 	return compressed_buffer.size();
@@ -155,6 +170,29 @@ size_t Buffer::rle8_decompress()
 		}
 		command = this->buffer.at(i+1);
 		held_u8 = this->buffer.at(i+2);
+	}
+
+    this->buffer = decompressed_buffer;
+
+    return decompressed_buffer.size();
+}
+
+size_t Buffer::rle16_decompress()
+{
+    std::vector<unsigned char> decompressed_buffer;
+    char			command = this->buffer.at( 0 );
+    unsigned char	held_u16 = this->buffer.at( 1 );
+    size_t			held_cursor = 1;
+
+    for ( size_t i = 1; i < this->buffer.size(); i++ )
+	{
+		while(held_cursor < command)
+		{
+			decompressed_buffer.push_back( held_u16 );
+			held_cursor++;
+		}
+		command = this->buffer.at(i+1);
+		held_u16 = this->buffer.at(i+2);
 	}
 
     this->buffer = decompressed_buffer;
