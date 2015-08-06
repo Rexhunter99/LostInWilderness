@@ -3,6 +3,12 @@
 [Bb]uild/
 [Oo]bj/
 [Ss]creenshots/
+[Dd]oxygen/
+[Dd]oc/
+[Dd]ocumentation/
+[Dd]ocs/
+[Hh]elp/
+[Mm]an/
 
 # Binaries
 *.exe
