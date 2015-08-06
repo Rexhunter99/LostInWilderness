@@ -1,0 +1,1 @@
+If testing textures, please replace the textures in the strips, not the individual files in the "blocks" or "items" folders as they do not get used yet.

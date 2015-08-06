@@ -25,7 +25,7 @@ public:
 		this->y_min		= 64;
 		this->y_max		= 90;
 		this->temperature = 75.0f;
-		this->rainfall	= 0.0f;
+		this->rainfall	= 25.0f;
 	}
 	~BiomeDesert(){}
 

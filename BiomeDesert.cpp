@@ -2,6 +2,7 @@
 #include "BiomeDesert.h"
 #include "Block.h"
 #include "BlockDirt.h"
+#include "BlockSaltWater.h"
 #include "Chunk.h"
 #include "Noise.h"
 #include "ResourceManager.h"
@@ -23,12 +24,20 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 			int rx = x + (chunk->ax * CHUNK_WIDTH);
 			int rz = z + (chunk->az * CHUNK_LENGTH);
 
-			int height = 64 + noise->perlin2D( rx / 16.0f, rz / 16.0f, 3, 0.5f );
-			int y = 0;
+			int height = 64 + worldgen->getTerrainHeight( rx, rz, 0.0f );
 
 			// Land blocks
-			for ( y = 0; y < CHUNK_HEIGHT; y++ )
+			for (int y = 0; y < CHUNK_HEIGHT; y++ )
 			{
+                int actual_y = y + chunk->ay * CHUNK_HEIGHT;
+
+				// -- Sea level
+				if ( actual_y >= height && actual_y < 64 )
+				{
+					chunk->set( x, y, z, new BlockSaltWater( ResourceManager::iResourceManager->getBlockInfo( "salt_water" ) ) );
+					continue;
+				}
+
 				// Are we above "ground" level?
 				if ( y + chunk->ay * CHUNK_HEIGHT >= height )
 				{
@@ -39,15 +48,22 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 						b->info == ResourceManager::iResourceManager->getBlockInfo( "sand" ) &&
 						(rand() & 0xff) <= 3 )
 					{
-						//this->placePineTree( chunk, x, y, z );
+						//this->placeCactus( chunk, x, y, z );
 					}
-					break;
+					continue;
 				}
-
-				if ( y < height - 4 )
+                if ( y < 4 )
+				{
+					chunk->set(x,y,z, new Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) ); // bedrock
+				}
+				else if ( y < height - 4 )
+				{
 					chunk->set( x, y, z, new Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
+                }
 				else
+				{
 					chunk->set( x, y, z, new Block( ResourceManager::iResourceManager->getBlockInfo( "sand" ) ) );
+                }
 			}
 		}
 	}

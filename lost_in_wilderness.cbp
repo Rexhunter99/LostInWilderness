@@ -5,7 +5,7 @@
 		<Option title="Lost In Wilderness" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="Game\;Game\;Game\Blocks\;Game\;Game\Items\;Game\;Game\;Game\;Game\;Game\;Game\;Game\Biomes\;Game\;Game\;Game\;Game\;Game\;Game\Generators\;Game\;Game\;Game\;Client\;Renderer\;Utils\;Renderer\Resources\;" />
+		<Option virtualFolders="Renderer/;Renderer/Resources/;Utils/;World/Blocks/;Client/;World/Items/;World/Biomes/;World/;World/Generators/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/gaiacraft-dbg" prefix_auto="1" extension_auto="1" />
@@ -24,16 +24,19 @@
 				</Compiler>
 				<Linker>
 					<Add option="-pg" />
-					<Add option="-lm" />
+					<Add option="-lpng" />
 					<Add option="-lGL" />
 					<Add option="-lglfw3" />
 					<Add option="-lGLEW" />
 					<Add option="-lX11" />
-					<Add option="-lXxf86vm" />
-					<Add option="-lXrandr" />
-					<Add option="-lpthread" />
 					<Add option="-lXi" />
-					<Add option="-lpng" />
+					<Add option="-lXrandr" />
+					<Add option="-lXxf86vm" />
+					<Add option="-lXinerama" />
+					<Add option="-lXcursor" />
+					<Add option="-lrt" />
+					<Add option="-lm" />
+					<Add option="-lpthread" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -52,16 +55,19 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lm" />
+					<Add option="-lpng" />
 					<Add option="-lGL" />
 					<Add option="-lglfw3" />
 					<Add option="-lGLEW" />
 					<Add option="-lX11" />
-					<Add option="-lXxf86vm" />
-					<Add option="-lXrandr" />
-					<Add option="-lpthread" />
 					<Add option="-lXi" />
-					<Add option="-lpng" />
+					<Add option="-lXrandr" />
+					<Add option="-lXxf86vm" />
+					<Add option="-lXinerama" />
+					<Add option="-lXcursor" />
+					<Add option="-lrt" />
+					<Add option="-lm" />
+					<Add option="-lpthread" />
 				</Linker>
 			</Target>
 			<Target title="Debug-Win32">
@@ -78,6 +84,8 @@
 					<Add option="-D_DEBUG" />
 					<Add option="-D_WINDOWS" />
 					<Add option="-DGLEW_STATIC" />
+					<Add option="-D_WIN32_WINNT=0x0601" />
+					<Add option="-DWINVER=0x0601" />
 				</Compiler>
 				<Linker>
 					<Add option="-pg" />
@@ -89,6 +97,7 @@
 					<Add option="-luser32" />
 					<Add option="-lkernel32" />
 					<Add option="-lpng" />
+					<Add option="-lws2_32" />
 				</Linker>
 			</Target>
 			<Target title="Release-Win32">
@@ -103,6 +112,8 @@
 					<Add option="-DNDEBUG" />
 					<Add option="-D_WINDOWS" />
 					<Add option="-DGLEW_STATIC" />
+					<Add option="-D_WIN32_WINNT=0x0601" />
+					<Add option="-DWINVER=0x0601" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -114,6 +125,7 @@
 					<Add option="-luser32" />
 					<Add option="-lkernel32" />
 					<Add option="-lpng" />
+					<Add option="-lws2_32" />
 				</Linker>
 			</Target>
 		</Build>
@@ -122,37 +134,37 @@
 			<Add option="-DGLM_FORCE_RADIANS" />
 		</Compiler>
 		<Unit filename="Biome.h">
-			<Option virtualFolder="Game/Biomes/" />
+			<Option virtualFolder="World/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeDesert.cpp">
-			<Option virtualFolder="Game/Biomes/" />
+			<Option virtualFolder="World/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeDesert.h">
-			<Option virtualFolder="Game/Biomes/" />
+			<Option virtualFolder="World/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeForest.cpp">
-			<Option virtualFolder="Game/Biomes/" />
+			<Option virtualFolder="World/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeForest.h">
-			<Option virtualFolder="Game/Biomes/" />
+			<Option virtualFolder="World/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeWoods.cpp">
-			<Option virtualFolder="Game/Biomes/" />
+			<Option virtualFolder="World/Biomes/" />
 		</Unit>
 		<Unit filename="BiomeWoods.h">
-			<Option virtualFolder="Game/Biomes/" />
+			<Option virtualFolder="World/Biomes/" />
 		</Unit>
 		<Unit filename="Block.h">
-			<Option virtualFolder="Game/Blocks/" />
+			<Option virtualFolder="World/Blocks/" />
 		</Unit>
 		<Unit filename="BlockDirt.h">
-			<Option virtualFolder="Game/Blocks/" />
+			<Option virtualFolder="World/Blocks/" />
 		</Unit>
 		<Unit filename="BlockInfo.h">
-			<Option virtualFolder="Game/Blocks/" />
+			<Option virtualFolder="World/Blocks/" />
 		</Unit>
 		<Unit filename="BlockSaltWater.h">
-			<Option virtualFolder="Game/Blocks/" />
+			<Option virtualFolder="World/Blocks/" />
 		</Unit>
 		<Unit filename="Buffer.cpp">
 			<Option virtualFolder="Utils/" />
@@ -160,11 +172,12 @@
 		<Unit filename="Buffer.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>
+		<Unit filename="Camera.h" />
 		<Unit filename="Chunk.cpp">
-			<Option virtualFolder="Game/" />
+			<Option virtualFolder="World/" />
 		</Unit>
 		<Unit filename="Chunk.h">
-			<Option virtualFolder="Game/" />
+			<Option virtualFolder="World/" />
 		</Unit>
 		<Unit filename="Config.cpp">
 			<Option virtualFolder="Utils/" />
@@ -175,17 +188,29 @@
 		<Unit filename="Exceptions.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>
+		<Unit filename="Framebuffer.cpp">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="Framebuffer.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
 		<Unit filename="Item.h">
-			<Option virtualFolder="Game/Items/" />
+			<Option virtualFolder="World/Items/" />
 		</Unit>
 		<Unit filename="ItemInfo.h">
-			<Option virtualFolder="Game/Items/" />
+			<Option virtualFolder="World/Items/" />
 		</Unit>
 		<Unit filename="LostInWilderness.cpp">
 			<Option virtualFolder="Client/" />
 		</Unit>
 		<Unit filename="LostInWilderness.h">
 			<Option virtualFolder="Client/" />
+		</Unit>
+		<Unit filename="Network.cpp">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="Network.h">
+			<Option virtualFolder="Utils/" />
 		</Unit>
 		<Unit filename="Noise.cpp">
 			<Option virtualFolder="Utils/" />
@@ -199,8 +224,12 @@
 		<Unit filename="Renderer.h">
 			<Option virtualFolder="Renderer/" />
 		</Unit>
-		<Unit filename="ResourceManager.cpp" />
-		<Unit filename="ResourceManager.h" />
+		<Unit filename="ResourceManager.cpp">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="ResourceManager.h">
+			<Option virtualFolder="Utils/" />
+		</Unit>
 		<Unit filename="Shader.cpp">
 			<Option virtualFolder="Renderer/" />
 		</Unit>
@@ -228,22 +257,46 @@
 		<Unit filename="VertexBuffer.h">
 			<Option virtualFolder="Renderer/" />
 		</Unit>
+		<Unit filename="VertexFormat.cpp">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="VertexFormat.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
 		<Unit filename="World.cpp">
-			<Option virtualFolder="Game/" />
+			<Option virtualFolder="World/" />
 		</Unit>
 		<Unit filename="World.h">
-			<Option virtualFolder="Game/" />
+			<Option virtualFolder="World/" />
 		</Unit>
 		<Unit filename="WorldGenerator.cpp">
-			<Option virtualFolder="Game/Generators/" />
+			<Option virtualFolder="World/Generators/" />
 		</Unit>
 		<Unit filename="WorldGenerator.h">
-			<Option virtualFolder="Game/Generators/" />
+			<Option virtualFolder="World/Generators/" />
 		</Unit>
-		<Unit filename="bin/data/shaders/glescraft.fs">
+		<Unit filename="WrapperSTL.h">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/120.blocks.fs">
 			<Option virtualFolder="Renderer/Resources/" />
 		</Unit>
-		<Unit filename="bin/data/shaders/glescraft.vs">
+		<Unit filename="bin/data/shaders/120.blocks.vs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/150.fxaa.fs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/150.pp.fs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/150.pp.vs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/world.150.fs">
+			<Option virtualFolder="Renderer/Resources/" />
+		</Unit>
+		<Unit filename="bin/data/shaders/world.150.vs">
 			<Option virtualFolder="Renderer/Resources/" />
 		</Unit>
 		<Unit filename="vectors.h">

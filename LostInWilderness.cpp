@@ -1,12 +1,16 @@
 
 #include "LostInWilderness.h"
+#include "Buffer.h"
 #include "Chunk.h"
+#include "Config.h"
 #include "Exceptions.h"
+#include "Network.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "World.h"
 #include "WorldGenerator.h"
 
+#include <dirent.h>
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
@@ -20,6 +24,19 @@
 #include <sstream>
 #include <thread>
 
+#ifdef _WIN32
+#include <io.h>
+#else
+#endif // _WIN32
+
+#include <sys/stat.h>
+#include <mutex>
+
+/** Include WrapperSTL, has thread-safe alternatives to C++ Standard STL 2011 **/
+#define __NEED_CONCURRENT_QUEUE__
+#include "WrapperSTL.h"
+
+/** Include OpenGL API/Utilities **/
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -27,11 +44,19 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/noise.hpp>
 
-// TODO: Remove using namespace
-using namespace std;
-
 
 typedef struct ChunkUpdateStruct {
+	enum EType
+	{
+		CHUNK_GENERATE,
+		CHUNK_UPDATE,
+		CHUNK_UPDATE_LIGHTING,
+		CHUNK_UPDATE_GRAPHIC,
+		CHUNK_SAVE,
+		CHUNK_LOAD,
+		NOTHING
+	};
+	EType	type;
 	Chunk	*chunk;
 	int		x,
 			y,
@@ -39,144 +64,128 @@ typedef struct ChunkUpdateStruct {
 	int		seed;
 } ChunkUpdateType;
 
-static struct CameraStruct {
-	glm::vec3 position;
-	glm::vec3 forward;
-	glm::vec3 right;
-	glm::vec3 up;
-	glm::vec3 lookat;
-	glm::vec3 angle;
-} camera;
-
-static GLuint cursor_vbo;
-static GLuint default_vao;
-static int ww, wh;
-static int mx, my, mz;
-static int face;
-static uint8_t buildtype = 1;
+static Camera		g_camera;
+static World		*world;
+static int			ww, wh;
+static int			mx, my, mz;
+static int			face;
+static uint8_t		buildtype = 1;
 static unsigned int keys;
-static bool select_using_depthbuffer = false;
-static World *world;
+static bool			select_using_depthbuffer = false;
+struct stat		    info;
 
 uint32_t chunk_update_count = 0;
 uint32_t chunk_gen_count = 0;
 
 
-#include "Chunk.h"
-
-// Size of one chunk in blocks
+// Shorthand: Size of one chunk in blocks
 #define CX CHUNK_WIDTH
 #define CY CHUNK_HEIGHT
 #define CZ CHUNK_LENGTH
 
-// Number of VBO slots for chunks
-#define CHUNKSLOTS (SCX * SCY * SCZ)
 
-std::thread g_chunk_updater_thread;
-std::atomic<bool> g_chunk_updater_loop;
-std::queue<Chunk*>			thread_chunk_update_queue;
-std::queue<ChunkUpdateType>	thread_chunk_gen_queue;
+std::atomic<bool>							g_finished;
+//g_chunk_updater_mutex;
+concurrent::queue<ChunkUpdateType*>	chunk_thread_queue;
 
-void GaiaCraft::chunkUpdateThread( void )
+
+void LostInWilderness::chunkThread( void )
 {
+	// -- Set the concurrent context used for parallel buffers, as the current context
 	glfwMakeContextCurrent( (GLFWwindow*)Renderer::getWindow( "g_updatecontext" ) );
 
 	// -- While the queue is not empty
-	while ( g_chunk_updater_loop )
+	while ( !g_finished )
 	{
-		if ( thread_chunk_gen_queue.empty() )
+		if ( !chunk_thread_queue.empty() )
 		{
-			if ( !thread_chunk_update_queue.empty() )
+			ChunkUpdateType *chunk_data = nullptr;
+
+			chunk_thread_queue.pop( chunk_data );
+
+			switch (chunk_data->type)
 			{
-				Chunk *chunk = thread_chunk_update_queue.front();
-				thread_chunk_update_queue.pop();
-				//std::cout << "[THREAD] Chunk Update...";
-				//chunk->update();
-				chunk->save();
-				//std::cout << " done!" << endl;
+			case ChunkUpdateType::CHUNK_GENERATE:
+				chunk_data->chunk->generate( chunk_data->seed );
+				break;
+
+			case ChunkUpdateType::CHUNK_UPDATE:
+				chunk_data->chunk->update( );
+				break;
+
+			case ChunkUpdateType::CHUNK_LOAD:
+				chunk_data->chunk->load( );
+				break;
+
+			case ChunkUpdateType::CHUNK_SAVE:
+				chunk_data->chunk->save( );
+				break;
+
+			case ChunkUpdateType::CHUNK_UPDATE_GRAPHIC:
+			case ChunkUpdateType::CHUNK_UPDATE_LIGHTING:
+			case ChunkUpdateType::NOTHING:
+				break;
 			}
-			else
-			{
-				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-				continue;
-			}
+
+			delete chunk_data;
 		}
-		else
-		{
-			ChunkUpdateType chunk_data = thread_chunk_gen_queue.front();
-			thread_chunk_gen_queue.pop();
-			chunk_data.chunk->generate( chunk_data.seed );
-		}
+
+		//std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 	}
 
+	// -- No context is current
 	glfwMakeContextCurrent( nullptr );
-
-	cout << "[THREAD] Chunk updates finished" << endl;
+    //g_chunk_updater_mutex.unlock();
+	std::cout << "[THREAD:Chunks] Chunk thread finished." << std::endl;
 }
 
-static void free_resources();
 
 // Calculate the forward, right and lookat vectors from the angle vector
 static void update_vectors()
 {
-	camera.forward.x = std::sin(camera.angle.x);
-	camera.forward.y = 0;
-	camera.forward.z = std::cos(camera.angle.x);
+	g_camera.forward.x = std::sin(g_camera.angle.x);
+	g_camera.forward.y = 0;
+	g_camera.forward.z = std::cos(g_camera.angle.x);
 
-	camera.right.x = -std::cos(camera.angle.x);
-	camera.right.y = 0;
-	camera.right.z = std::sin(camera.angle.x);
+	g_camera.right.x = -std::cos(g_camera.angle.x);
+	g_camera.right.y = 0;
+	g_camera.right.z = std::sin(g_camera.angle.x);
 
-	camera.lookat.x = std::sin(camera.angle.x) * std::cos(camera.angle.y);
-	camera.lookat.y = std::sin(camera.angle.y);
-	camera.lookat.z = std::cos(camera.angle.x) * std::cos(camera.angle.y);
+	g_camera.lookat.x = std::sin(g_camera.angle.x) * std::cos(g_camera.angle.y);
+	g_camera.lookat.y = std::sin(g_camera.angle.y);
+	g_camera.lookat.z = std::cos(g_camera.angle.x) * std::cos(g_camera.angle.y);
 
-	camera.up = glm::cross(camera.right, camera.lookat);
+	g_camera.up = glm::cross(g_camera.right, g_camera.lookat);
 }
 
 int init_resources()
 {
-	// -- Load Textures
-	Renderer::blocks_texture = new Texture();
-	Renderer::blocks_texture->loadFile( "data/textures/gc-textures.png", 16, 16 );
-	Renderer::blocks_texture->bind();
+	// -- Network
+	Network::HttpRequest http;
+	http.open( Network::HttpRequest::HTTP_GET, "www.epiczen.net/" );
+	http.send( std::string("test") );
 
-	Renderer::font_texture = new TextFont( "data/fonts/minecraft" );
 
-	// -- Create shaders
-	Renderer::default_shader = new Shader();
-	Renderer::default_shader->addVertexShader( "data/shaders/glescraft.vs" );
-	Renderer::default_shader->addFragmentShader( "data/shaders/glescraft.fs" );
-	Renderer::default_shader->compileShaders();
-	Renderer::default_shader->bind();
-
-	// -- Make the shader object aware of attributes and uniforms
-	Renderer::default_shader->addAttrib( "v_position" );
-	Renderer::default_shader->addAttrib( "v_texcoord" );
-	Renderer::default_shader->addUniform( "mvp" );
-	Renderer::default_shader->addUniform( "texture" );
-	Renderer::default_shader->addUniform( "b_lighting" );
-	// TODO: Put this into the Shader class
-	Renderer::default_shader->bindFragData( 0, "frag_color" );
-	Renderer::default_shader->setUniform1i( "texture", 0 );
+	// -- Default the uniforms/attribs
+	Shader *shader_world = ResourceManager::iResourceManager->getShader("default");
+	shader_world->setUniform1i( "texture", 0 );
+	shader_world->setUniform4f( "g_SunLightSource.position", (float*)glm::value_ptr( glm::vec4( 0, -1, 0, 0 ) ) );
+	shader_world->setUniform4f( "g_SunLightSource.diffuse", (float*)glm::value_ptr( glm::vec4( 1, 1, 1, 1 ) ) );
+	shader_world->setUniform4f( "g_SunLightSource.ambient", (float*)glm::value_ptr( glm::vec4( 0.4, 0.4, 0.4, 1 ) ) );
+	shader_world->setUniform1f( "g_SunLightSource.specular", 1.0f );
 
 	// -- Create the world
 	world = new World( "world" );
 
-	camera.position = glm::vec3(0, CY + 1, 0);
-	camera.angle = glm::vec3(0, -0.5, 0);
+	// -- Pre-generate the terrain here
+
+
+    // TODO: place the camera on the terrain
+    //pseudocode: getHeight(curPos) --> set y value to this
+    // ResourceManager::iResourceManager->getWorldGen("default").getTerrainHeight(0,0,0)
+	g_camera.position = glm::vec3(0, CY / 2, 0);
+	g_camera.angle = glm::vec3(0, -0.5, 0);
 	update_vectors();
-
-	// -- Create a VBO for the cursor
-	glGenVertexArrays(1, &default_vao);
-	glGenBuffers(1, &cursor_vbo);
-	glBindVertexArray( default_vao );
-
-	// -- OpenGL settings that do not change while running this program
-	glClearColor(0.6, 0.8, 1.0, 0.0);
-	glPolygonOffset(1, 1);
-	glEnableVertexAttribArray( Renderer::default_shader->getAttrib( "v_position" ) );
-	glEnableVertexAttribArray( Renderer::default_shader->getAttrib( "v_texcoord" ) );
 
 	return 1;
 }
@@ -188,7 +197,7 @@ void resize( GLFWwindow* wnd, int w, int h)
 	glViewport(0, 0, w, h);
 }
 
-// Not really GLSL fract(), but the absolute distance to the nearest integer value
+// -- Not really GLSL fract(), but the absolute distance to the nearest integer value
 static float fract(float value)
 {
 	float f = value - floorf(value);
@@ -205,17 +214,18 @@ static unsigned int frameCount = 0;
 
 static void display()
 {
-	float fov = 70.0f;
-	float aspect = (float)ww/(float)wh;
-	float znear = 0.1f;
-	float zfar = 1000.0f;
+	LostInWilderness *client = LostInWilderness::iGaiaCraft;
+	float fov = Config::getGlobal()->getFloat( "renderer.field_of_view" ) / 180.0f * 3.14f;
+	float aspect = (float)ww / (float)wh;
+	float znear = 0.25f;
+	float zfar = 16.0f * 16;
 
-	glm::mat4 view = glm::lookAt(camera.position, camera.position + camera.lookat, camera.up);
+	glm::mat4 view = glm::lookAt(g_camera.position, g_camera.position + g_camera.lookat, g_camera.up);
 	glm::mat4 projection = glm::perspective( fov, aspect, znear, zfar );
 	glm::mat4 mvp = projection * view;
 
 	Renderer::default_shader->setUniformMatrix( "mvp", glm::value_ptr(mvp) );
-	//Renderer::default_shader->setUniform1i( "b_lighting", true );
+	Renderer::default_shader->setUniform1i( "b_lighting", true );
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	glDisable( GL_BLEND );
@@ -224,14 +234,17 @@ static void display()
 	glEnable( GL_CULL_FACE );
 	glCullFace( GL_BACK );
 
-	/* Then draw chunks */
+	// -- Then draw chunks
+
+	world->update();
 
 	world->render(mvp);
 
-	/* At which voxel are we looking? */
+	// -- At which voxel are we looking?
 
-	if(select_using_depthbuffer) {
-		/* Find out coordinates of the center pixel */
+	if ( select_using_depthbuffer )
+	{
+		// -- Find out coordinates of the center pixel
 
 		float depth;
 		glReadPixels(ww / 2, wh / 2, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
@@ -240,7 +253,7 @@ static void display()
 		glm::vec3 wincoord = glm::vec3(ww / 2, wh / 2, depth);
 		glm::vec3 objcoord = glm::unProject(wincoord, view, projection, viewport);
 
-		/* Find out which block it belongs to */
+		// -- Find out which block it belongs to
 
 		mx = objcoord.x;
 		my = objcoord.y;
@@ -252,7 +265,7 @@ static void display()
 		if(objcoord.z < 0)
 			mz--;
 
-		/* Find out which face of the block we are looking at */
+		// -- Find out which face of the block we are looking at
 
 		if(fract(objcoord.x) < fract(objcoord.y))
 			if(fract(objcoord.x) < fract(objcoord.z))
@@ -265,35 +278,38 @@ static void display()
 			else
 				face = 2; // Z
 
-		if(face == 0 && camera.lookat.x > 0)
+		if(face == 0 && g_camera.lookat.x > 0)
 			face += 3;
-		if(face == 1 && camera.lookat.y > 0)
+		if(face == 1 && g_camera.lookat.y > 0)
 			face += 3;
-		if(face == 2 && camera.lookat.z > 0)
+		if(face == 2 && g_camera.lookat.z > 0)
 			face += 3;
-	} else {
-		/* Very naive ray casting algorithm to find out which block we are looking at */
+	}
+	else
+	{
+		// -- Very naive ray casting algorithm to find out which block we are looking at
 
-		glm::vec3 testpos = camera.position;
-		glm::vec3 prevpos = camera.position;
+		glm::vec3 testpos = g_camera.position;
+		glm::vec3 prevpos = g_camera.position;
 
-		for(int i = 0; i < 100; i++) {
-			/* Advance from our currect position to the direction we are looking at, in small steps */
+		for ( auto i = 0; i < 16 * 4; i++ )
+		{
+			// -- Advance from our currect position to the direction we are looking at, in increments of 1 voxel.
+			// NOTE: 1 voxel is equal to 1.0f / 16.0f
 
 			prevpos = testpos;
-			testpos += camera.lookat * 0.1f;
+			testpos += g_camera.lookat * (1.0f / 16.0f);
 
 			mx = floorf(testpos.x);
 			my = floorf(testpos.y);
 			mz = floorf(testpos.z);
 
-			/* If we find a block that is not air, we are done */
-
-			if(world->get(mx, my, mz))
+			// -- If this block is not air, then break the loop
+			if ( world->getBlock(mx, my, mz) )
 				break;
 		}
 
-		/* Find out which face of the block we are looking at */
+		// -- Find out which face of the block we are looking at
 
 		int px = floorf(prevpos.x);
 		int py = floorf(prevpos.y);
@@ -312,19 +328,20 @@ static void display()
 		else if(pz < mz)
 			face = 5;
 
-		/* If we are looking at air, move the cursor out of sight */
-
-		if(!world->get(mx, my, mz))
+		// -- If we are looking at air, move the cursor out of sight
+		if ( world->getBlock(mx, my, mz) == nullptr )
+		{
 			mx = my = mz = 99999;
+		}
 	}
 
-	float bx = mx;
+	/**float bx = mx;
 	float by = my;
 	float bz = mz;
 
-	/* Render a box around the block we are pointing at */
+	// Render a box around the block we are pointing at
 
-	/**Vertex box[24] = {
+	Vertex box[24] = {
 		Vertex(bx + 0, by + 0, bz + 0, 0, 0, 0),
 		Vertex(bx + 1, by + 0, bz + 0, 0, 0, 0),
 		Vertex(bx + 0, by + 1, bz + 0, 0, 0, 0),
@@ -401,12 +418,18 @@ static void display()
 	mvp			= view * projection;
 
 	Renderer::default_shader->setUniformMatrix( "mvp", glm::value_ptr(mvp) );
-	//Renderer::default_shader->setUniform1i( "b_lighting", false );
+	Renderer::default_shader->setUniform1i( "b_lighting", false );
 
 	std::wostringstream overlay_s;
-	overlay_s << L"FPS: " << framesPerSecond << L"\nUpdates: " << chunk_update_count << L"\nGens: " << chunk_gen_count;
+	overlay_s	<< L"FPS: " << framesPerSecond
+				<< L" Updates: " << chunk_update_count
+				<< L" Gens: " << chunk_gen_count
+				<< L"\nX,Y,Z: " << client->camera->position.x << "," << client->camera->position.y << "," << client->camera->position.z
+				<< L"\nCX,CY,CZ: " << (client->camera->position.x/CHUNK_WIDTH) << "," << (client->camera->position.y/CHUNK_HEIGHT) << "," << (client->camera->position.z/CHUNK_LENGTH)
+				<< L"\nOpenGL 3.2 Core | GLSL 1.50";
+
 	Renderer::font_texture->bind();
-	Renderer::font_texture->drawString( 2,2, 0xFFFFFFFF, 2.0f, overlay_s.str().c_str() );
+	Renderer::font_texture->drawString( 2, 2, 0xFFFFFFFF, 2.0f, overlay_s.str().c_str() );
 	Renderer::blocks_texture->bind();
 
 
@@ -472,13 +495,13 @@ void key_cb( GLFWwindow* wnd, int key, int scancode, int action, int mods )
 			keys |= 32;
 			break;
 		case GLFW_KEY_HOME:
-			camera.position = glm::vec3(0, CY + 1, 0);
-			camera.angle = glm::vec3(0, -0.5, 0);
+			g_camera.position = glm::vec3(0, CY / 2, 0);
+			g_camera.angle = glm::vec3(0, -0.5, 0);
 			update_vectors();
 			break;
 		case GLFW_KEY_END:
-			camera.position = glm::vec3(0, CX * SCX, 0);
-			camera.angle = glm::vec3(0, -3.14 * 0.49, 0);
+			g_camera.position = glm::vec3(0, CX * Config::getGlobal()->getInteger( "renderer.view_distance" ), 0);
+			g_camera.angle = glm::vec3(0, -3.14 * 0.49, 0);
 			update_vectors();
 			break;
 		case GLFW_KEY_F1:
@@ -514,17 +537,17 @@ static void idle()
 	pt = t;
 
 	if(keys & 1)
-		camera.position -= camera.right * movespeed * dt;
+		g_camera.position -= g_camera.right * movespeed * dt;
 	if(keys & 2)
-		camera.position += camera.right * movespeed * dt;
+		g_camera.position += g_camera.right * movespeed * dt;
 	if(keys & 4)
-		camera.position += camera.forward * movespeed * dt;
+		g_camera.position += g_camera.forward * movespeed * dt;
 	if(keys & 8)
-		camera.position -= camera.forward * movespeed * dt;
+		g_camera.position -= g_camera.forward * movespeed * dt;
 	if(keys & 16)
-		camera.position.y += movespeed * dt;
+		g_camera.position.y += movespeed * dt;
 	if(keys & 32)
-		camera.position.y -= movespeed * dt;
+		g_camera.position.y -= movespeed * dt;
 }
 
 void motion(GLFWwindow *wnd, double x, double y)
@@ -540,19 +563,19 @@ void motion(GLFWwindow *wnd, double x, double y)
 
 	if(!warp)
 	{
-		camera.angle.x -= (x - (((float)ww / 2.0f)) ) * mousespeed;
-		camera.angle.y -= (y - (((float)wh / 2.0f)) ) * mousespeed;
+		g_camera.angle.x -= (x - (((float)ww / 2.0f)) ) * mousespeed;
+		g_camera.angle.y -= (y - (((float)wh / 2.0f)) ) * mousespeed;
 
-		if(camera.angle.x < -3.14)
-			camera.angle.x += 3.14 * 2;
-		if(camera.angle.x > 3.14)
-			camera.angle.x -= 3.14 * 2;
-		if(camera.angle.y < -3.14 / 2)
-			camera.angle.y = -3.14 / 2;
-		if(camera.angle.y > 3.14 / 2)
-			camera.angle.y = 3.14 / 2;
+		if(g_camera.angle.x < -3.14)
+			g_camera.angle.x += 3.14 * 2;
+		if(g_camera.angle.x > 3.14)
+			g_camera.angle.x -= 3.14 * 2;
+		if(g_camera.angle.y < -3.14 / 2)
+			g_camera.angle.y = -3.14 / 2;
+		if(g_camera.angle.y > 3.14 / 2)
+			g_camera.angle.y = 3.14 / 2;
 
-		update_vectors();
+        update_vectors();
 
 		// Force the mouse pointer back to the center of the screen.
 		// This causes another call to motion(), which we need to ignore.
@@ -605,81 +628,135 @@ static void mouse(int button, int state, int x, int y)
 	}*/
 }
 
-static void free_resources()
+LostInWilderness *LostInWilderness::iGaiaCraft;
+
+
+LostInWilderness::LostInWilderness()
 {
-	cout << "[INFO] Resources freed" << endl;
+	LostInWilderness::iGaiaCraft = this;
 
-	if ( world != nullptr )
-		delete world;
+	this->camera						= &g_camera;
+	this->config						= Config::getGlobal();
+	this->config->load( "client.properties" );
 
-	glDeleteVertexArrays(1, &default_vao);
+	// -- Prepare the network API
+	Network::network_initialise();
+
+	Renderer::iRenderer					= new Renderer( LostInWilderness::iGaiaCraft->config->getString( "renderer.api" ) );
+	ResourceManager::iResourceManager	= new ResourceManager();
 }
 
-GaiaCraft *GaiaCraft::iGaiaCraft;
-
-
-GaiaCraft::GaiaCraft()
+LostInWilderness::~LostInWilderness()
 {
-	GaiaCraft::iGaiaCraft = this;
+	Network::network_cleanup();
 
-	this->config						= new Config();
-	Renderer::iRenderer					= new Renderer();
-    ResourceManager::iResourceManager	= new ResourceManager();
-
-    this->config->load( "client.properties" );
-}
-
-GaiaCraft::~GaiaCraft()
-{
 	delete this->config;
 	delete ResourceManager::iResourceManager;
 	delete Renderer::iRenderer;
 }
 
-void GaiaCraft::addChunkToGenerateQueue( int x, int y, int z, int seed, Chunk *chunk )
+void LostInWilderness::addChunkToGenerateQueue( int x, int y, int z, int seed, Chunk *chunk )
 {
-	ChunkUpdateType chunk_data;
-	chunk_data.chunk	= chunk;
-	chunk_data.x		= x;
-	chunk_data.y		= y;
-	chunk_data.z		= z;
-	chunk_data.seed		= seed;
-	thread_chunk_gen_queue.push( chunk_data );
+	ChunkUpdateType *chunk_data = new ChunkUpdateType;
+	chunk_data->chunk	= chunk;
+	chunk_data->type	= ChunkUpdateType::CHUNK_GENERATE;
+	chunk_data->x		= x;
+	chunk_data->y		= y;
+	chunk_data->z		= z;
+	chunk_data->seed	= seed;
+
+	chunk_thread_queue.push( chunk_data );
 }
 
-void GaiaCraft::addChunkToUpdateQueue( Chunk *chunk )
+void LostInWilderness::addChunkToUpdateQueue( Chunk *chunk )
 {
-	thread_chunk_update_queue.push( chunk );
+	ChunkUpdateType *chunk_data = new ChunkUpdateType;
+	chunk_data->chunk	= chunk;
+	chunk_data->type	= ChunkUpdateType::CHUNK_UPDATE;
+	chunk_data->x		= 0;
+	chunk_data->y		= 0;
+	chunk_data->z		= 0;
+	chunk_data->seed	= 0;
+
+	chunk_thread_queue.push( chunk_data );
 }
 
-int GaiaCraft::run()
+void LostInWilderness::addChunkToSaveQueue( Chunk *chunk )
 {
-	g_chunk_updater_loop = true;
-	g_chunk_updater_thread = thread( GaiaCraft::chunkUpdateThread );
+	ChunkUpdateType *chunk_data = new ChunkUpdateType;
+	chunk_data->chunk	= chunk;
+	chunk_data->type	= ChunkUpdateType::CHUNK_SAVE;
+	chunk_data->x		= 0;
+	chunk_data->y		= 0;
+	chunk_data->z		= 0;
+	chunk_data->seed	= 0;
+
+	chunk_thread_queue.push( chunk_data );
+}
+
+int LostInWilderness::run()
+{
+	// -- File system manipulation goes here
+	if(!(info.st_mode & S_IFDIR))
+	{
+		#ifdef _WIN32
+		mkdir("./world");
+		#else
+		mkdir("./world",S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		#endif
+
+		// -- NOTE: This is temporary
+		DIR *d = opendir("./world");
+		struct dirent *dp;
+
+		while ( ( dp = readdir(d)) != nullptr )
+		{
+			std::string file = dp->d_name;
+
+			if ( !file.compare( "." ) || !file.compare( ".." ) ) continue;
+
+			std::string fpath = std::string("./world/") + file;
+			std::cout << fpath << std::endl;
+			std::remove( fpath.c_str() );
+		}
+
+		closedir(d);
+	}
+
+	// -- Initialise any threads here
+	g_finished = false;
+	this->threads.insert( std::make_pair( std::string("chunks"), std::thread(LostInWilderness::chunkThread) ) );
 
 	if (init_resources())
 	{
-		glfwGetWindowSize( (GLFWwindow*)Renderer::getWindow( "g_window" ), &ww, &wh );
-		glfwSetCursorPos( (GLFWwindow*)Renderer::getWindow( "g_window" ), ww / 2, wh / 2);
-		glfwSetWindowSizeCallback( (GLFWwindow*)Renderer::getWindow( "g_window" ), resize );
-		glfwSetKeyCallback( (GLFWwindow*)Renderer::getWindow( "g_window" ), key_cb );
-		glfwSetCursorPosCallback( (GLFWwindow*)Renderer::getWindow( "g_window" ), motion );
+		GLFWwindow *window = (GLFWwindow*)Renderer::getWindow( "g_window" );
+		glfwGetWindowSize( window, &ww, &wh );
+		glfwSetCursorPos( window, ww / 2, wh / 2);
+		glfwSetWindowSizeCallback( window, resize );
+		glfwSetKeyCallback( window, key_cb );
+		glfwSetCursorPosCallback( window, motion );
 
-		while ( !glfwWindowShouldClose( (GLFWwindow*)Renderer::getWindow( "g_window" ) ) )
+		while ( !glfwWindowShouldClose( window ) )
 		{
 			idle();
 			display();
 		}
+
+		std::cout << "[INFO] Exited the loop" << std::endl;
 	}
 
-	std::cout << "[INFO] Exited the loop" << std::endl;
+	// -- Join all threads into the main again
+	g_finished = true;
+	this->threads.find( "chunks" )->second.join();
 
-	g_chunk_updater_loop = false;
-	g_chunk_updater_thread.join();
+	std::cout << "[INFO] Threads have joined" << std::endl;
 
-	std::cout << "[INFO] Thread has joined" << std::endl;
-
-	free_resources();
+	// -- Free the resources
+	if ( world != nullptr )
+	{
+		delete world;
+	}
+	std::cout << "[INFO] Resources freed" << std::endl;
 
 	return 0;
 }
@@ -690,11 +767,12 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		GaiaCraft game;
+		LostInWilderness game;
 		r = game.run();
 	}
 	catch ( std::exception& e )
 	{
+		std::cerr << "=================================================\n";
 		std::cerr << "Fatal Exception:\n" << e.what() << std::endl;
 	}
 

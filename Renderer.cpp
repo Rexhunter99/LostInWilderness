@@ -1,5 +1,6 @@
 
 #include "Renderer.h"
+#include "Config.h"
 #include "Exceptions.h"
 #include "LostInWilderness.h"
 
@@ -33,19 +34,25 @@ void APIENTRY cbOpenGLError( GLenum _source, GLenum _type, GLuint _id, GLenum _s
 {
 	if ( strstr(_message, "Clear color unsupported") ) return;
 
-	if ( _type != GL_DEBUG_TYPE_ERROR_ARB ) return;
+	//if ( _type != GL_DEBUG_TYPE_ERROR_ARB ) return;
 
 #ifdef _DEBUG
-	if ( _severity == GL_DEBUG_SEVERITY_LOW_ARB ) return;
-#endif // NDEBUG
+	if ( _severity == GL_DEBUG_SEVERITY_LOW_ARB ) {} //return;
+	else
+	{
+		std::cerr << "[OPENGL ERROR] " << " | " << _message << std::endl;
+	}
+#else
 
-	std::cerr << "[OPENGL ERROR] " << " | " << _message << std::endl;
+	std::cerr << "[OPENGL DEBUG ERROR] " << " | " << _message << std::endl;
+
+#endif // NDEBUG
 
 	return;
 }
 
 
-Renderer::Renderer()
+Renderer::Renderer( std::string version )
 {
 	Renderer::blocks_texture = nullptr;
 	Renderer::items_texture = nullptr;
@@ -59,6 +66,63 @@ Renderer::Renderer()
 		return;
 	}
 
+	int glfw_hints[5][4] = {
+		#if defined( _PORTABLE )
+		{
+			GLFW_OPENGL_ES_API,
+			3, 1,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_ES_API,
+			3, 0,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_ES_API,
+			2, 0,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_ES_API,
+			1, 1,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_ES_API,
+			1, 0,
+			GLFW_OPENGL_ANY_PROFILE,
+		}
+		#else
+		{
+			GLFW_OPENGL_API,
+			3, 2,
+			GLFW_OPENGL_CORE_PROFILE,
+		},
+		{
+			GLFW_OPENGL_API,
+			3, 1,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_API,
+			3, 0,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_API,
+			2, 1,
+			GLFW_OPENGL_ANY_PROFILE,
+		},
+		{
+			GLFW_OPENGL_API,
+			2, 0,
+			GLFW_OPENGL_ANY_PROFILE,
+		}
+		#endif
+	};
+	const int glfw_hints_num = 5;
+
 	// -- Initialise the monitor pointer to no monitor
 	GLFWmonitor *monitor = nullptr;
 
@@ -66,33 +130,57 @@ Renderer::Renderer()
 	monitor = glfwGetPrimaryMonitor();
 	#endif // defined
 
-	// -- MSAA Samples (default to 0 for now...)
-	glfwWindowHint( GLFW_SAMPLES, 0 );
+	bool msaa = false;
 
-	#if defined( _PORTABLE )
-	// -- We're using OpenGL on portables
-	glfwWindowHint( GLFW_CLIENT_API, GLFW_OPENGL_ES_API );
-	#else
-	// -- We're using OpenGL on desktops/laptops
-	glfwWindowHint( GLFW_CLIENT_API, GLFW_OPENGL_API );
-	#endif
+	for ( int h=0; h<glfw_hints_num; h++ )
+	{
+		glfwDefaultWindowHints();
 
-	// -- Default our desired context version to 2.0
-	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
-	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
+		glfwWindowHint( GLFW_CLIENT_API, glfw_hints[h][0] );
 
-	// -- Core profile context
-	//glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+		// -- Hint at our desired context version
+		glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, glfw_hints[h][1] );
+		glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, glfw_hints[h][2] );
 
-	#ifdef _DEBUG
-	glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE );
-	#endif // _DEBUG
+		// -- Core profile context
+		glfwWindowHint( GLFW_OPENGL_PROFILE, glfw_hints[h][3] );
 
-	g_window = glfwCreateWindow( 1280, 720, "GaiaCraft", monitor, nullptr );
+		#ifdef _DEBUG
+		glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE );
+		#endif // _DEBUG
+
+		// -- MSAA Samples (default to 0 for now...)
+		msaa = false;
+
+		if ( Config::getGlobal()->getString( "renderer.antialiasing" ).find("msaa") != std::string::npos )
+		{
+			std::string aa = Config::getGlobal()->getString( "renderer.antialiasing" );
+			msaa = true;
+			if ( aa.find("2x") != std::string::npos )
+				glfwWindowHint( GLFW_SAMPLES, 2 );
+			else if ( aa.find("4x") != std::string::npos )
+				glfwWindowHint( GLFW_SAMPLES, 4 );
+			else if ( aa.find("8x") != std::string::npos )
+				glfwWindowHint( GLFW_SAMPLES, 8 );
+		}
+		else
+		{
+			glfwWindowHint( GLFW_SAMPLES, 0 );
+		}
+
+		g_window = glfwCreateWindow( 1280, 720, "Lost In Wilderness - Alpha", monitor, nullptr );
+
+		if ( g_window )
+		{
+			// -- We found a working set of hints!
+			break;
+		}
+	}
+
 	if ( !g_window )
 	{
 		glfwTerminate();
-		throw custom_exception( "GLFW 3 failed to create the window and context." );
+		throw custom_exception( "GLFW 3 failed to create a window/context that matched any of the desired hints." );
 		return;
 	}
 
@@ -114,6 +202,22 @@ Renderer::Renderer()
 		throw custom_exception( std::string("GLEW was unable to initialize! Error message:\n") + std::string((const char*)glewGetErrorString(glew_status)) );
 		return;
 	}
+
+	// -- Version output
+	#ifdef _DEBUG
+	int gl_version[2];
+	glGetIntegerv( GL_MAJOR_VERSION, &gl_version[0] );
+	glGetIntegerv( GL_MINOR_VERSION, &gl_version[1] );
+	std::cout << "GL_VERSION: " << glGetString( GL_VERSION ) << std::endl;
+	std::cout << "GL_VERSION: " << gl_version[0] << "." << gl_version[1] << std::endl;
+	int glsl_version_num = 0;
+	glGetIntegerv( GL_NUM_SHADING_LANGUAGE_VERSIONS, &glsl_version_num );
+
+	for ( int i=0; i<glsl_version_num; i++ )
+	{
+		std::cout << "GLSL VERSION: " << glGetStringi( GL_SHADING_LANGUAGE_VERSION, i ) << std::endl;
+	}
+	#endif // _DEBUG
 
 	// -- Check the minimum version of OpenGL is actually 2.0 or greater
 	if (!GLEW_VERSION_2_0)
@@ -144,7 +248,11 @@ Renderer::Renderer()
 	//glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)glfwGetProcAddress( "glGenVertexArrays" );
 
 	// -- Handle state changes here that are 'static' or that don't change every frame
-	glEnable( GL_MULTISAMPLE );
+	if ( msaa == true )
+	{
+		glEnable( GL_MULTISAMPLE );
+	}
+
 	glEnable( GL_CULL_FACE );
 	glEnable( GL_BLEND );
 
@@ -152,24 +260,29 @@ Renderer::Renderer()
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
 	// -- Enable Swap Control Tear over Swap Interval (control tear does not vsync if fps is behind)
-	if ( GaiaCraft::iGaiaCraft->config->getInteger( "renderer.vertical_sync" ) > 0 )
+	if ( Config::getGlobal()->getInteger( "renderer.vertical_sync" ) > 0 )
 	{
 		if ( glfwExtensionSupported( "GLX_EXT_swap_control" ) || glfwExtensionSupported( "WGL_EXT_swap_control" ) )
 		{
 			if ( glfwExtensionSupported( "GLX_EXT_swap_control_tear" ) || glfwExtensionSupported( "WGL_EXT_swap_control_tear" ) )
+			{
 				glfwSwapInterval( -1 );
+				std::cout << "Adaptive Vertical Sync: Enabled" << std::endl;
+			}
 			else
+			{
 				glfwSwapInterval( 1 );
+				std::cout << "1:1 Vertical Sync: Enabled" << std::endl;
+			}
 		}
 	}
+
+	glClearColor(0.6, 0.8, 1.0, 0.0);
+	glPolygonOffset(1, 1);
 }
 
 Renderer::~Renderer()
 {
-	DELETE_IF_NOT_NULL(Renderer::blocks_texture);
-	DELETE_IF_NOT_NULL(Renderer::items_texture);
-	DELETE_IF_NOT_NULL(Renderer::default_shader);
-
 	glfwTerminate();
 }
 

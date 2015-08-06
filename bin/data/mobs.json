@@ -1,9 +1,51 @@
 {
   "boar": {
     "name": "boar",
-    "health": 6,
+    "health": 15,
     "hostile": false,
     "drops": [ "raw_pork", [0,2], "hide", [0,1] ]
+  },
+  "bison": {
+    "name": "bison",
+    "health": 60,
+    "hostile": false,
+    "drops": [ "raw_beef", [0,6], "hide", [0,3] ]
+  },
+  "bear_black": {
+    "name": "bear_black",
+    "health": 25,
+    "hostile": false,
+    "drops": [ "raw_bear", [0,3], "pelt_bear_black", [0,1] ]
+  },
+  "bear_black_as": {
+    "name": "bear_black_as",
+    "health": 20,
+    "hostile": true,
+    "drops": [ "raw_bear", [0,3], "pelt_bear_black_as", [0,1] ]
+  },
+  "bear_brown": {
+    "name": "bear_brown",
+    "health": 30,
+    "hostile": false,
+    "drops": [ "raw_bear", [0,3], "pelt_bear_brown", [0,1] ]
+  },
+  "bear_polar": {
+    "name": "bear_polar",
+    "health": 40,
+    "hostile": false,
+    "drops": [ "raw_bear", [0,3], "pelt_bear_polar", [0,1] ]
+  },
+  "wolf_grey": {
+    "name": "wolf_grey",
+    "health": 6,
+    "hostile": false,
+    "drops": [ "raw_wolf", [0,2], "pelt_wolf_grey", [0,1] ]
+  },
+  "wolf_red": {
+    "name": "wolf_red",
+    "health": 5,
+    "hostile": false,
+    "drops": [ "raw_wolf", [0,2], "pelt_wolf_red", [0,1] ]
   },
   "duck": {
     "name": "duck",

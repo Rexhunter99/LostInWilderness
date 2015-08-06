@@ -12,10 +12,8 @@ public:
 
 	BlockDirt( const BlockInfo &block_info ) : Block( block_info )
 	{}
-
 	void render( Chunk *chunk, int x, int y, int z, int8_t direction, std::vector<Vertex> &vertex_buffer )
 	{
-		// TODO: Implement custom render code for BlockDirt
 		// This should handle rendering grass textures on top of
 		// the dirt if it has grown grass (use the data member)
 		// and also to modify the sides of the block. Only the
@@ -44,21 +42,21 @@ public:
 
 		if ( direction == -1 ) // Negative X direction
 		{
-			vertex_buffer.push_back( Vertex( x, y, z, 0, left_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, right_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x, y + 1, z, 0, left_u, bottom_v ) );
-			vertex_buffer.push_back( Vertex( x, y + 1, z, 0, left_u, bottom_v ) );
-			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, right_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x, y + 1, z + 1, 0, right_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x, y, z, 0, 1, 0, 0, left_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, 1, 0, 0, right_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x, y + 1, z, 0, 1, 0, 0, left_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x, y + 1, z, 0, 1, 0, 0, left_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, 1, 0, 0, right_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x, y + 1, z + 1, 0, 1, 0, 0, right_u, bottom_v ) );
 		}
 		else if ( direction == 1 ) // Positive X direction
 		{
-			vertex_buffer.push_back( Vertex( x + 1, y, z, 0, left_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y + 1, z, 0, left_u, bottom_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, right_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y + 1, z, 0, left_u, bottom_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y + 1, z + 1, 0, right_u, bottom_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, right_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z, 0, -1, 0, 0, left_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y + 1, z, 0, -1, 0, 0, left_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, -1, 0, 0, right_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y + 1, z, 0, -1, 0, 0, left_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y + 1, z + 1, 0, -1, 0, 0, right_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, -1, 0, 0, right_u, top_v ) );
 		}
 		else if ( direction == -2 ) // Negative Y direction
 		{
@@ -69,12 +67,12 @@ public:
 			top_v2 = Renderer::blocks_texture->getAtlasV( this->info.ID, 0 );
 			bottom_v2 = Renderer::blocks_texture->getAtlasV( this->info.ID, 1 );
 
-			vertex_buffer.push_back( Vertex( x, y, z, 0, left_u2, top_v2 ) );
-			vertex_buffer.push_back( Vertex( x + 1, y, z, 0, right_u2, top_v2 ) );
-			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, left_u2, bottom_v2 ) );
-			vertex_buffer.push_back( Vertex( x + 1, y, z, 0, right_u2, top_v2 ) );
-			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, right_u2, bottom_v2 ) );
-			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, left_u2, bottom_v2 ) );
+			vertex_buffer.push_back( Vertex( x, y, z, 0, 0, 1, 0, left_u2, top_v2 ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z, 0, 0, 1, 0, right_u2, top_v2 ) );
+			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, 0, 1, 0, left_u2, bottom_v2 ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z, 0, 0, 1, 0, right_u2, top_v2 ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, 0, 1, 0, right_u2, bottom_v2 ) );
+			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, 0, 1, 0, left_u2, bottom_v2 ) );
 		}
 		else if ( direction == 2 ) // Positive Y direction
 		{
@@ -95,30 +93,30 @@ public:
 				bottom_v2 = Renderer::blocks_texture->getAtlasV( this->info.ID, 1 );
 			}
 
-			vertex_buffer.push_back( Vertex( x, y + 1, z, 0, left_u2, top_v2 ) );
-			vertex_buffer.push_back( Vertex( x, y + 1, z + 1, 0, left_u2, bottom_v2 ) );
-			vertex_buffer.push_back( Vertex( x + 1, y + 1, z, 0, right_u2, top_v2 ) );
-			vertex_buffer.push_back( Vertex( x + 1, y + 1, z, 0, right_u2, top_v2 ) );
-			vertex_buffer.push_back( Vertex( x, y + 1, z + 1, 0, left_u2, bottom_v2 ) );
-			vertex_buffer.push_back( Vertex( x + 1, y + 1, z + 1, 0, right_u2, bottom_v2 ) );
+			vertex_buffer.push_back( Vertex( x, y + 1, z, 0, 0, -1, 0, left_u2, top_v2 ) );
+			vertex_buffer.push_back( Vertex( x, y + 1, z + 1, 0, 0, -1, 0, left_u2, bottom_v2 ) );
+			vertex_buffer.push_back( Vertex( x + 1, y + 1, z, 0, 0, -1, 0, right_u2, top_v2 ) );
+			vertex_buffer.push_back( Vertex( x + 1, y + 1, z, 0, 0, -1, 0, right_u2, top_v2 ) );
+			vertex_buffer.push_back( Vertex( x, y + 1, z + 1, 0, 0, -1, 0, left_u2, bottom_v2 ) );
+			vertex_buffer.push_back( Vertex( x + 1, y + 1, z + 1, 0, 0, -1, 0, right_u2, bottom_v2 ) );
 		}
 		else if ( direction == -3 ) // Negative Z direction
 		{
-			vertex_buffer.push_back( Vertex( x, y, z, 0, left_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x, y + 1, z, 0, left_u, bottom_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y, z, 0, right_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x, y + 1, z, 0, left_u, bottom_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y + 1, z, 0, right_u, bottom_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y, z, 0, right_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x, y, z, 0, 0, 0, 1, left_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x, y + 1, z, 0, 0, 0, 1, left_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z, 0, 0, 0, 1, right_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x, y + 1, z, 0, 0, 0, 1, left_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y + 1, z, 0, 0, 0, 1, right_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z, 0, 0, 0, 1, right_u, top_v ) );
 		}
 		else if ( direction == 3 ) // Positive Z direction
 		{
-			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, left_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, right_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x, y + 1, z + 1, 0, left_u, bottom_v ) );
-			vertex_buffer.push_back( Vertex( x, y + 1, z + 1, 0, left_u, bottom_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, right_u, top_v ) );
-			vertex_buffer.push_back( Vertex( x + 1, y + 1, z + 1, 0, right_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x, y, z + 1, 0, 0, 0, -1, left_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, 0, 0, -1, right_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x, y + 1, z + 1, 0, 0, 0, -1, left_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x, y + 1, z + 1, 0, 0, 0, -1, left_u, bottom_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y, z + 1, 0, 0, 0, -1, right_u, top_v ) );
+			vertex_buffer.push_back( Vertex( x + 1, y + 1, z + 1, 0, 0, 0, -1, right_u, bottom_v ) );
 		}
 	}
 };

@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <ctime>
 #include <fstream>
+#include <mutex>
 
 #define CHUNK_WIDTH		16
 #define CHUNK_HEIGHT	256
@@ -17,10 +18,11 @@ class Chunk
 {
 private:
 
-	void init();
+	void init( bool manual_gen = false );
 
 public:
 	Block*					blk[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_LENGTH];
+	//std::map<vector3i,std::unique_ptr<Block>> blk;
 	Chunk					*left,
 							*right,
 							*below,
@@ -28,10 +30,11 @@ public:
 							*front,
 							*back;
 
-	int32_t			ax,
+	int64_t			ax,
 					ay,
 					az,
-					elements;
+					elements,
+					biome;
 	uint32_t		vbo;
 	time_t			time_last_saved,		// The last time the chunk was cached to disk
 					time_last_updated,		// The last time the chunk was updated
@@ -43,9 +46,21 @@ public:
 	float			humidity,
 					temperature;
 
+    std::mutex      lock;
+
+	/**
+	 **/
 	Chunk();
-	Chunk(int x, int y, int z);
+
+	/**
+	 **/
+	Chunk( int x, int y, int z, bool manual_gen = false );
+
+	Chunk( const Chunk &chunk );
+
 	~Chunk();
+
+	Chunk & operator = ( const Chunk & chunk );
 
 	/** @fn get( int x, int y, int z ) const
 	 ** @param x The column to get the block from
@@ -69,6 +84,9 @@ public:
 	 ** @param x1 The column to get the block from
 	 ** @param y1 The row to get the block from
 	 ** @param z1 The layer to get the block from
+	 ** @param x2 The column of the 'blocking' block
+	 ** @param y2 The row of the 'blocking' block
+	 ** @param z2 The layer of the 'blocking' block
 	 ** @return True if the block is hidden
 	 ** Check if the block at x1,y1,z1 is 'blocked' from view
 	 **/
@@ -89,4 +107,9 @@ public:
 	 ** Saves the chunk onto the hard drive
 	 **/
 	void save();
+
+	/** @fn load()
+	 ** Load the chunk from the hard drive
+	 **/
+	void load();
 };

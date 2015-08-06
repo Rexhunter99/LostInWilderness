@@ -18,7 +18,7 @@ protected:
 public:
 
 	Texture();
-	Texture( std::string filename );
+	Texture( std::string filename, uint32_t width, uint32_t height );
 	~Texture();
 
 	bool		loadFile( std::string p_texturefile, uint32_t index_width = 0, uint32_t index_height = 0 );

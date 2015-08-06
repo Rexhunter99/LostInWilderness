@@ -5,31 +5,18 @@
 #include <string>
 #include <cstdint>
 
-/** @class Item
- ** @brief World instance of the Item class.
- ** The world may have many items in it of one type, this class handles that abstraction.
- **/
 class Item
 {
 protected:
 
 public:
 
-  /** @var info
-   ** @brief Reference to ItemInfo instance.
-   ** Reference to the item information and code that this instance of item draws from.
-   **/
-	ItemInfo        &info;
+	ItemInfo&			info;
+	uint16_t			id;
 
-	/** @var name
-   ** @brief Unicode string for this item instance
-   ** The individual name of this particular item in the world space. This is unique to this instance.
-   **/
-	std::wstring		name;
+	float				x, y, z;
 
-  /** @fn Item( ItemInfo &info )
-   ** The constructor that creates this item */
-	Item( ItemInfo &info ) : info( info )
-	{}
+	Item( ItemInfo& item, id, x, y, z );
+	~Item();
 
 };

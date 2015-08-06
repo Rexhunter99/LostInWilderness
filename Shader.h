@@ -7,6 +7,7 @@
 /** @class Shader
  ** @brief Container for managing shader programs
  ** @todo Finish implementing class Shader
+ **
  ** Container for managing OpenGL shader programs, simplifies the usage and management of the internal
  ** handles and data as well as error handling, abstracting away some of the more complex methods. */
 class Shader

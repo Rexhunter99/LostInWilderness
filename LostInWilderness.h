@@ -1,34 +1,56 @@
 
 #pragma once
 
+#if !defined( __LOSTINWILDERNESS_H__ )
+#define __LOSTINWILDERNESS_H__
+
 #include <ctime>
 #include <map>
 #include <string>
 #include <thread>
 
-#include "Config.h"
+#include <glm/glm.hpp>
+
+#include "Camera.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
 
 
 class Chunk;
+class Config;
+class World;
 
 
-class GaiaCraft
+/** @class LostInWilderness
+ ** @version 2
+ ** @author Rexhunter99
+ ** @brief
+ **
+ **/
+class LostInWilderness
 {
 public:
-	static GaiaCraft					*iGaiaCraft;
-	class Config						*config;
+	static LostInWilderness					*iGaiaCraft;
+	Config								*config;
+	Camera								*camera;
 	std::map<std::string,std::thread>	threads;
 
-	GaiaCraft();
-	~GaiaCraft();
+	LostInWilderness();
+	~LostInWilderness();
 
 	static void addChunkToGenerateQueue( int x, int y, int z, int seed, Chunk *chunk );
 	static void addChunkToUpdateQueue( Chunk *chunk );
-	static void chunkUpdateThread( void );
+	static void addChunkToSaveQueue( Chunk *chunk );
+	static void chunkThread( void );
 
+	/** @fn run()
+	 ** @brief Process the game state
+	 **
+	 **
+	 **/
 	int run();
 
-	static GaiaCraft * getInstance() { return iGaiaCraft; }
+	static LostInWilderness * getInstance() { return iGaiaCraft; }
 };
+
+#endif

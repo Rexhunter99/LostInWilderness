@@ -17,6 +17,17 @@ Texture::Texture()
 	glGenTextures( 1, &texid );
 }
 
+
+Texture::Texture( std::string texture_file, uint32_t width, uint32_t height )
+{
+	this->width		= width;
+	this->height	= height;
+	this->iformat	= GL_RGBA8;
+	this->format	= GL_RGBA;
+	glGenTextures( 1, &texid );
+	this->loadFile( texture_file, width, height );
+}
+
 Texture::~Texture()
 {
 	glDeleteTextures( 1, &texid );
@@ -172,11 +183,11 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 	{
 		if (color_type == PNG_COLOR_TYPE_RGB )
 		{
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB16, twidth, theight, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB16, twidth, theight, 0, GL_RGB, GL_UNSIGNED_SHORT, image_data );
 		}
 		else if (color_type == PNG_COLOR_TYPE_RGBA )
 		{
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16, twidth, theight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16, twidth, theight, 0, GL_RGBA, GL_UNSIGNED_SHORT, image_data );
 		}
 		else fprintf( stderr, "loadTexture() :: glTexImage2D 16-bit format is Unknown\n" );
 	}

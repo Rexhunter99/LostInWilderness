@@ -1,8 +1,74 @@
-bin/LostInWilderness.exe
-bin/LostInWilderness-dbg.exe
-bin/LostInWilderness
-bin/LostInWilderness-dbg
-bin/LostInWilderness.x64
-bin/LostInWilderness-dbg.x64
-bin/world/*
-obj/
+# Directories
+[Bb]in/world/
+[Bb]uild/
+[Oo]bj/
+[Ss]creenshots/
+
+# Binaries
+*.exe
+*.run
+*.nix
+*.linux
+
+# Loose filetypes
+*.log
+
+# Visual Studio filetypes and files
+*.suo
+*.user
+*.sln.docstates
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.log
+*.scc
+ipch/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
+*.psess
+*.vsp
+*.vspx
+*.gpState
+DocProject/buildhelp/
+DocProject/Help/*.HxT
+DocProject/Help/*.HxC
+DocProject/Help/*.hhc
+DocProject/Help/*.hhk
+DocProject/Help/*.hhp
+DocProject/Help/Html2
+DocProject/Help/html
+
+
+# Code::Blocks filetypes and files
+*.layout
+*.workspace
+
+# Windows Operating System specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Macintosh Operating System specific
+.DS_Store

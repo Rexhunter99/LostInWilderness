@@ -1,0 +1,8 @@
+﻿important info:
+http://www.science.co.il/Language/Locale-codes.asp
+
+
+  "achievements.make_fire": "ファイファイ！",
+  "achievements.make_fire": "ちぇっ！",
+  "achievements.make_fire": "呸！",
+  "achievements.make_fire": "Pfui pfui!",

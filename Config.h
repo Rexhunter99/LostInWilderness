@@ -5,6 +5,11 @@
 #include <string>
 
 
+/** @class Config
+ ** Create a configuration/settings structure in memory that can be
+ ** saved directly to the file system and loaded in from the file
+ ** system when necessary
+ */
 class Config
 {
 private:
@@ -14,6 +19,10 @@ private:
 
 public:
 
+	/** @fn getGlobal()
+	 ** @return static Config*
+	 ** Get a pointer to the 'global' configuration structure
+	 **/
 	static Config * getGlobal() { return &__c; }
 
 	Config();
