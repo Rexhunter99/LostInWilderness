@@ -25,6 +25,8 @@ arm64/
 *.log
 *.tlog
 *.wlog
+*.o
+*.d
 
 # Visual Studio filetypes and files
 *.suo
@@ -76,6 +78,7 @@ DocProject/Help/html
 # Code::Blocks filetypes and files
 *.layout
 *.workspace
+*.cscope_file_list
 
 # Windows Operating System specific
 Thumbs.db
@@ -85,3 +88,7 @@ $RECYCLE.BIN/
 
 # Macintosh Operating System specific
 .DS_Store
+
+# Linux Operating System specific
+.Trash
+.Trash-1000
