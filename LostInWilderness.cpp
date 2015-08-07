@@ -84,7 +84,7 @@ uint32_t chunk_gen_count = 0;
 #define CZ CHUNK_LENGTH
 
 
-std::atomic<bool>							g_finished;
+bool							g_finished;
 //g_chunk_updater_mutex;
 concurrent::queue<ChunkUpdateType*>	chunk_thread_queue;
 
