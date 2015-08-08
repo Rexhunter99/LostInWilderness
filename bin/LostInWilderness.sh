@@ -1,2 +1,4 @@
 #!/bin/bash
-bash ./x86/liw
+
+# Run the 32-Bit ELF executable
+./x86/liw
