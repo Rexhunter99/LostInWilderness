@@ -201,7 +201,7 @@ public:
 			else if ( command < 0 ) // there are 'command' number of uncompressed bytes
 			{
 				held_data = this->buffer.at(i+1);
-				held_cursor = std::fabs(command); // drop negative sign
+				held_cursor = (size_t)std::fabs(command); // drop negative sign
 				while ( held_cursor )
 				{
 					/*Instead of pushing back x number of bytes, just push that byte,

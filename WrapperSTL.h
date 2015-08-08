@@ -88,7 +88,7 @@ public:
 
     void push(T const& data)
     {
-		//std::unique_lock<std::mutex> lock(the_mutex);
+		std::unique_lock<std::mutex> lock(the_mutex);
 
 		// -- Allocate a new node and initialise it
 		TNode *new_node		= new TNode;
@@ -115,13 +115,20 @@ public:
 		// -- Increment the counter, we have a new node
 		this->n_count++;
 
-		//lock.unlock();
-		//the_condition_variable.notify_one();
+		lock.unlock();
+		the_condition_variable.notify_one();
     }
+
+	size_t size()
+	{
+		std::lock_guard<std::mutex> lock(the_mutex);
+
+		return this->n_count;
+	}
 
     bool empty()
     {
-        //std::lock_guard<std::mutex> lock(the_mutex);
+        std::lock_guard<std::mutex> lock(the_mutex);
 
         if ( n_front == nullptr && n_back == nullptr )
 			return true;
@@ -129,14 +136,17 @@ public:
 			return false;
     }
 
-    void pop(T& popped_value)
-    {
-    	//std::unique_lock<std::mutex> lock(the_mutex);
+	T & front(void)
+	{
+		std::unique_lock<std::mutex> lock(the_mutex);
+		return this->n_front->element;
+	}
 
+    void pop()
+    {
     	if ( !empty() )
 		{
-			// -- Get the stored value
-			popped_value = n_front->element;
+			std::unique_lock<std::mutex> lock(the_mutex);
 
 			if ( n_front == n_back )
 			{
@@ -157,10 +167,10 @@ public:
 
 				// -- Assign the new front node's pointer
 				n_front = new_front;
-			}
 
-			// -- Decrement the count
-			n_count--;
+				// -- Decrement the count
+				n_count--;
+			}
 		}
     }
 
@@ -196,10 +206,10 @@ public:
 
 				// -- Assign the new front node's pointer
 				n_front = new_front;
-			}
 
-			// -- Decrement the count
-			n_count--;
+				// -- Decrement the count
+				n_count--;
+			}
 		}
 
         return true;
@@ -236,10 +246,10 @@ public:
 
 			// -- Assign the new front node's pointer
 			n_front = new_front;
-		}
 
-		// -- Decrement the count
-		n_count--;
+			// -- Decrement the count
+			n_count--;
+		}
     }
 
 };

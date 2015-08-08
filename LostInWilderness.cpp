@@ -95,7 +95,8 @@ uint32_t chunk_gen_count = 0;
 
 bool							g_finished;
 //g_chunk_updater_mutex;
-concurrent::queue<ChunkUpdateType*>	chunk_thread_queue;
+//concurrent::queue<ChunkUpdateType*>	chunk_thread_queue;
+std::queue<ChunkUpdateType*>	chunk_thread_queue;
 
 
 void LostInWilderness::chunkThread( void )
@@ -110,7 +111,8 @@ void LostInWilderness::chunkThread( void )
 		{
 			ChunkUpdateType *chunk_data = nullptr;
 
-			chunk_thread_queue.pop( chunk_data );
+			chunk_data = chunk_thread_queue.front();
+			chunk_thread_queue.pop();
 
 			switch (chunk_data->type)
 			{
@@ -170,10 +172,9 @@ static void update_vectors()
 int init_resources()
 {
 	// -- Network
-	Network::HttpRequest http;
+	/*Network::HttpRequest http;
 	http.open( Network::HttpRequest::HTTP_GET, "www.lostinwilderness.com/updates.php" );
-	http.send( std::string("test") );
-
+	http.send( std::string("test") );*/
 
 	// -- Default the uniforms/attribs
 	Shader *shader_world = ResourceManager::iResourceManager->getShader("default");
@@ -449,12 +450,12 @@ void key_cb( GLFWwindow* wnd, int key, int scancode, int action, int mods )
 			break;
 		case GLFW_KEY_F4:
 			{
-				GLint pm;
+				/*GLint pm;
 				glGetIntegerv( GL_POLYGON_MODE, &pm );
 				if ( pm == GL_FILL )
 					glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 				else
-					glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+					glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );*/
 			}
 			break;
 		case GLFW_KEY_ESCAPE:
@@ -722,7 +723,11 @@ int LostInWilderness::run()
 	return 0;
 }
 
+#if defined(NDEBUG) && defined(_MSC_VER)
+int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPTSTR lpszCmdLine, int nCmdShow)
+#else
 int main(int argc, char* argv[])
+#endif
 {
 	int r = 0;
 
