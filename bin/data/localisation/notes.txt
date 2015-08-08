@@ -1,7 +1,7 @@
 ﻿important info:
 http://www.science.co.il/Language/Locale-codes.asp
 
-
+These were alternate translations that I didn't think fit or made too much sense but I left them here in case:
   "achievements.make_fire": "ファイファイ！",
   "achievements.make_fire": "ちぇっ！",
   "achievements.make_fire": "呸！",

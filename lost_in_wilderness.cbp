@@ -8,7 +8,7 @@
 		<Option virtualFolders="Renderer/;Renderer/Resources/;Utils/;World/Blocks/;Client/;World/Items/;World/Biomes/;World/;World/Generators/;" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/gaiacraft-dbg" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/liw-dbg" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
@@ -40,7 +40,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/gaiacraft" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/liw" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
@@ -71,7 +71,7 @@
 				</Linker>
 			</Target>
 			<Target title="Debug-Win32">
-				<Option output="bin/glescraft-dbg" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/liw-dbg" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
@@ -101,7 +101,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release-Win32">
-				<Option output="bin/gaiacraft" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/liw" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
@@ -172,7 +172,9 @@
 		<Unit filename="Buffer.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>
-		<Unit filename="Camera.h" />
+		<Unit filename="Camera.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
 		<Unit filename="Chunk.cpp">
 			<Option virtualFolder="World/" />
 		</Unit>
@@ -186,6 +188,12 @@
 			<Option virtualFolder="Utils/" />
 		</Unit>
 		<Unit filename="Exceptions.h">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="FileSystem.cpp">
+			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="FileSystem.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>
 		<Unit filename="Framebuffer.cpp">
@@ -299,8 +307,16 @@
 		<Unit filename="bin/data/shaders/world.150.vs">
 			<Option virtualFolder="Renderer/Resources/" />
 		</Unit>
+		<Unit filename="resource.h">
+			<Option target="Debug-Win32" />
+			<Option target="Release-Win32" />
+		</Unit>
 		<Unit filename="vectors.h">
 			<Option virtualFolder="Utils/" />
+		</Unit>
+		<Unit filename="win32.rc">
+			<Option target="Debug-Win32" />
+			<Option target="Release-Win32" />
 		</Unit>
 		<Extensions>
 			<envvars />
