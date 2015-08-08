@@ -34,7 +34,7 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 				// -- Sea level
 				if ( actual_y >= height && actual_y < 64 )
 				{
-					chunk->set( x, y, z, new BlockSaltWater( ResourceManager::iResourceManager->getBlockInfo( "salt_water" ) ) );
+					chunk->set( x, y, z, &BlockSaltWater( ResourceManager::iResourceManager->getBlockInfo( "salt_water" ) ) );
 					continue;
 				}
 
@@ -54,15 +54,15 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 				}
                 if ( y < 4 )
 				{
-					chunk->set(x,y,z, new Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) ); // bedrock
+					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) ); // bedrock
 				}
 				else if ( y < height - 4 )
 				{
-					chunk->set( x, y, z, new Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
+					chunk->set( x, y, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
                 }
 				else
 				{
-					chunk->set( x, y, z, new Block( ResourceManager::iResourceManager->getBlockInfo( "sand" ) ) );
+					chunk->set( x, y, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "sand" ) ) );
                 }
 			}
 		}

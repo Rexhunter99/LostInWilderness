@@ -34,7 +34,7 @@ void BiomeForest::generate( Chunk *chunk, Perlin *noise )
 				// -- Sea level
 				if ( actual_y >= height && actual_y < 64 )
 				{
-					chunk->set( x, y, z, new BlockSaltWater( ResourceManager::iResourceManager->getBlockInfo( "salt_water" ) ) );
+					chunk->set( x, y, z, &BlockSaltWater( ResourceManager::iResourceManager->getBlockInfo( "salt_water" ) ) );
 					continue;
 				}
 
@@ -55,15 +55,15 @@ void BiomeForest::generate( Chunk *chunk, Perlin *noise )
 
 				if ( y < 4 )
 				{
-					chunk->set(x,y,z, new Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) ); // bedrock
+					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) ); // bedrock
 				}
 				else if ( y < height - 4 )
 				{
-					chunk->set(x,y,z, new Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
+					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
 				}
 				else
 				{
-					chunk->set(x,y,z, new BlockDirt( ResourceManager::iResourceManager->getBlockInfo( "dirt" ) ) );
+					chunk->set(x,y,z, &BlockDirt( ResourceManager::iResourceManager->getBlockInfo( "dirt" ) ) );
 				}
 			}
 		}
@@ -77,7 +77,7 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 
 	for ( int i = 0; i < h; i++ )
 	{
-		chunk->set(x, y + i, z, new Block( ResourceManager::iResourceManager->getBlockInfo( "wood" ) ) );
+		chunk->set(x, y + i, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "wood" ) ) );
 	}
 
 	// Leaves
@@ -87,7 +87,7 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 	{
 		if ( iy == 6 )
 		{
-			chunk->set( x, y + h + iy, z, new Block( ResourceManager::iResourceManager->getBlockInfo( "leaves" ) ) );
+			chunk->set( x, y + h + iy, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "leaves" ) ) );
 		}
 		else if ( thin == false )
 		{
@@ -95,9 +95,9 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 			for ( int iz = -2; iz <= 2; iz++ )
 			{
 				if ( ix * ix + iz * iz < 8 )
-				chunk->set( x + ix, y + h + iy, z + iz, new Block( ResourceManager::iResourceManager->getBlockInfo( "leaves" ) ) );
+				chunk->set( x + ix, y + h + iy, z + iz, &Block( ResourceManager::iResourceManager->getBlockInfo( "leaves" ) ) );
 			}
-			chunk->set( x, y + h + iy, z, new Block( ResourceManager::iResourceManager->getBlockInfo( "wood" ) ) );
+			chunk->set( x, y + h + iy, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "wood" ) ) );
 			thin = true;
 		}
 		else
@@ -105,9 +105,9 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 			for ( int ix = -1; ix <= 1; ix++ )
 			for ( int iz = -1; iz <= 1; iz++ )
 			{
-				chunk->set( x + ix, y + h + iy, z + iz, new Block( ResourceManager::iResourceManager->getBlockInfo( "leaves" ) ) );
+				chunk->set( x + ix, y + h + iy, z + iz, &Block( ResourceManager::iResourceManager->getBlockInfo( "leaves" ) ) );
 			}
-			chunk->set( x, y + h + iy, z, new Block( ResourceManager::iResourceManager->getBlockInfo( "wood" ) ) );
+			chunk->set( x, y + h + iy, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "wood" ) ) );
 			thin = false;
 		}
 	}

@@ -127,8 +127,7 @@ void WorldGenerator::generateOres( Chunk *chunk )
 			continue;
 
 		// NOTE: Need to replace these two lines with a WorldGenMinable that should spawn a vein properly
-		delete chunk->blk[x][y][z];
-		chunk->blk[x][y][z] = new Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) );
+		chunk->set(x, y, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) );
 	}
 }
 

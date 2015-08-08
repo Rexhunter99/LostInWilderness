@@ -107,7 +107,7 @@ ResourceManager::~ResourceManager()
 	this->shaders.clear();
 }
 
-const BlockInfo & ResourceManager::getBlockInfo( std::string block_name )
+BlockInfo & ResourceManager::getBlockInfo( std::string block_name )
 {
 	std::map<std::string,BlockInfo>::iterator it = block_info.find( block_name );
 
@@ -117,7 +117,7 @@ const BlockInfo & ResourceManager::getBlockInfo( std::string block_name )
 		return it->second;
 }
 
-const BlockInfo & ResourceManager::getBlockInfo( size_t block_id )
+BlockInfo & ResourceManager::getBlockInfo( size_t block_id )
 {
 	for ( auto it = block_info.begin(); it != block_info.end(); it++ )
 	{
@@ -139,7 +139,7 @@ void ResourceManager::addBlockInfo( BlockInfo new_block_info )
 	block_info.insert( std::make_pair( new_block_info.name, new_block_info ) );
 }
 
-const ItemInfo & ResourceManager::getItemInfo( std::string item_name )
+ItemInfo & ResourceManager::getItemInfo( std::string item_name )
 {
 	std::map<std::string,ItemInfo>::iterator it = item_info.find( item_name );
 
@@ -150,7 +150,7 @@ const ItemInfo & ResourceManager::getItemInfo( std::string item_name )
 		return it->second;
 }
 
-const ItemInfo & ResourceManager::getItemInfo( size_t item_id )
+ItemInfo & ResourceManager::getItemInfo( size_t item_id )
 {
     for ( auto it = item_info.begin(); it != item_info.end(); it++ )
 	{

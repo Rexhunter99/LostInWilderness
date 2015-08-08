@@ -7,20 +7,29 @@
 
 #include <vector>
 
+#pragma warning( disable : 4244 )
+
 
 class Block
 {
 protected:
 public:
 
-	const BlockInfo		&info;
+	BlockInfo			&info;
 	uint8_t				data_value;
 
-	Block( const BlockInfo &block_info ) :
+	Block( BlockInfo &block_info ) :
 		info( block_info )
 	{}
 	virtual ~Block()
 	{}
+
+	Block & operator= (const Block &b)
+	{
+		this->info = b.info;
+		this->data_value = b.data_value;
+		return *this;
+	}
 
 	/** @fn render()
 	 ** @todo Implement custom render code for BlockDirt

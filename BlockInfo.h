@@ -43,6 +43,16 @@ public:
 	uint8_t					hardness;
 
 
+	BlockInfo & operator= (BlockInfo & block)
+	{
+		this->name = block.name;
+		this->locale_name = block.locale_name;
+		this->ID = block.ID;
+		this->flags = block.flags;
+		this->hardness = block.hardness;
+		return *this;
+	}
+
 	bool operator == ( BlockInfo block ) const
 	{
 		if ( block.name == this->name &&

@@ -21,8 +21,9 @@ private:
 	void init( bool manual_gen = false );
 
 public:
-	Block*					blk[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_LENGTH];
-	//std::map<vector3i,std::unique_ptr<Block>> blk;
+	Block					*block_pool;
+	Block					*blk[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_LENGTH];
+
 	Chunk					*left,
 							*right,
 							*below,
@@ -78,7 +79,7 @@ public:
 	 ** @param new_block The new block instance
 	 ** Set the block that resides at the index x,y,z in the chunk.
 	 **/
-	void set(int x, int y, int z, Block *new_block );
+	void set(int x, int y, int z, Block * new_block );
 
 	/** @fn isBlocked( int x1, int y1, int z1, int x2, int y2, int z2 )
 	 ** @param x1 The column to get the block from
@@ -92,8 +93,6 @@ public:
 	 **/
 	bool isBlocked(int x1, int y1, int z1, int x2, int y2, int z2);
 
-	void noise( int seed );
-
 	void update();
 
 	/** @fn render()
@@ -101,6 +100,9 @@ public:
 	 **/
 	void render();
 
+	/**
+	* Generate this chunk with `new_seed` as the RNG seed
+	*/
 	void generate( int new_seed );
 
 	/** @fn save()

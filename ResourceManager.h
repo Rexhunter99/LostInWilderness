@@ -33,11 +33,11 @@ public:
 	ResourceManager();
 	~ResourceManager();
 
-	const BlockInfo &	getBlockInfo( std::string block_name );
-	const BlockInfo &	getBlockInfo( size_t block_id );
+	BlockInfo &			getBlockInfo( std::string block_name );
+	BlockInfo &			getBlockInfo( size_t block_id );
 	void				addBlockInfo( BlockInfo new_block_info );
-	const ItemInfo &	getItemInfo( std::string item_name );
-	const ItemInfo &    getItemInfo( size_t item_id);
+	ItemInfo &			getItemInfo( std::string item_name );
+	ItemInfo &			getItemInfo( size_t item_id);
 	void				addItemInfo( ItemInfo new_item_info );
 	WorldGenerator &	getWorldGen( std::string worldgen_name );
 	void				addWorldGen( WorldGenerator *new_worldgen );

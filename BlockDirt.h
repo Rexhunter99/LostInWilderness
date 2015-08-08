@@ -10,7 +10,7 @@ protected:
 
 public:
 
-	BlockDirt( const BlockInfo &block_info ) : Block( block_info )
+	BlockDirt( BlockInfo &block_info ) : Block( block_info )
 	{}
 	void render( Chunk *chunk, int x, int y, int z, int8_t direction, std::vector<Vertex> &vertex_buffer )
 	{

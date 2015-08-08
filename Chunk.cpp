@@ -55,6 +55,7 @@ Chunk::Chunk( const Chunk & chunk )
 	this->ax = chunk.ax;
 	this->ay = chunk.ay;
 	this->az = chunk.az;
+	this->block_pool = (Block*)std::calloc(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH, sizeof(Block));
 	memcpy( this->blk, chunk.blk, sizeof(this->blk) );
 	this->left = chunk.left;
 	this->right = chunk.right;
@@ -80,21 +81,7 @@ Chunk::Chunk( const Chunk & chunk )
 
 Chunk::~Chunk()
 {
-	// NOTE: Eww this is slow :c
-	for(int x = 0; x < CHUNK_WIDTH; x++)
-	{
-		for(int z = 0; z < CHUNK_LENGTH; z++)
-		{
-			for(int y = 0; y < CHUNK_HEIGHT; y++)
-			{
-				if ( blk[x][y][z] != nullptr )
-					delete blk[x][y][z];
-			}
-		}
-	}
-	//auto it = blk.find(vector3i(x,y,z));
-	//if ( it != nullptr && it != blk.end())
-    //    blk.erase(vector3i(x,y,z));
+	free(this->block_pool);
 
 	glDeleteBuffers( 1, &this->vbo );
 }
@@ -104,7 +91,13 @@ Chunk & Chunk::operator = ( const Chunk & chunk )
 	this->ax = chunk.ax;
 	this->ay = chunk.ay;
 	this->az = chunk.az;
+
+	if (this->block_pool != nullptr)
+		free(this->block_pool);
+
+	this->block_pool = (Block*)std::calloc(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH, sizeof(Block));
 	memcpy( this->blk, chunk.blk, sizeof(this->blk) );
+	
 	this->left = chunk.left;
 	this->right = chunk.right;
 	this->below = chunk.below;
@@ -131,11 +124,14 @@ Chunk & Chunk::operator = ( const Chunk & chunk )
 
 void Chunk::init( bool manual_gen )
 {
-	for(int x = 0; x < CHUNK_WIDTH; x++) {
-		for(int z = 0; z < CHUNK_LENGTH; z++) {
-			for(int y = 0; y < CHUNK_HEIGHT; y++)  {
-				this->blk[x][y][z] = nullptr;
-				//this->blk.at(vector3i(x,y,z)) = nullptr;
+	// -- Allocate a single pool of memory for the Block instances, initialise it to 0's
+	this->block_pool = (Block*)std::calloc(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH, sizeof(Block));
+
+	// -- Fill the 3D array with pointers to the areas of memory for each little blockywocky
+	for (int x = 0; x < CHUNK_WIDTH; x++) {
+		for (int z = 0; z < CHUNK_LENGTH; z++) {
+			for (int y = 0; y < CHUNK_HEIGHT; y++) {
+				this->blk[x][y][z] = nullptr;//this->block_pool + (x + CHUNK_WIDTH * (z + CHUNK_LENGTH) * y);
 			}
 		}
 	}
@@ -146,166 +142,143 @@ void Chunk::init( bool manual_gen )
 	// -- Initialize the time the chunk was last used to 'now'
 	this->time_last_saved	= std::time( nullptr );
 
-	// -- Initialize the flags (1 bit each)
+	// -- Properties
 	this->elements			= 0;
 	this->biome				= 0;
 	this->humidity			= 0.0f;
 	this->temperature		= 0.0f;
 	this->time_inhabited	= 0;
 	this->time_last_updated	= 0;
-	needs_update			= true;
-	initialized				= false;
-	generated				= manual_gen;
-	generating				= false;
+	// -- Initialize the flags (1 bit each)
+	this->needs_update			= true;
+	this->initialized			= false;
+	this->generated				= manual_gen;
+	this->generating			= false;
+
 	glGenBuffers(1, &this->vbo);
 }
 
-Block * Chunk::get(int x, int y, int z) const
-{
-	if (x < 0)
-		return left ? left->blk[x + CHUNK_WIDTH][y][z] : 0;
-		//return left ? left->blk.at(vector3i(x + CHUNK_WIDTH,y,z)) : 0;
-	if (x >= CHUNK_WIDTH)
-		return right ? right->blk[x - CHUNK_WIDTH][y][z] : 0;
-		//return right ? right->blk.at(vector3i(x - CHUNK_WIDTH,y,z)) : 0;
-	if (y < 0)
-		return below ? below->blk[x][y + CHUNK_HEIGHT][z] : 0;
-		//return below ? below->blk.at(vector3i(x,y + CHUNK_HEIGHT,z)) : 0;
-	if (y >= CHUNK_HEIGHT)
-		return above ? above->blk[x][y - CHUNK_HEIGHT][z] : 0;
-		//return above ? above->blk.at(vector3i(x,y - CHUNK_HEIGHT,z)) : 0;
-	if (z < 0)
-		return front ? front->blk[x][y][z + CHUNK_LENGTH] : 0;
-		//return front ? front->blk.at(x,y,z + CHUNK_LENGTH) : 0;
-	if (z >= CHUNK_LENGTH)
-		return back ? back->blk[x][y][z - CHUNK_LENGTH] : 0;
-		//return back ? back->blk.at(vector3i(x,y,z - CHUNK_LENGTH)) : 0;
-	return blk[x][y][z];
-	//return blk.at(x,y,z);
-}
 
 bool Chunk::isBlocked(int x1, int y1, int z1, int x2, int y2, int z2)
 {
-    //Block *b = blk.at(vector3i(x1,y1,z1));
+	//Block *b = blk.at(vector3i(x1,y1,z1));
 	Block *b = blk[x1][y1][z1];
-	Block *b2 = this->get( x2, y2, z2 );
+	Block *b2 = this->get(x2, y2, z2);
 
 	// -- if itself is empty/air then it is blocked
-	if ( b == nullptr )
+	if (b == nullptr)
 		return true;
 
 	// -- Air blocks/empty blocks do not block
-	if ( b2 == nullptr )
+	if (b2 == nullptr)
 		return false;
 
 	// -- If both blocks are water blocks they are blocked
-	if ( b->info.name == "salt_water" && b2->info.name == "salt_water" )
+	if (b->info.name == "salt_water" && b2->info.name == "salt_water")
 		return true;
 
 	// Blocks that are see through (glass/leaves/etc) do not block
-	if ( b2 != nullptr && (b2->info.flags & BI_TRANSLUCENT || b2->info.flags & BI_OPACITY) )
+	if (b2 != nullptr && (b2->info.flags & BI_TRANSLUCENT || b2->info.flags & BI_OPACITY))
 		return false;
 	else // -- Non-transparent blocks always block line of sight
 		return true;
 
 	// Otherwise, LOS is only blocked by blocks if the same transparency type
-	return ( b2->info.flags & BI_TRANSLUCENT || b2->info.flags & BI_OPACITY ) == ( b->info.flags & BI_TRANSLUCENT || b->info.flags & BI_OPACITY );
+	return (b2->info.flags & BI_TRANSLUCENT || b2->info.flags & BI_OPACITY) == (b->info.flags & BI_TRANSLUCENT || b->info.flags & BI_OPACITY);
 }
 
-void Chunk::set( int x, int y, int z, Block *new_block )
-{
-	if ( new_block == nullptr )
-	{
-		throw nullptr_exception();
-	}
 
-	// -- If coordinates are outside this Chunk, find the right one.
-	//if(blk->first.x < 0)
+Block * Chunk::get(int x, int y, int z) const
+{
+	if (x < 0)
+		return left ? left->blk[x + CHUNK_WIDTH][y][z] : 0;
+	if (x >= CHUNK_WIDTH)
+		return right ? right->blk[x - CHUNK_WIDTH][y][z] : 0;
+	if (y < 0)
+		return below ? below->blk[x][y + CHUNK_HEIGHT][z] : 0;
+	if (y >= CHUNK_HEIGHT)
+		return above ? above->blk[x][y - CHUNK_HEIGHT][z] : 0;
+	if (z < 0)
+		return front ? front->blk[x][y][z + CHUNK_LENGTH] : 0;
+	if (z >= CHUNK_LENGTH)
+		return back ? back->blk[x][y][z - CHUNK_LENGTH] : 0;
+
+	return this->blk[x][y][z];
+}
+
+
+void Chunk::set( int x, int y, int z, Block * new_block )
+{
+	// -- If coordinates are outside this Chunk, make that Chunk handle the set() call
 	if(x < 0)
 	{
 		if(left)
 			left->set(x + CHUNK_WIDTH, y, z, new_block);
-		else
-		{
-			delete new_block;
-		}
 		return;
 	}
-	//if(blk->first.x >= CHUNK_WIDTH)
 	if(x >= CHUNK_WIDTH)
 	{
 		if(right)
 			right->set(x - CHUNK_WIDTH, y, z, new_block);
-		else
-		{
-			delete new_block;
-		}
 		return;
 	}
-	//if(blk->first.y < 0)
 	if(y < 0)
 	{
 		if(below)
 			below->set(x, y + CHUNK_HEIGHT, z, new_block);
-		else
-		{
-			delete new_block;
-		}
 		return;
 	}
-	//if(blk->first.y >= CHUNK_HEIGHT)
 	if(y >= CHUNK_HEIGHT)
 	{
 		if(above)
 			above->set(x, y - CHUNK_HEIGHT, z, new_block);
-		else
-		{
-			delete new_block;
-		}
 		return;
 	}
-	//if(blk->first.z < 0)
 	if(z < 0)
 	{
 		if(front)
 			front->set(x, y, z + CHUNK_LENGTH, new_block);
-		else
-		{
-			delete new_block;
-		}
 		return;
 	}
-	//if(blk->first.z >= CHUNK_LENGTH)
 	if(z >= CHUNK_LENGTH)
 	{
 		if(back)
 			back->set(x, y, z - CHUNK_LENGTH, new_block);
-		else
-		{
-			delete new_block;
-		}
 		return;
 	}
 
-	// -- If a block exists here already, destroy it
-	if ( this->blk[x][y][z] != nullptr )
+	// -- If the `new_block` is nullptr, then we set the array pointer to null as well
+	if ( new_block == nullptr )
 	{
-		delete this->blk[x][y][z];
+		if (this->blk[x][y][z] != nullptr)
+		{
+			this->blk[x][y][z]->~Block();
+			this->blk[x][y][z] = nullptr;
+		}
 	}
+	// -- Otherwise we need to copy the data via dereference
+	else
+	{
+		// -- Point the pointer to the correct part of the pool
+		if (this->blk[x][y][z] == nullptr)
+		{
+			//Block *blk_ptr = this->block_pool + (x + CHUNK_WIDTH * (z + CHUNK_LENGTH) * y);
+			Block *blk_ptr = this->block_pool + (x + (z * CHUNK_WIDTH) + (y * CHUNK_WIDTH * CHUNK_LENGTH));
+			this->blk[x][y][z] = new (blk_ptr) Block(new_block->info);
+		}
+		else
+		{
+			this->blk[x][y][z]->info = new_block->info;
+			this->blk[x][y][z]->data_value = new_block->data_value;
+		}
+	}
+
+	this->needs_update = true;
+
 	/*
-	if ( this->blk.at(vector3i(x,y,z) != nullptr )
-	{
-		delete this->blk.at(vector3i(x,y,z);
-	}
+	When updating blocks at the edge of this Chunk,
+	visibility of blocks in the neighbouring Chunk might change.
 	*/
-
-	// -- Set the block
-	this->blk[x][y][z] = new_block;
-	//this->blk.at(vector3i(x,y,z) = new_block;
-	needs_update = true;
-
-	// When updating blocks at the edge of this WorldChunk,
-	//   visibility of blocks in the neighbouring WorldChunk might change.
 
 	if(x == 0 && left)
 		left->needs_update = true;
@@ -319,20 +292,6 @@ void Chunk::set( int x, int y, int z, Block *new_block )
 		front->needs_update = true;
 	if(z == CHUNK_LENGTH - 1 && back)
 		back->needs_update = true;
-    /*
-    if(blk->first.x == 0 && left)
-		left->needs_update = true;
-	if(blk->first.x == CHUNK_WIDTH - 1 && right)
-		right->needs_update = true;
-	if(blk->first.y == 0 && below)
-		below->needs_update = true;
-	if(blk->first.y == CHUNK_HEIGHT - 1 && above)
-		above->needs_update = true;
-	if(blk->first.z == 0 && front)
-		front->needs_update = true;
-	if(blk->first.z == CHUNK_LENGTH - 1 && back)
-		back->needs_update = true;
-    */
 }
 
 void Chunk::update()

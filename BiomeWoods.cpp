@@ -34,7 +34,7 @@ void BiomeWoods::generate( Chunk *chunk, Perlin *noise )
 				// -- Sea level
 				if ( actual_y >= height && actual_y < 64 )
 				{
-					chunk->set( x, y, z, new BlockSaltWater( ResourceManager::iResourceManager->getBlockInfo( "salt_water" ) ) );
+					chunk->set( x, y, z, &BlockSaltWater( ResourceManager::iResourceManager->getBlockInfo( "salt_water" ) ) );
 					continue;
 				}
 
@@ -58,15 +58,15 @@ void BiomeWoods::generate( Chunk *chunk, Perlin *noise )
 
 				if ( y < 4 )
 				{
-					chunk->set(x,y,z, new Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) ); // bedrock
+					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) ); // bedrock
 				}
 				else if ( y < height - 4 )
 				{
-					chunk->set(x,y,z, new Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
+					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
 				}
 				else
 				{
-					chunk->set(x,y,z, new BlockDirt( ResourceManager::iResourceManager->getBlockInfo( "dirt" ) ) );
+					chunk->set(x,y,z, &BlockDirt( ResourceManager::iResourceManager->getBlockInfo( "dirt" ) ) );
 				}
 			}
 		}
@@ -86,14 +86,14 @@ void BiomeWoods::placePineTree( Chunk *chunk, int x, int y, int z )
 		{
 			float l = 6.0f * ( 1.0f - ( float(iy) / float(mh) ) );
 			if ( float(ix * ix + iz * iz) < l )
-			chunk->set( x + ix, y + h + iy, z + iz, new Block( ResourceManager::iResourceManager->getBlockInfo( "leaves" ) ) );
+			chunk->set( x + ix, y + h + iy, z + iz, &Block( ResourceManager::iResourceManager->getBlockInfo( "leaves" ) ) );
 		}
 	}
 
 	// -- Place the trunk
 	for ( int iy = 0; iy <= h + (mh/2); iy++ )
 	{
-		chunk->set( x, y + iy, z, new Block( ResourceManager::iResourceManager->getBlockInfo( "wood" ) ) );
+		chunk->set( x, y + iy, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "wood" ) ) );
 	}
 }
 
@@ -105,7 +105,7 @@ void BiomeWoods::placeBoulder( Chunk *chunk, int x, int y, int z )
 		for ( int iz = -3; iz <= 3; iz++ )
 		{
 			if ( ix * ix + iz * iz + iy * iy < 6 )
-			chunk->set( x + ix, y + iy, z + iz, new Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
+			chunk->set( x + ix, y + iy, z + iz, &Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
 		}
 	}
 }
