@@ -58,15 +58,15 @@ void BiomeWoods::generate( Chunk *chunk, Perlin *noise )
 
 				if ( y < 4 )
 				{
-					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) ); // bedrock
+					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:bedrock" ) ) ); // bedrock
 				}
 				else if ( y < height - 4 )
 				{
-					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
+					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:stone" ) ) );
 				}
 				else
 				{
-					chunk->set(x,y,z, &BlockDirt( ResourceManager::iResourceManager->getBlockInfo( "dirt" ) ) );
+					chunk->set(x,y,z, &BlockDirt( ResourceManager::iResourceManager->getBlockInfo( "liw:soil" ) ) );
 				}
 			}
 		}
