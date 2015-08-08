@@ -4,6 +4,10 @@
 #define __BIOME_H__
 
 #include <string>
+
+#include "Block.h"
+#include "BlockDirt.h"
+#include "BlockSaltWater.h"
 namespace Noise { class Perlin; };
 class Chunk;
 class WorldGenerator;
@@ -25,6 +29,13 @@ protected:
 	WorldGenerator	*worldgen;
 
 public:
+    BlockSaltWater saltWater( ResourceManager::iResourceManager->getBlockInfo( "salt_water" ) );
+    Block bedrock( ResourceManager::iResourceManager->getBlockInfo( "liw:bedrock" ) );
+    Block stone( ResourceManager::iResourceManager->getBlockInfo( "liw:stone" ) );
+    BlockDirt soil( ResourceManager::iResourceManager->getBlockInfo( "liw:soil" ) );
+    Block wood( ResourceManager::iResourceManager->getBlockInfo( "wood" ) );
+    Block leaves( ResourceManager::iResourceManager->getBlockInfo( "leaves" ) );
+    Block sand( ResourceManager::iResourceManager->getBlockInfo( "sand" ) );
 
 	Biome( WorldGenerator * worldgen, std::string name = "biome_unknown", unsigned char y_min = 64, unsigned char y_max = 64, float temperature = 0.0f, float rainfall = 0.0f )
 	{

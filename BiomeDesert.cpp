@@ -1,8 +1,5 @@
 
 #include "BiomeDesert.h"
-#include "Block.h"
-#include "BlockDirt.h"
-#include "BlockSaltWater.h"
 #include "Chunk.h"
 #include "Noise.h"
 #include "ResourceManager.h"
@@ -34,7 +31,7 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 				// -- Sea level
 				if ( actual_y >= height && actual_y < 64 )
 				{
-					chunk->set( x, y, z, &BlockSaltWater( ResourceManager::iResourceManager->getBlockInfo( "salt_water" ) ) );
+					chunk->set( x, y, z, &saltWater);
 					continue;
 				}
 
@@ -54,15 +51,15 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 				}
                 if ( y < 4 )
 				{
-					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) ); // bedrock
+					chunk->set(x,y,z, &bedrock); // bedrock
 				}
 				else if ( y < height - 4 )
 				{
-					chunk->set( x, y, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "stone" ) ) );
+					chunk->set( x, y, z, &stone );
                 }
 				else
 				{
-					chunk->set( x, y, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "sand" ) ) );
+					chunk->set( x, y, z, &sand );
                 }
 			}
 		}
