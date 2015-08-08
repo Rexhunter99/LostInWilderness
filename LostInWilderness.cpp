@@ -678,7 +678,7 @@ int LostInWilderness::run()
 
 			if (!file.compare(".") || !file.compare("..")) continue;
 
-			std::remove(fpath.c_str());
+			std::remove(file.c_str());
 		}
 
 		closedir(d);

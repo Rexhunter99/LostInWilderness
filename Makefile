@@ -37,8 +37,8 @@ SRCDIRS   =
 # The target name and architecture/OS checks.
 # If the name is not specified, current directory name or `a.out' will be used.
 
-PROGRAMD   = bin/gaiacraft-dbg
-PROGRAMR   = bin/gaiacraft
+PROGRAMD   = bin/liw-dbg
+PROGRAMR   = bin/liw
 PROGRAM = $(PROGRAMD) $(PROGRAMR)
 
 ifeq ($(OS),Windows_NT)
