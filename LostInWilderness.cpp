@@ -742,5 +742,7 @@ int main(int argc, char* argv[])
 		std::cerr << "Fatal Exception:\n" << e.what() << std::endl;
 	}
 
+	system("pause");
+
 	return r;
 }
