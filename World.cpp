@@ -229,7 +229,7 @@ void World::update()
 	int64_t edge_e = cx + vd;
 	int64_t edge_s = cz + vd;
 
-    auto it = this->chunk_map.begin();
+    /*auto it = this->chunk_map.begin();
 	while ( it != this->chunk_map.end() )
 	{
 	    auto new_it = it;
@@ -240,5 +240,5 @@ void World::update()
 			this->chunk_map.erase( k );
 			this->chunk_mutex.unlock();
 		}
-	}
+	}*/
 }

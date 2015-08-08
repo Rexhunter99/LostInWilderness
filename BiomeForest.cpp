@@ -16,18 +16,18 @@ using namespace Noise;
 void BiomeForest::generate( Chunk *chunk, Perlin *noise )
 {
 	// TODO: finish
-	for(int x = 0; x < CHUNK_WIDTH; x++)
+	for(int64_t x = 0; x < CHUNK_WIDTH; x++)
 	{
-		for(int z = 0; z < CHUNK_LENGTH; z++)
+		for(int64_t z = 0; z < CHUNK_LENGTH; z++)
 		{
 			// Land height
-			int rx = x + (chunk->ax * CHUNK_WIDTH);
-			int rz = z + (chunk->az * CHUNK_LENGTH);
+			int64_t rx = x + (chunk->ax * CHUNK_WIDTH);
+			int64_t rz = z + (chunk->az * CHUNK_LENGTH);
 
 			int height = 64 + worldgen->getTerrainHeight( rx, rz, 0.0f );
 
 			// Land blocks
-			for ( int y = 0; y < CHUNK_HEIGHT; y++ )
+			for (int64_t y = 0; y < CHUNK_HEIGHT; y++ )
 			{
 				int actual_y = y + chunk->ay * CHUNK_HEIGHT;
 

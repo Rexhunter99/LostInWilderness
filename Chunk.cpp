@@ -606,7 +606,7 @@ void Chunk::save()
 	}
 	else
 	{
-		std::cerr << "[ ERROR ] Failed to open the file: " << name << std::endl;
+		std::cerr << "[ ERROR ] Failed to open the file: " << name.str() << std::endl;
 	}
 
 	this->time_last_saved = time( nullptr );
@@ -624,7 +624,7 @@ void Chunk::load()
 	// -- If the file stream opened properly then we write to it
 	if ( !f.is_open() )
 	{
-		std::cerr << "[ ERROR ] File does not exist, or is corrupt: \"" << name << "\"" << std::endl;
+		std::cerr << "[ ERROR ] File does not exist, or is corrupt: \"" << name.str() << "\"" << std::endl;
 	}
 	else
 	{

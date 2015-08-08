@@ -4,6 +4,8 @@
 #if !defined( __LOSTINWILDERNESS_H__ )
 #define __LOSTINWILDERNESS_H__
 
+#pragma warning( disable : 4244 )
+
 #include <ctime>
 #include <map>
 #include <string>

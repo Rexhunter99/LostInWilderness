@@ -4,6 +4,10 @@
 #include <cmath>
 #include <algorithm>
 #include <random>
+#if defined(_MSC_VER)
+// Needed for iota on MSVC
+#include <numeric>
+#endif
 
 #include <glm/glm.hpp>
 

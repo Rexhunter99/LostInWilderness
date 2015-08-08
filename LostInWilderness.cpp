@@ -9,8 +9,17 @@
 #include "Texture.h"
 #include "World.h"
 #include "WorldGenerator.h"
+#include "FileSystem.h"
 
+#if defined(_MSC_VER)
+#include <direct.h>
+#include <Windows.h>
+// Make an alias to the CRT safe function
+#define mkdir _mkdir
+#else // GNU
 #include <dirent.h>
+#endif
+
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
@@ -162,7 +171,7 @@ int init_resources()
 {
 	// -- Network
 	Network::HttpRequest http;
-	http.open( Network::HttpRequest::HTTP_GET, "www.epiczen.net/" );
+	http.open( Network::HttpRequest::HTTP_GET, "www.lostinwilderness.com/updates.php" );
 	http.send( std::string("test") );
 
 
@@ -334,79 +343,6 @@ static void display()
 			mx = my = mz = 99999;
 		}
 	}
-
-	/**float bx = mx;
-	float by = my;
-	float bz = mz;
-
-	// Render a box around the block we are pointing at
-
-	Vertex box[24] = {
-		Vertex(bx + 0, by + 0, bz + 0, 0, 0, 0),
-		Vertex(bx + 1, by + 0, bz + 0, 0, 0, 0),
-		Vertex(bx + 0, by + 1, bz + 0, 0, 0, 0),
-		Vertex(bx + 1, by + 1, bz + 0, 0, 0, 0),
-
-		Vertex(bx + 0, by + 0, bz + 1, 0, 0, 0),
-		Vertex(bx + 1, by + 0, bz + 1, 0, 0, 0),
-		Vertex(bx + 0, by + 1, bz + 1, 0, 0, 0),
-		Vertex(bx + 1, by + 1, bz + 1, 0, 0, 0),
-
-		Vertex(bx + 0, by + 0, bz + 0, 0, 0, 0),
-		Vertex(bx + 0, by + 1, bz + 0, 0, 0, 0),
-		Vertex(bx + 1, by + 0, bz + 0, 0, 0, 0),
-		Vertex(bx + 1, by + 1, bz + 0, 0, 0, 0),
-
-		Vertex(bx + 0, by + 0, bz + 1, 0, 0, 0),
-		Vertex(bx + 0, by + 1, bz + 1, 0, 0, 0),
-		Vertex(bx + 1, by + 0, bz + 1, 0, 0, 0),
-		Vertex(bx + 1, by + 1, bz + 1, 0, 0, 0),
-
-		Vertex(bx + 0, by + 0, bz + 0, 0, 0, 0),
-		Vertex(bx + 0, by + 0, bz + 1, 0, 0, 0),
-		Vertex(bx + 1, by + 0, bz + 0, 0, 0, 0),
-		Vertex(bx + 1, by + 0, bz + 1, 0, 0, 0),
-
-		Vertex(bx + 0, by + 1, bz + 0, 0, 0, 0),
-		Vertex(bx + 0, by + 1, bz + 1, 0, 0, 0),
-		Vertex(bx + 1, by + 1, bz + 0, 0, 0, 0),
-		Vertex(bx + 1, by + 1, bz + 1, 0, 0, 0)
-	};
-
-	glDisable(GL_POLYGON_OFFSET_FILL);
-	glDisable(GL_CULL_FACE);
-	Renderer::default_shader->setUniformMatrix( "mvp", glm::value_ptr(mvp) );
-	glBindBuffer(GL_ARRAY_BUFFER, cursor_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 24, &box[0], GL_DYNAMIC_DRAW);
-	glVertexAttribPointer( Renderer::default_shader->getAttrib("v_position"), 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-	glVertexAttribPointer( Renderer::default_shader->getAttrib("v_texcoord"), 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(float) * 4) );
-	glDrawArrays(GL_LINES, 0, 24);
-
-	// -- Draw a cross in the center of the screen
-
-	Vertex cross[4] = {
-		Vertex(-0.05*((float)wh/(float)ww), 0, 0, 0, 0, 0 ),
-		Vertex(+0.05*((float)wh/(float)ww), 0, 0, 0, 0, 0 ),
-		Vertex( 0, -0.05, 0, 0, 0, 0 ),
-		Vertex( 0, +0.05, 0, 0, 0, 0 )
-	};
-
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_TEXTURE_2D);
-	glm::mat4 one(1);
-	Renderer::default_shader->setUniformMatrix( "mvp", glm::value_ptr(one) );
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 4, &cross[0], GL_DYNAMIC_DRAW);
-	glVertexAttribPointer( Renderer::default_shader->getAttrib("v_position"), 4, GL_FLOAT, GL_FALSE, sizeof( Vertex ), 0 );
-	glVertexAttribPointer( Renderer::default_shader->getAttrib("v_texcoord"), 2, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (void*)( sizeof(float) * 4 ) );
-
-	glEnable( GL_BLEND );
-	glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
-
-	glDrawArrays(GL_LINES, 0, 4);
-
-	glDisable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	glEnable( GL_TEXTURE_2D );*/
 
 	// -- Overlay
 	glDisable(GL_POLYGON_OFFSET_FILL);
@@ -628,6 +564,11 @@ static void mouse(int button, int state, int x, int y)
 	}*/
 }
 
+
+/*********************************************************************************************
+** Everything below this comment block actually belongs in this source file...
+*********************************************************************************************/
+
 LostInWilderness *LostInWilderness::iGaiaCraft;
 
 
@@ -637,6 +578,8 @@ LostInWilderness::LostInWilderness()
 
 	this->camera						= &g_camera;
 	this->config						= Config::getGlobal();
+
+	// -- Load the configuration file
 	this->config->load( "client.properties" );
 
 	// -- Prepare the network API
@@ -650,7 +593,8 @@ LostInWilderness::~LostInWilderness()
 {
 	Network::network_cleanup();
 
-	delete this->config;
+	// CDB caught this, GDB did not, cannot delete a static variable
+	//delete this->config;
 	delete ResourceManager::iResourceManager;
 	delete Renderer::iRenderer;
 }
@@ -697,31 +641,48 @@ void LostInWilderness::addChunkToSaveQueue( Chunk *chunk )
 int LostInWilderness::run()
 {
 	// -- File system manipulation goes here
-	if(!(info.st_mode & S_IFDIR))
+	FileSystem::Directory::create("./world");
+
+#if defined(_MSC_VER)
+
+	WIN32_FIND_DATA fd;
+	HANDLE hfile = FindFirstFile(".\\world\\*", &fd);
+
+	if (hfile != INVALID_HANDLE_VALUE)
 	{
-		#ifdef _WIN32
-		mkdir("./world");
-		#else
-		mkdir("./world",S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-		#endif
+		while (FindNextFile(hfile, &fd))
+		{
+			std::string filename = fd.cFileName;
+
+			// Don't delete special files/folders
+			if (!filename.compare(".") || !filename.compare("..")) continue;
+
+			DeleteFile(filename.c_str());
+		}
+
+		FindClose(hfile);
+	}
+
+#elif defined(__GNUC__)
+	if (!(info.st_mode & S_IFDIR))
+	{
 
 		// -- NOTE: This is temporary
 		DIR *d = opendir("./world");
 		struct dirent *dp;
 
-		while ( ( dp = readdir(d)) != nullptr )
+		while ((dp = readdir(d)) != nullptr)
 		{
 			std::string file = dp->d_name;
 
-			if ( !file.compare( "." ) || !file.compare( ".." ) ) continue;
+			if (!file.compare(".") || !file.compare("..")) continue;
 
-			std::string fpath = std::string("./world/") + file;
-			std::cout << fpath << std::endl;
-			std::remove( fpath.c_str() );
+			std::remove(fpath.c_str());
 		}
 
 		closedir(d);
 	}
+#endif
 
 	// -- Initialise any threads here
 	g_finished = false;

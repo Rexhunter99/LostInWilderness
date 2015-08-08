@@ -1,0 +1,1 @@
+@start x86/liw.exe
