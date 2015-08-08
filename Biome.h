@@ -29,12 +29,12 @@ protected:
 	WorldGenerator	*worldgen;
 
 public:
-    BlockSaltWater saltWater( ResourceManager::iResourceManager->getBlockInfo( "salt_water" ) );
+    BlockSaltWater saltWater( ResourceManager::iResourceManager->getBlockInfo( "liw:salt_water" ) );
     Block bedrock( ResourceManager::iResourceManager->getBlockInfo( "liw:bedrock" ) );
     Block stone( ResourceManager::iResourceManager->getBlockInfo( "liw:stone" ) );
     BlockDirt soil( ResourceManager::iResourceManager->getBlockInfo( "liw:soil" ) );
-    Block wood( ResourceManager::iResourceManager->getBlockInfo( "wood" ) );
-    Block leaves( ResourceManager::iResourceManager->getBlockInfo( "leaves" ) );
+    Block wood( ResourceManager::iResourceManager->getBlockInfo( "liw:wood" ) );
+    Block leaves( ResourceManager::iResourceManager->getBlockInfo( "liw:leaves" ) );
     Block sand( ResourceManager::iResourceManager->getBlockInfo( "sand" ) );
 
 	Biome( WorldGenerator * worldgen, std::string name = "biome_unknown", unsigned char y_min = 64, unsigned char y_max = 64, float temperature = 0.0f, float rainfall = 0.0f )
