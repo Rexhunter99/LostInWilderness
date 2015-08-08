@@ -22,8 +22,8 @@ class ResourceManager
 public:
 	BlockInfo air;
 	ItemInfo none;
-	std::map<std::string,BlockInfo>		block_info;
-	std::map<std::string,ItemInfo>		item_info;
+	std::map<std::string,BlockInfo*>	block_info;
+	std::map<std::string,ItemInfo*>		item_info;
 	std::map<std::string,Texture*>		textures;
 	std::map<std::string,TextFont*>		fonts;
 	std::map<std::string,Shader*>		shaders;
@@ -35,10 +35,10 @@ public:
 
 	BlockInfo &			getBlockInfo( std::string block_name );
 	BlockInfo &			getBlockInfo( size_t block_id );
-	void				addBlockInfo( BlockInfo new_block_info );
+	void				addBlockInfo( BlockInfo * new_block_info );
 	ItemInfo &			getItemInfo( std::string item_name );
 	ItemInfo &			getItemInfo( size_t item_id);
-	void				addItemInfo( ItemInfo new_item_info );
+	void				addItemInfo( ItemInfo * new_item_info );
 	WorldGenerator &	getWorldGen( std::string worldgen_name );
 	void				addWorldGen( WorldGenerator *new_worldgen );
 	Texture *			getTexture( std::string texture_name );

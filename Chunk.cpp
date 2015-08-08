@@ -177,7 +177,7 @@ bool Chunk::isBlocked(int x1, int y1, int z1, int x2, int y2, int z2)
 	if (b->info.name == "salt_water" && b2->info.name == "salt_water")
 		return true;
 
-	// Blocks that are see through (glass/leaves/etc) do not block
+	// Blocks that are see through (glass/liw:leaves/etc) do not block
 	if (b2 != nullptr && (b2->info.flags & BI_TRANSLUCENT || b2->info.flags & BI_OPACITY))
 		return false;
 	else // -- Non-transparent blocks always block line of sight
