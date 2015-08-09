@@ -18,7 +18,7 @@ by the C++11 standard.  MSVC 14.0 is the first compiler to fully implement the s
 the standard since early builds of GCC 4.x
 
 Once your preferred development environment is installed and configured you will need to acquire the appropriate libraries:
-* libpng12 (or higher)
+* libpng16
 * libglfw3
 * libglew
 _For legal reasons we cannot provide a 'pack' with these libraries_
