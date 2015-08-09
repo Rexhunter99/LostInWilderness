@@ -262,7 +262,6 @@ void Chunk::set( int x, int y, int z, Block * new_block )
 		// -- Point the pointer to the correct part of the pool
 		if (this->blk[x][y][z] == nullptr)
 		{
-			//Block *blk_ptr = this->block_pool + (x + CHUNK_WIDTH * (z + CHUNK_LENGTH) * y);
 			Block *blk_ptr = this->block_pool + (x + (z * CHUNK_WIDTH) + (y * CHUNK_WIDTH * CHUNK_LENGTH));
 			this->blk[x][y][z] = new (blk_ptr) Block(new_block->info);
 		}

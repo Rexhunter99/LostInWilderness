@@ -745,12 +745,20 @@ int LostInWilderness::run()
 	return 0;
 }
 
+#if defined(_MSC_VER) && defined(_DEBUG)
+#include <crtdbg.h>
+#endif
+
 #if defined(NDEBUG) && defined(_MSC_VER)
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPTSTR lpszCmdLine, int nCmdShow)
 #else
 int main(int argc, char* argv[])
 #endif
 {
+#if defined(_DEBUG) && defined(_MSC_VER)
+	_CrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
+#endif
+
 	int r = 0;
 
 	try

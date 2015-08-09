@@ -37,14 +37,17 @@
 # Visual Studio filetypes and files
 *.suo
 *.user
+*.cd
 *.sln.docstates
 *_i.c
 *_p.c
 *.ilk
 *.meta
 *.obj
+*.iobj
 *.pch
 *.pdb
+*.ipdb
 *.pgc
 *.pgd
 *.rsp
@@ -86,6 +89,9 @@ DocProject/Help/html
 *.workspace
 *.cscope_file_list
 *.depend
+lost_in_wilderness.cscope_file_list
+lost_in_wilderness.depend
+lost_in_wilderness.layout
 
 # Windows Operating System specific
 [Tt]humbs.db

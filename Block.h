@@ -19,9 +19,6 @@ public:
 
 	BlockInfo			&info;
 	uint8_t				data_value;
-	union {
-
-	};
 
 	Block( BlockInfo &block_info ) :
 		info( block_info )
