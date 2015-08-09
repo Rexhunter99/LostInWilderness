@@ -17,49 +17,53 @@ C++11 standards are required for this project as it uses move constructors and v
 by the C++11 standard.  MSVC 14.0 is the first compiler to fully implement the standard for Microsoft, GCC has implemented
 the standard since early builds of GCC 4.x
 
-Once your preferred development environment is installed and configured you will need to acquire the appropriate libraries:
-* libpng16
-* libglfw3
-* libglew
+Once your preferred development environment is installed and configured you will need to acquire the appropriate libraries:  
+- libpng16    
+- libglfw3  
+- libglew  
 _For legal reasons we cannot provide a 'pack' with these libraries_
-
+  
 Additionally you will need to acquire the GL Math library which is a C++ header include.
 
 ... _To be completed_ ...
 
-**-Rexhunter99**
+-----------------------
+-----------------------
 
 ### Mac OS X 
 To be added
   
+-----------------------
 -----------------------  
 ### Ubuntu-based Linux distributions
 **Note:** Ubuntu information may also be applied to Debian distributions as Ubuntu itself is based on Debian at its core.
 Please beware however and make sure you change any steps as appropriate for your particular Linux environment.
 
-Use your preferred package manager (most likely apt-get or aptitude) and install the following dependencies:
-* libpng12-dev
-* libglfw3-dev
-* libglew-dev  
-* libglm-dev  
-* libx11-dev  
-* libxi-dev  
-* libxrandr-dev  
-* libxxf86vm-dev  
-* libxinerama-dev  
-* libxcursor-dev  
-* gcc
-
-If you wish to debug:
-* gdb  
-* libcc1  
+Use your preferred package manager (most likely apt-get or aptitude) and install the following dependencies:  
+- libpng12-dev  
+- libglfw3-dev  *  
+- libglew-dev  
+- libglm-dev  
+- libx11-dev  
+- libxi-dev  
+- libxrandr-dev  
+- libxxf86vm-dev  
+- libxinerama-dev  
+- libxcursor-dev  
+- gcc
+  
+*_See note below_
+  
+If you wish to debug:  
+- gdb  
+- libcc1  
    
-Then either install:
-* codeblocks
-* codeblocks-contrib _Optional_
-* codeblocks-dbg _Optional_
-Or:
-* make  
+Then either install:  
+- codeblocks  
+- codeblocks-contrib _Optional_  
+- codeblocks-dbg _Optional_  
+Or:  
+- make  
   
 With Code::Blocks, just open the included lost_in_wilderness.cbp project/workspace file and build either the "Debug" or "Release" version (selectable from a drop-down menu at the top). The build icon should be a gear in the toolbar near the top.  
   
@@ -68,11 +72,22 @@ Then type:
 make  
   
 The project will begin building and will output information to the terminal. When done, find the built binaries in LostInWilderness/bin/ as gaiacraft and gaiacraft-dbg.  
-You can also type:
-`make -j N`
+You can also type:  
+`make -j N`  
 (where N is the number of cores)  
 to speed the build process.      
+  
+--------------------  
+        
+*Note:  
+Ubuntu repositories (15.04 and 15.10) provide the dynamic library (.so rather than .a), which the compiler will not automatically find because its filename does not include 'libglfw3'. To use the Ubuntu dynamic libraries, run this command to create a symbolic link:*  
+64-bit:  
+`ln -s /usr/lib/x86_64-linux-gnu/libglfw.so.3  /usr/lib/x86_64-linux-gnu/libglfw3.so`  
+32-bit:  
+`ln -s /usr/lib/i386-linux-gnu/libglfw.so.3  /usr/lib/i386-linux-gnu/libglfw3.so`  
     
+*The recommended method, however, is to build and install glfw3 from source (or using the included config script) and use the static library.*  
+
 -----------------------  
 To use the debug binary, have GDB installed and run it like this:
 gdb gaiacraft-dbg
@@ -80,13 +95,14 @@ gdb gaiacraft-dbg
 While GDB is running, enter:  
 run
 
-If GDB catches any signal, such as SIGABORT or SIGSEGV, type these commands for useful debugging information:  
-* where  
-* list
+If GDB catches any signal, such as SIGABORT or SIGSEGV, type these commands for useful debugging information:    
+- where    
+- list
 
 'where' will print the call stack from when the signal occurred.  
 'list' will print a few lines before and after the line it stopped on, in addition to that line.
 
 To quit GDB, type 'quit' and then 'y' when it asks whether to terminate the running process.
 
-**-TambourineReindeer**
+**-TambourineReindeer**  
+**-Rexhunter99**
