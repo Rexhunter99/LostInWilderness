@@ -8,7 +8,8 @@
 		<Option virtualFolders="Renderer/;Renderer/Resources/;Utils/;World/Blocks/;Client/;World/Items/;World/Biomes/;World/;World/Generators/;" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/liw-dbg" prefix_auto="1" extension_auto="1" />
+				<Option platforms="Unix;" />
+				<Option output="bin/$(TARGET_ARCH)/liw-dbg" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
@@ -21,10 +22,11 @@
 					<Add option="-ffast-math" />
 					<Add option="-D_DEBUG" />
 					<Add option="-D_LINUX" />
+					<Add option="-DGLM_FORCE_RADIANS" />
 				</Compiler>
 				<Linker>
 					<Add option="-pg" />
-					<Add option="-lpng" />
+					<Add option="-lpng16" />
 					<Add option="-lGL" />
 					<Add option="-lglfw3" />
 					<Add option="-lGLEW" />
@@ -40,10 +42,11 @@
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/liw" prefix_auto="1" extension_auto="1" />
+				<Option platforms="Unix;" />
+				<Option output="bin/$(TARGET_ARCH)/liw" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/Release/" />
-				<Option type="1" />
+				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O3" />
@@ -52,10 +55,11 @@
 					<Add option="-O6" />
 					<Add option="-DNDEBUG" />
 					<Add option="-D_LINUX" />
+					<Add option="-DGLM_FORCE_RADIANS" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lpng" />
+					<Add option="-lpng16" />
 					<Add option="-lGL" />
 					<Add option="-lglfw3" />
 					<Add option="-lGLEW" />

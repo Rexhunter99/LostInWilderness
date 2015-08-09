@@ -33,7 +33,8 @@ void BiomeWoods::generate( Chunk *chunk, Perlin *noise )
 				// -- Sea level
 				if ( actual_y >= height && actual_y < 64 )
 				{
-					chunk->set( x, y, z, saltWater );
+					BlockSaltWater b(ResourceManager::iResourceManager->getBlockInfo("liw:salt_water"));
+					chunk->set( x, y, z, &b );
 					continue;
 				}
 
@@ -57,15 +58,18 @@ void BiomeWoods::generate( Chunk *chunk, Perlin *noise )
 
 				if ( y < 4 )
 				{
-					chunk->set(x,y,z, bedrock ); // bedrock
+					Block b(ResourceManager::iResourceManager->getBlockInfo("liw:bedrock"));
+					chunk->set(x,y,z, &b ); // bedrock
 				}
 				else if ( y < height - 4 )
 				{
-					chunk->set(x,y,z, stone );
+					Block b(ResourceManager::iResourceManager->getBlockInfo("liw:stone"));
+					chunk->set(x,y,z, &b );
 				}
 				else
 				{
-					chunk->set(x,y,z, soil );
+					Block b(ResourceManager::iResourceManager->getBlockInfo("liw:soil"));
+					chunk->set(x,y,z, &b );
 				}
 			}
 		}
@@ -74,6 +78,8 @@ void BiomeWoods::generate( Chunk *chunk, Perlin *noise )
 
 void BiomeWoods::placePineTree( Chunk *chunk, int x, int y, int z )
 {
+	Block wood(ResourceManager::iResourceManager->getBlockInfo("liw:wood"));
+	Block leaves(ResourceManager::iResourceManager->getBlockInfo("liw:leaves"));
 	// -- Set the height of the trunk
 	int h = 2 + (rand() % 2);
 	int mh = 4 + (rand() % 6);
@@ -85,26 +91,28 @@ void BiomeWoods::placePineTree( Chunk *chunk, int x, int y, int z )
 		{
 			float l = 6.0f * ( 1.0f - ( float(iy) / float(mh) ) );
 			if ( float(ix * ix + iz * iz) < l )
-			chunk->set( x + ix, y + h + iy, z + iz, leaves );
+			chunk->set( x + ix, y + h + iy, z + iz, &leaves );
 		}
 	}
 
 	// -- Place the trunk
 	for ( int iy = 0; iy <= h + (mh/2); iy++ )
 	{
-		chunk->set(x, y + iy, z, wood);
+		chunk->set(x, y + iy, z, &wood);
 	}
 }
 
 void BiomeWoods::placeBoulder( Chunk *chunk, int x, int y, int z )
 {
+	Block stone(ResourceManager::iResourceManager->getBlockInfo("liw:stone"));
+
 	for ( int iy = -3; iy <= 3; iy++ )
 	{
 		for ( int ix = -3; ix <= 3; ix++ )
 		for ( int iz = -3; iz <= 3; iz++ )
 		{
 			if ( ix * ix + iz * iz + iy * iy < 6 )
-			chunk->set( x + ix, y + iy, z + iz, stone );
+			chunk->set( x + ix, y + iy, z + iz, &stone );
 		}
 	}
 }

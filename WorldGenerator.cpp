@@ -96,8 +96,6 @@ void WorldGenerator::generate( Chunk *chunk )
 		}
 	}
 
-	//printf( "chunk[%d,%d] t:%f r:%f b:%s\n", chunk->ax, chunk->az, temperature, rainfall, biome->name.c_str() );
-
 	chunk_gen_count++;
 
 	// -- Generate the chunk and any ores
@@ -112,7 +110,7 @@ void WorldGenerator::generate( Chunk *chunk )
 
 void WorldGenerator::generateOres( Chunk *chunk )
 {
-    Biome 	*biome = this->biome_list[0]; // Do we want to declare this local variable again?
+    Block coal(ResourceManager::iResourceManager->getBlockInfo("liw:bedrock"));
 
     for ( int i=0; i<17; i++ )
 	{
@@ -129,7 +127,7 @@ void WorldGenerator::generateOres( Chunk *chunk )
 			continue;
 
 		// NOTE: Need to replace these two lines with a WorldGenMinable that should spawn a vein properly
-		chunk->set(x, y, z, biome->coal );
+		chunk->set(x, y, z, &coal );
 	}
 }
 

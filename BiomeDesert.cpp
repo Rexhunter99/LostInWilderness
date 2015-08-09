@@ -30,7 +30,8 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 				// -- Sea level
 				if ( actual_y >= height && actual_y < 64 )
 				{
-					chunk->set( x, y, z, saltWater);
+				    BlockSaltWater b(ResourceManager::iResourceManager->getBlockInfo("liw:salt_water"));
+					chunk->set(x, y, z, &b);
 					continue;
 				}
 
@@ -44,21 +45,24 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 						b->info == ResourceManager::iResourceManager->getBlockInfo( "liw:sand" ) &&
 						(rand() & 0xff) <= 3 )
 					{
-						//this->placeCactus( chunk, x, y, z );
+						this->placeCactus( chunk, x, y, z );
 					}
 					continue;
 				}
                 if ( y < 4 )
 				{
-					chunk->set(x,y,z, bedrock); // bedrock
+				    Block b(ResourceManager::iResourceManager->getBlockInfo("liw:bedrock"));
+					chunk->set(x,y,z, &b); // bedrock
 				}
 				else if ( y < height - 4 )
 				{
-					chunk->set( x, y, z, stone );
+				    Block b(ResourceManager::iResourceManager->getBlockInfo("liw:stone"));
+					chunk->set( x, y, z, &b );
                 }
 				else
 				{
-					chunk->set( x, y, z, sand );
+				    Block b(ResourceManager::iResourceManager->getBlockInfo("liw:sand"));
+					chunk->set( x, y, z, &b );
                 }
 			}
 		}
@@ -67,12 +71,5 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 
 void BiomeDesert::placeCactus( Chunk *chunk, int x, int y, int z )
 {
-	// Trunk
-	int h = 1 + (rand() & 0x3);
-
-	for ( int i = 0; i < h; i++ )
-	{
-		//chunk->set(x, y + i, z, new Block( ResourceManager::iResourceManager->getBlockInfo( "cactus" ) ) );
-	}
 }
 

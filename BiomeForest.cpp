@@ -65,7 +65,8 @@ void BiomeForest::generate( Chunk *chunk, Perlin *noise )
 				}
 				else
 				{
-					chunk->set(x,y,z, soil );
+				    Block b(ResourceManager::iResourceManager->getBlockInfo("liw:soil"));
+					chunk->set(x,y,z, &b );
 				}
 			}
 		}
@@ -79,7 +80,8 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 
 	for ( int i = 0; i < h; i++ )
 	{
-		chunk->set(x, y + i, z, wood );
+	    Block b(ResourceManager::iResourceManager->getBlockInfo("liw:wood"));
+		chunk->set(x, y + i, z, &b );
 	}
 
 	// liw:leaves
@@ -89,17 +91,20 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 	{
 		if ( iy == 6 )
 		{
-			chunk->set( x, y + h + iy, z, leaves );
+		    Block b(ResourceManager::iResourceManager->getBlockInfo("liw:leaves"));
+			chunk->set( x, y + h + iy, z, &b );
 		}
 		else if ( thin == false )
 		{
 			for ( int ix = -2; ix <= 2; ix++ )
 			for ( int iz = -2; iz <= 2; iz++ )
 			{
+				Block b(ResourceManager::iResourceManager->getBlockInfo("liw:leaves"));
 				if ( ix * ix + iz * iz < 8 )
-				chunk->set( x + ix, y + h + iy, z + iz, leaves );
+				chunk->set( x + ix, y + h + iy, z + iz, &b );
 			}
-			chunk->set( x, y + h + iy, z, wood );
+			Block b(ResourceManager::iResourceManager->getBlockInfo("liw:wood"));
+			chunk->set( x, y + h + iy, z, &b );
 			thin = true;
 		}
 		else
@@ -107,9 +112,12 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 			for ( int ix = -1; ix <= 1; ix++ )
 			for ( int iz = -1; iz <= 1; iz++ )
 			{
-				chunk->set( x + ix, y + h + iy, z + iz, leaves );
+				Block b(ResourceManager::iResourceManager->getBlockInfo("liw:wood"));
+				chunk->set( x + ix, y + h + iy, z + iz, &b );
 			}
-			chunk->set( x, y + h + iy, z, wood );
+
+			Block b(ResourceManager::iResourceManager->getBlockInfo("liw:wood"));
+			chunk->set( x, y + h + iy, z, &b );
 			thin = false;
 		}
 	}

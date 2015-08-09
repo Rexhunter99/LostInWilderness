@@ -1,99 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="Buffer.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Network.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2637" topLine="80" />
-		</Cursor>
-	</File>
-	<File name="BiomeDesert.cpp" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="26" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="ItemInfo.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="35" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="BlockInfo.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="771" topLine="27" />
-		</Cursor>
-	</File>
-	<File name="Renderer.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="226" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="TextFont.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2325" topLine="85" />
-		</Cursor>
-	</File>
-	<File name="BiomeForest.h" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="102" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="Exceptions.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="465" topLine="6" />
-		</Cursor>
-	</File>
-	<File name="Config.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2305" topLine="86" />
-		</Cursor>
-	</File>
-	<File name="Shader.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="410" topLine="13" />
-		</Cursor>
-	</File>
-	<File name="Block.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="270" topLine="15" />
-		</Cursor>
-	</File>
-	<File name="WorldGenerator.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="517" topLine="16" />
-		</Cursor>
-	</File>
-	<File name="VertexFormat.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="341" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="World.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="858" topLine="26" />
-		</Cursor>
-	</File>
-	<File name="BiomeWoods.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="441" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="VertexBuffer.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1420" topLine="19" />
-		</Cursor>
-	</File>
-	<File name="Texture.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="460" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="Chunk.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2050" topLine="77" />
-		</Cursor>
-	</File>
-	<File name="TextFont.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1095" topLine="16" />
+			<Cursor1 position="1176" topLine="50" />
 		</Cursor>
 	</File>
 	<File name="vectors.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -101,24 +11,119 @@
 			<Cursor1 position="3372" topLine="194" />
 		</Cursor>
 	</File>
+	<File name="Framebuffer.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="388" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Exceptions.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="465" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="Camera.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="100" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="BiomeWoods.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="441" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Shader.cpp" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7712" topLine="28" />
+		</Cursor>
+	</File>
+	<File name="VertexFormat.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="91" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="TextFont.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2325" topLine="85" />
+		</Cursor>
+	</File>
 	<File name="Item.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="239" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="BiomeWoods.cpp" open="1" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Vertex.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1369" topLine="30" />
+			<Cursor1 position="862" topLine="42" />
 		</Cursor>
 	</File>
-	<File name="Network.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="VertexFormat.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1176" topLine="50" />
+			<Cursor1 position="341" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="WorldGenerator.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Chunk.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="478" topLine="118" />
+			<Cursor1 position="2050" topLine="77" />
+		</Cursor>
+	</File>
+	<File name="Network.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="150" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="BiomeDesert.cpp" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="26" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Renderer.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="226" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="VertexBuffer.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1420" topLine="19" />
+		</Cursor>
+	</File>
+	<File name="WorldGenerator.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="517" topLine="16" />
+		</Cursor>
+	</File>
+	<File name="Buffer.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2637" topLine="80" />
+		</Cursor>
+	</File>
+	<File name="LostInWilderness.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="16508" topLine="633" />
+		</Cursor>
+	</File>
+	<File name="Framebuffer.cpp" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="39" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Config.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="506" topLine="5" />
+		</Cursor>
+	</File>
+	<File name="Shader.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="410" topLine="13" />
+		</Cursor>
+	</File>
+	<File name="VertexBuffer.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1054" topLine="36" />
+		</Cursor>
+	</File>
+	<File name="WrapperSTL.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="331" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="Renderer.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -126,14 +131,54 @@
 			<Cursor1 position="675" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="Chunk.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="BlockDirt.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2052" topLine="62" />
+			<Cursor1 position="5950" topLine="39" />
 		</Cursor>
 	</File>
-	<File name="BiomeForest.cpp" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="BiomeWoods.cpp" open="0" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1369" topLine="30" />
+		</Cursor>
+	</File>
+	<File name="bin/data/shaders/world.150.vs" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1383" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="BiomeForest.cpp" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1391" topLine="34" />
+		</Cursor>
+	</File>
+	<File name="World.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="805" topLine="27" />
+		</Cursor>
+	</File>
+	<File name="LostInWilderness.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="92" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="BiomeForest.h" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="102" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Block.h" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="202" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="BlockSaltWater.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="78" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="WorldGenerator.cpp" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="478" topLine="118" />
 		</Cursor>
 	</File>
 	<File name="bin/data/shaders/world.150.fs" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -146,94 +191,49 @@
 			<Cursor1 position="2486" topLine="66" />
 		</Cursor>
 	</File>
-	<File name="Vertex.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Texture.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="862" topLine="42" />
+			<Cursor1 position="460" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="LostInWilderness.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="ResourceManager.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="92" topLine="0" />
+			<Cursor1 position="3530" topLine="6" />
 		</Cursor>
 	</File>
-	<File name="Camera.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="BlockInfo.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="100" topLine="0" />
+			<Cursor1 position="771" topLine="27" />
 		</Cursor>
 	</File>
-	<File name="ResourceManager.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Config.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2305" topLine="86" />
+		</Cursor>
+	</File>
+	<File name="Chunk.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2052" topLine="62" />
+		</Cursor>
+	</File>
+	<File name="ResourceManager.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="356" topLine="2" />
 		</Cursor>
 	</File>
-	<File name="Network.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="TextFont.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="150" topLine="0" />
+			<Cursor1 position="1095" topLine="16" />
 		</Cursor>
 	</File>
-	<File name="Texture.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="World.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3416" topLine="31" />
+			<Cursor1 position="858" topLine="26" />
 		</Cursor>
 	</File>
-	<File name="bin/data/shaders/world.150.vs" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Buffer.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1383" topLine="18" />
-		</Cursor>
-	</File>
-	<File name="Shader.cpp" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="7712" topLine="28" />
-		</Cursor>
-	</File>
-	<File name="VertexBuffer.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1054" topLine="36" />
-		</Cursor>
-	</File>
-	<File name="Framebuffer.cpp" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="39" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="Framebuffer.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="388" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="BlockDirt.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="5950" topLine="39" />
-		</Cursor>
-	</File>
-	<File name="Noise.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="830" topLine="21" />
-		</Cursor>
-	</File>
-	<File name="Biome.h" open="1" top="1" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="992" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="Buffer.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4947" topLine="185" />
-		</Cursor>
-	</File>
-	<File name="Config.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="506" topLine="5" />
-		</Cursor>
-	</File>
-	<File name="WrapperSTL.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="331" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="World.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="805" topLine="27" />
+			<Cursor1 position="901" topLine="35" />
 		</Cursor>
 	</File>
 	<File name="BiomeDesert.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -241,24 +241,24 @@
 			<Cursor1 position="180" topLine="15" />
 		</Cursor>
 	</File>
-	<File name="VertexFormat.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Texture.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="91" topLine="0" />
+			<Cursor1 position="422" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="ResourceManager.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+	<File name="Noise.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3530" topLine="6" />
+			<Cursor1 position="830" topLine="21" />
 		</Cursor>
 	</File>
-	<File name="BlockSaltWater.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="ItemInfo.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="78" topLine="12" />
+			<Cursor1 position="35" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="LostInWilderness.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Biome.h" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="16508" topLine="633" />
+			<Cursor1 position="992" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

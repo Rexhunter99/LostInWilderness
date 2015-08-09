@@ -46,8 +46,7 @@ unsigned char & Buffer::operator [] ( unsigned index ) const
         throw custom_exception( "Buffer overflow." );
     }
 
-	auto i = this->buffer.at(index);
-    return const_cast<unsigned char&>(i);
+    return const_cast<unsigned char&>(this->buffer.at(index));
 }
 
 Buffer & Buffer::operator + ( const Buffer & append_buffer )

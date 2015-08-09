@@ -9,15 +9,16 @@ LIBPNG_DIR="libpng-1.6.18"
 LIBPNG_SRC="ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.18.tar.gz"
 
 ## Install Utilities
-#apt-get install cmake
+apt-get install cmake
 
 ## Install X Org/X11 libraries
-#apt-get install xorg-dev libx11-dev libxi-dev libxrandr-dev libxxf86vm-dev libxinerama-dev libxcursor-dev
+apt-get install xorg-dev libx11-dev libxi-dev libxrandr-dev libxxf86vm-dev libxinerama-dev libxcursor-dev
 
 ## Install OpenGL libraries and utility libraries
-#apt-get install libgl1-mesa-dev libglu1-mesa-dev libglew-dev libglm-dev
+apt-get install libgl1-mesa-dev libglu1-mesa-dev libglew-dev libglm-dev
 
 ## Install Third Party libraries
+# Note: this script will download and configure the libpng16 library
 #apt-get install libpng12-dev
 
 ## We have to get the GLFW3 library
@@ -43,7 +44,7 @@ cd /tmp/libpng-1.6.18
 ./configure
 make check
 make install
-
+cp /usr/local/lib/libpng16.so.16 /usr/lib/libpng16.so.16
 cd $LIW_CWD
 
 echo Cleaning up...
