@@ -18,10 +18,8 @@
 # The pre-processor and compiler options.
 CFLAGS = -Wall -DGLM_FORCE_RADIANS
 
-# The linker options. Note: lglfw is glfw3 but the filename is the same as
-# previous versions so -lglfw3 won't find it unless a symbolic link is made.
-# May make a permanent solution to this in the future.
-LIBS   = -lpng -lglfw -lm
+# The linker options.
+LIBS   = -lpng16 -lglfw3 -lm
 
 # The pre-processor options used by the cpp (man cpp for more).
 CPPFLAGS  = $(CFLAGS) -std=c++11 -ffast-math
