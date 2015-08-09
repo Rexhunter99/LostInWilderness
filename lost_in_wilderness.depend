@@ -1384,14 +1384,10 @@
 	<mutex>
 	<queue>
 
-1439033486 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeDesert.cpp
+1439087927 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeDesert.cpp
 	"BiomeDesert.h"
-	"Block.h"
-	"BlockDirt.h"
-	"BlockSaltWater.h"
 	"Chunk.h"
 	"Noise.h"
-	"ResourceManager.h"
 	<cstdlib>
 	<cmath>
 
@@ -1399,10 +1395,14 @@
 	"Biome.h"
 	<cstdlib>
 
-1436270497 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Biome.h
+1439088928 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Biome.h
 	<string>
+	"Block.h"
+	"BlockDirt.h"
+	"BlockSaltWater.h"
+	"ResourceManager.h"
 
-1439023913 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Block.h
+1439036595 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Block.h
 	"BlockInfo.h"
 	"Chunk.h"
 	"Renderer.h"
@@ -1462,7 +1462,7 @@
 	"Block.h"
 	"ResourceManager.h"
 
-1439023913 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/ResourceManager.h
+1439036595 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/ResourceManager.h
 	<cstdint>
 	<map>
 	<string>
@@ -1486,28 +1486,26 @@
 	<vector>
 	<glm/fwd.hpp>
 
-1438995519 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeForest.cpp
+1439087502 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeForest.cpp
 	"BiomeForest.h"
 	"Block.h"
 	"BlockDirt.h"
 	"BlockSaltWater.h"
 	"Chunk.h"
 	"Noise.h"
-	"ResourceManager.h"
 	<cstdlib>
 	<cmath>
 
 1436098106 /home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeForest.h
 	"Biome.h"
 
-1438995519 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeWoods.cpp
+1439087617 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/BiomeWoods.cpp
 	"BiomeWoods.h"
 	"Block.h"
 	"BlockDirt.h"
 	"BlockSaltWater.h"
 	"Chunk.h"
 	"Noise.h"
-	"ResourceManager.h"
 	<cstdlib>
 	<cmath>
 
@@ -1557,7 +1555,7 @@
 	<string>
 	<vector>
 
-1439010646 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/LostInWilderness.cpp
+1439023913 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/LostInWilderness.cpp
 	"LostInWilderness.h"
 	"Buffer.h"
 	"Chunk.h"
@@ -1673,7 +1671,7 @@
 	<glm/gtc/type_ptr.hpp>
 	<glm/gtc/noise.hpp>
 
-1438328838 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/ResourceManager.cpp
+1439088891 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/ResourceManager.cpp
 	"ResourceManager.h"
 	"Renderer.h"
 
@@ -1745,7 +1743,7 @@
 	"BiomeDesert.h"
 	"BiomeWoods.h"
 
-1438995519 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Chunk.cpp
+1439036595 source:/home/razzy/Desktop/Projects/Lost in Wilderness/LostInWilderness/Chunk.cpp
 	"Chunk.h"
 	"Block.h"
 	"BlockDirt.h"

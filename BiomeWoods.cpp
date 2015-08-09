@@ -5,7 +5,6 @@
 #include "BlockSaltWater.h"
 #include "Chunk.h"
 #include "Noise.h"
-#include "ResourceManager.h"
 
 #include <cstdlib>
 #include <cmath>
@@ -34,7 +33,7 @@ void BiomeWoods::generate( Chunk *chunk, Perlin *noise )
 				// -- Sea level
 				if ( actual_y >= height && actual_y < 64 )
 				{
-					chunk->set( x, y, z, &BlockSaltWater( ResourceManager::iResourceManager->getBlockInfo( "liw:salt_water" ) ) );
+					chunk->set( x, y, z, saltWater );
 					continue;
 				}
 
@@ -58,15 +57,15 @@ void BiomeWoods::generate( Chunk *chunk, Perlin *noise )
 
 				if ( y < 4 )
 				{
-					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:bedrock" ) ) ); // bedrock
+					chunk->set(x,y,z, bedrock ); // bedrock
 				}
 				else if ( y < height - 4 )
 				{
-					chunk->set(x,y,z, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:stone" ) ) );
+					chunk->set(x,y,z, stone );
 				}
 				else
 				{
-					chunk->set(x,y,z, &BlockDirt( ResourceManager::iResourceManager->getBlockInfo( "liw:soil" ) ) );
+					chunk->set(x,y,z, soil );
 				}
 			}
 		}
@@ -86,14 +85,14 @@ void BiomeWoods::placePineTree( Chunk *chunk, int x, int y, int z )
 		{
 			float l = 6.0f * ( 1.0f - ( float(iy) / float(mh) ) );
 			if ( float(ix * ix + iz * iz) < l )
-			chunk->set( x + ix, y + h + iy, z + iz, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:leaves" ) ) );
+			chunk->set( x + ix, y + h + iy, z + iz, leaves );
 		}
 	}
 
 	// -- Place the trunk
 	for ( int iy = 0; iy <= h + (mh/2); iy++ )
 	{
-		chunk->set(x, y + iy, z, &Block(ResourceManager::iResourceManager->getBlockInfo("liw:wood")));
+		chunk->set(x, y + iy, z, wood);
 	}
 }
 
@@ -105,7 +104,7 @@ void BiomeWoods::placeBoulder( Chunk *chunk, int x, int y, int z )
 		for ( int iz = -3; iz <= 3; iz++ )
 		{
 			if ( ix * ix + iz * iz + iy * iy < 6 )
-			chunk->set( x + ix, y + iy, z + iz, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:stone" ) ) );
+			chunk->set( x + ix, y + iy, z + iz, stone );
 		}
 	}
 }

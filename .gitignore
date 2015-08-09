@@ -16,12 +16,14 @@ arm64/
 [Mm]an/
 [Ii]nclude/
 [Ll]ib/
+#[Ii]mage[Pp]roject[Ff]iles/
 
 # Binaries
 *.exe
 *.run
 *.nix
 *.linux
+*.elf
 
 # Loose filetypes
 *.log
@@ -53,7 +55,7 @@ arm64/
 *.log
 *.vspscc
 *.vssscc
-.builds
+*.builds
 *.pidb
 *.log
 *.scc
@@ -81,11 +83,12 @@ DocProject/Help/html
 *.layout
 *.workspace
 *.cscope_file_list
+*.depend
 
 # Windows Operating System specific
-Thumbs.db
+[Tt]humbs.db
 ehthumbs.db
-Desktop.ini
+[Dd]esktop.ini
 $RECYCLE.BIN/
 
 # Macintosh Operating System specific

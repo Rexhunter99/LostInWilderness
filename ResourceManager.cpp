@@ -16,12 +16,13 @@ ResourceManager::ResourceManager()
 	this->addBlockInfo(new BlockInfo( "liw:leaves", 0, BI_OPACITY ) );
 	this->addBlockInfo(new BlockInfo( "liw:wood", 0, 0 ) );
 	this->addBlockInfo(new BlockInfo( "liw:stone", 0, 0 ) );
-	this->addBlockInfo(new BlockInfo( "sand", 0, 0 ) );
+	this->addBlockInfo(new BlockInfo( "liw:sand", 0, 0 ) );
 	this->addBlockInfo(new BlockInfo( "liw:salt_water", 0, BI_TRANSLUCENT ) );
 	this->addBlockInfo(new BlockInfo( "glass", 0, BI_OPACITY ) );
 	this->addBlockInfo(new BlockInfo( "brick", 0, 0 ) );
 	this->addBlockInfo(new BlockInfo( "liw:bedrock", 0, 0 ) );
 	this->addBlockInfo(new BlockInfo( "fresh_water", 0, BI_TRANSLUCENT ) );
+	this->addBlockInfo(new BlockInfo( "liw:ore_coal", 0, 0 ) );
 	// End block info
 
 	// World Generators
@@ -91,7 +92,7 @@ ResourceManager::~ResourceManager()
 	{
 		delete i->second;
 	}
-	
+
 	for (auto i = this->item_info.begin(); i != this->item_info.end(); i++)
 	{
 		delete i->second;
