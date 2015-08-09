@@ -1,12 +1,17 @@
-# Directories
-[Bb]in/world/
-[Bb]uild/
-[Dd]ebug/
-[Rr]elease/
-x64/
-arm/
-arm64/
-[Oo]bj/
+# Ignore these directories only in this directory
+/[Bb]in/world/
+/[Bb]uild/
+/[Dd]ebug/
+/[Rr]elease/
+/[Xx]64/
+/[Aa]rm/
+/[Aa]rm64/
+/[Oo]bj/
+/[Ii]nclude/
+/[Ll]ib/
+#/[Ii]mage[Pp]roject[Ff]iles/
+
+# Ignore these directories anywhere
 [Ss]creenshots/
 [Dd]oxygen/
 [Dd]oc/
@@ -14,9 +19,6 @@ arm64/
 [Dd]ocs/
 [Hh]elp/
 [Mm]an/
-[Ii]nclude/
-[Ll]ib/
-#[Ii]mage[Pp]roject[Ff]iles/
 
 # Binaries
 *.exe
