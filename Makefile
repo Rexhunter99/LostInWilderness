@@ -11,8 +11,9 @@
 #   $ make ctags     create ctags for VI editor
 #   $ make clean     clean objects and the executable file
 #   $ make distclean clean objects, the executable and dependencies
-#   $ make cleandeps clean dependecy files only
+#   $ make cleandeps clean dependency files only
 #   $ make help      get the usage of the makefile
+#   $ make show      show variables
 #===========================================================================
 
 # The pre-processor and compiler options.
@@ -44,28 +45,81 @@ ifeq ($(OS),Windows_NT)
     LIBS       += -lglew32s -lopengl32 -lgdi32 -luser32 -lkernel32 -lws2_32
     ifeq ($(or $(PROCESSOR_ARCHITECTURE),$(PROCESSOR_ARCHITEW6432)),AMD64)
         CFLAGS += -D_AMD64
+	PROGRAMD = bin/x64/liw-dbg
+	PROGRAMR = bin/x64/liw
+    endif
+    ifeq ($(or $(PROCESSOR_ARCHITECTURE),$(PROCESSOR_ARCHITEW6432)),$(or IA64,EM64T))
+        CFLAGS += -D_IA64
+	PROGRAMD = bin/x64/liw-dbg
+	PROGRAMR = bin/x64/liw
     endif
     ifeq ($(PROCESSOR_ARCHITECTURE),x86)
         CFLAGS += -D_IA32
+	PROGRAMD = bin/x86/liw-dbg
+	PROGRAMR = bin/x86/liw
+    endif
+    ifneq ($(filter arm%,$(UNAME_P)),)
+        CFLAGS += -D_ARM
+	PROGRAMD = bin/arm/liw-dbg
+	PROGRAMR = bin/arm/liw
+    endif
+    ifeq ($(UNAME_P),aarch64)
+        CFLAGS += -D_AARCH64
+	PROGRAMD = bin/arm64/liw-dbg
+	PROGRAMR = bin/arm64/liw
     endif
 else
     UNAME_S := $(shell uname -s)
     LIBS       += -lGL -lGLEW -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lpthread
-    ifeq ($(UNAME_S), Linux)
+    ifeq ($(UNAME_S),Linux)
         CFLAGS += -D_LINUX
     endif
     ifeq ($(UNAME_S),Darwin)
         CFLAGS += -D_OSX
     endif
+    ifneq ($(UNAME_S),Solaris)
+        CFLAGS += -D_SOLARIS
+    endif
+    ifeq ($(UNAME_S),FreeBSD)
+        CFLAGS += -D_FREEBSD
+    endif
+    ifeq ($(UNAME_S),OpenBSD)
+        CFLAGS += -D_OPENBSD
+    endif
+    ifeq ($(UNAME_S),NetBSD)
+        CFLAGS += -D_NETBSD
+    endif
     UNAME_P := $(shell uname -p)
     ifeq ($(UNAME_P),x86_64)
         CFLAGS += -D_AMD64
+	PROGRAMD = bin/x64/liw-dbg
+	PROGRAMR = bin/x64/liw
     endif
     ifneq ($(filter %86,$(UNAME_P)),)
         CFLAGS += -D_IA32
+	PROGRAMD = bin/x86/liw-dbg
+	PROGRAMR = bin/x86/liw
     endif
     ifneq ($(filter arm%,$(UNAME_P)),)
         CFLAGS += -D_ARM
+	PROGRAMD = bin/arm/liw-dbg
+	PROGRAMR = bin/arm/liw
+    endif
+    ifeq ($(UNAME_P),aarch64)
+        CFLAGS += -D_AARCH64
+	PROGRAMD = bin/arm64/liw-dbg
+	PROGRAMR = bin/arm64/liw
+    endif
+    ifneq ($(filter sparc%,$(UNAME_P)),)
+	ifeq ($(UNAME_P),sparc64)
+	    CFLAGS += -D_SPARC64
+	    PROGRAMD = bin/sparc64/liw-dbg
+	    PROGRAMR = bin/sparc64/liw
+	else
+            CFLAGS += -D_SPARC
+	    PROGRAMD = bin/sparc/liw-dbg
+	    PROGRAMR = bin/sparc/liw
+	endif
     endif
 endif
 
