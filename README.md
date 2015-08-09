@@ -17,10 +17,12 @@ C++11 standards are required for this project as it uses move constructors and v
 by the C++11 standard.  MSVC 14.0 is the first compiler to fully implement the standard for Microsoft, GCC has implemented
 the standard since early builds of GCC 4.x
 
-Once your preferred development environment is installed and configured you will need to acquire the appropriate libraries:  
+Once your preferred development environment is installed and configured you will need to acquire the appropriate libraries:    
+
 - libpng16    
 - libglfw3  
 - libglew  
+
 _For legal reasons we cannot provide a 'pack' with these libraries_
   
 Additionally you will need to acquire the GL Math library which is a C++ header include.
@@ -40,6 +42,7 @@ To be added
 Please beware however and make sure you change any steps as appropriate for your particular Linux environment.
 
 Use your preferred package manager (most likely apt-get or aptitude) and install the following dependencies:  
+
 - libpng12-dev  
 - libglfw3-dev  *  
 - libglew-dev  
@@ -54,15 +57,19 @@ Use your preferred package manager (most likely apt-get or aptitude) and install
   
 *_See note below_
   
-If you wish to debug:  
+If you wish to debug:    
+
 - gdb  
 - libcc1  
    
 Then either install:  
+
 - codeblocks  
 - codeblocks-contrib _Optional_  
 - codeblocks-dbg _Optional_  
+
 Or:  
+
 - make  
   
 With Code::Blocks, just open the included lost_in_wilderness.cbp project/workspace file and build either the "Debug" or "Release" version (selectable from a drop-down menu at the top). The build icon should be a gear in the toolbar near the top.  
@@ -96,6 +103,7 @@ While GDB is running, enter:
 run
 
 If GDB catches any signal, such as SIGABORT or SIGSEGV, type these commands for useful debugging information:    
+
 - where    
 - list
 
