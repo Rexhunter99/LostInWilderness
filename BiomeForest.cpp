@@ -5,7 +5,6 @@
 #include "BlockSaltWater.h"
 #include "Chunk.h"
 #include "Noise.h"
-#include "ResourceManager.h"
 
 #include <cstdlib>
 #include <cmath>
@@ -66,7 +65,7 @@ void BiomeForest::generate( Chunk *chunk, Perlin *noise )
 				}
 				else
 				{
-					chunk->set(x,y,z, &BlockDirt( ResourceManager::iResourceManager->getBlockInfo( "liw:soil" ) ) );
+					chunk->set(x,y,z, soil );
 				}
 			}
 		}
@@ -80,7 +79,7 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 
 	for ( int i = 0; i < h; i++ )
 	{
-		chunk->set(x, y + i, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:wood" ) ) );
+		chunk->set(x, y + i, z, wood );
 	}
 
 	// liw:leaves
@@ -90,7 +89,7 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 	{
 		if ( iy == 6 )
 		{
-			chunk->set( x, y + h + iy, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:leaves" ) ) );
+			chunk->set( x, y + h + iy, z, leaves );
 		}
 		else if ( thin == false )
 		{
@@ -98,9 +97,9 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 			for ( int iz = -2; iz <= 2; iz++ )
 			{
 				if ( ix * ix + iz * iz < 8 )
-				chunk->set( x + ix, y + h + iy, z + iz, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:leaves" ) ) );
+				chunk->set( x + ix, y + h + iy, z + iz, leaves );
 			}
-			chunk->set( x, y + h + iy, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:wood" ) ) );
+			chunk->set( x, y + h + iy, z, wood );
 			thin = true;
 		}
 		else
@@ -108,9 +107,9 @@ void BiomeForest::placePineTree( Chunk *chunk, int x, int y, int z )
 			for ( int ix = -1; ix <= 1; ix++ )
 			for ( int iz = -1; iz <= 1; iz++ )
 			{
-				chunk->set( x + ix, y + h + iy, z + iz, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:leaves" ) ) );
+				chunk->set( x + ix, y + h + iy, z + iz, leaves );
 			}
-			chunk->set( x, y + h + iy, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "liw:wood" ) ) );
+			chunk->set( x, y + h + iy, z, wood );
 			thin = false;
 		}
 	}

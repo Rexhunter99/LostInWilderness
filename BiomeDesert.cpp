@@ -2,7 +2,6 @@
 #include "BiomeDesert.h"
 #include "Chunk.h"
 #include "Noise.h"
-#include "ResourceManager.h"
 
 #include <cstdlib>
 #include <cmath>
@@ -31,7 +30,7 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 				// -- Sea level
 				if ( actual_y >= height && actual_y < 64 )
 				{
-					chunk->set( x, y, z, &saltWater);
+					chunk->set( x, y, z, saltWater);
 					continue;
 				}
 
@@ -42,7 +41,7 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 
 					// Place a tree if the block below is a sand block
 					if( b != nullptr &&
-						b->info == ResourceManager::iResourceManager->getBlockInfo( "sand" ) &&
+						b->info == ResourceManager::iResourceManager->getBlockInfo( "liw:sand" ) &&
 						(rand() & 0xff) <= 3 )
 					{
 						//this->placeCactus( chunk, x, y, z );
@@ -51,15 +50,15 @@ void BiomeDesert::generate( Chunk *chunk, Perlin *noise )
 				}
                 if ( y < 4 )
 				{
-					chunk->set(x,y,z, &bedrock); // bedrock
+					chunk->set(x,y,z, bedrock); // bedrock
 				}
 				else if ( y < height - 4 )
 				{
-					chunk->set( x, y, z, &stone );
+					chunk->set( x, y, z, stone );
                 }
 				else
 				{
-					chunk->set( x, y, z, &sand );
+					chunk->set( x, y, z, sand );
                 }
 			}
 		}

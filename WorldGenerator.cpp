@@ -112,6 +112,8 @@ void WorldGenerator::generate( Chunk *chunk )
 
 void WorldGenerator::generateOres( Chunk *chunk )
 {
+    Biome 	*biome = this->biome_list[0]; // Do we want to declare this local variable again?
+
     for ( int i=0; i<17; i++ )
 	{
 		int x = std::rand() % 16;
@@ -127,7 +129,7 @@ void WorldGenerator::generateOres( Chunk *chunk )
 			continue;
 
 		// NOTE: Need to replace these two lines with a WorldGenMinable that should spawn a vein properly
-		chunk->set(x, y, z, &Block( ResourceManager::iResourceManager->getBlockInfo( "ore" ) ) );
+		chunk->set(x, y, z, biome->coal );
 	}
 }
 
