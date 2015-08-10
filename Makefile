@@ -233,7 +233,7 @@ clean:
 	$(RM) $(OBJS) $(PROGRAM)
 
 distclean: clean
-	$(RM) $(DEPS) TAGS
+	$(RM) $(DEPS) TAGS *.out
 
 cleandeps:
 	$(RM) $(DEPS)

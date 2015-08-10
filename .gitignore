@@ -118,11 +118,10 @@ $RECYCLE.BIN/
 .Trash
 .Trash-1000
 
-<<<<<<< HEAD
 # GNU C/C++ Profiler data
 ./bin/gmon.out
 *.out
-=======
+
 #Autosave files
 *~
 
@@ -140,4 +139,3 @@ autom4te.cache/
 
 #dotCover
 *.dotCover
->>>>>>> 7aa56ad0bbc672c479b4251d6d2002efa62d0846
