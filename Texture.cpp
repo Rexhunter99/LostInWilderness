@@ -4,9 +4,8 @@
 #include <png.h>
 #include <GL/glew.h>
 
+#include <cstdio>
 #include <cstdlib>
-
-using namespace std;
 
 Texture::Texture()
 {
@@ -45,6 +44,7 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 	FILE *fp = fopen( p_filename.c_str(), "rb");
 	if (!fp)
 	{
+		// TODO: Change all C std I/O to C++ std I/O
         fprintf( stderr,  "Error opening picture file\n%s\n", p_filename.c_str() );
 		return false;
 	}

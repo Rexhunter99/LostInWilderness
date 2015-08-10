@@ -99,3 +99,7 @@ $RECYCLE.BIN/
 # Linux Operating System specific
 .Trash
 .Trash-1000
+
+# GNU C/C++ Profiler data
+./bin/gmon.out
+*.out
