@@ -1,11 +1,10 @@
 
 #include "Texture.h"
 
-#include <png.h>
 #include <GL/glew.h>
 
-#include <cstdio>
-#include <cstdlib>
+#include <fstream>
+#include <iostream>
 
 Texture::Texture()
 {
@@ -32,31 +31,33 @@ Texture::~Texture()
 	glDeleteTextures( 1, &texid );
 }
 
-bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t index_height )
+bool Texture::loadFile( std::string p_texturefile, uint32_t index_width, uint32_t index_height )
 {
 	// -- Header for testing if it is a png
 	png_byte header[8];
 
 	// -- Create a C++ string of the filename/directory
-	string p_filename = p_texturefile;
+	std::string p_filename = p_texturefile;
+
+	// Create a filestream object for loading PNG files
+	std::fstream file;
 
 	//open file as binary
-	FILE *fp = fopen( p_filename.c_str(), "rb");
-	if (!fp)
+	file.open( p_filename, std::fstream::in);
+	if (file.fail())
 	{
-		// TODO: Change all C std I/O to C++ std I/O
-        fprintf( stderr,  "Error opening picture file\n%s\n", p_filename.c_str() );
+        std::cerr << "Error opening picture file\n%s\n" << p_filename << std::endl;
 		return false;
 	}
 
 	//read the header
-	fread(header, 1, 8, fp);
+	file.read( (char*)header, 8 );
 
 	//test if png
 	if ( !(!png_sig_cmp(header, 0, 8)) )
 	{
-		fclose(fp);
-		fprintf( stderr,  "LoadPicturePNG()\nThe specified file is not a valid PNG.\n" );
+		file.close();
+		std::cerr << "LoadPicturePNG()\nThe specified file is not a valid PNG.\n" << std::endl;
 		return false;
 	}
 
@@ -64,16 +65,19 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 	png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 	if (!png_ptr)
 	{
-		fclose(fp);
+		file.close();
 		return false;
 	}
+
+	// Set PNG read function to our custom read function
+	png_set_read_fn(png_ptr,(png_voidp)&file, customReadPNG);
 
 	//create png info struct
 	png_infop info_ptr = png_create_info_struct(png_ptr);
 	if (!info_ptr)
 	{
 		png_destroy_read_struct(&png_ptr, (png_infopp) NULL, (png_infopp) NULL);
-		fclose(fp);
+		file.close();
 		return false;
 	}
 
@@ -82,7 +86,7 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 	if (!end_info)
 	{
 		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-		fclose(fp);
+		file.close();
 		return false;
 	}
 
@@ -90,12 +94,12 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 	if (setjmp(png_jmpbuf(png_ptr)))
 	{
 		png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-		fclose(fp);
+		file.close();
 		return false;
 	}
 
 	//init png reading
-	png_init_io(png_ptr, fp);
+	//png_init_io(png_ptr, file);
 
 	//let libpng know you already read the first 8 bytes
 	png_set_sig_bytes(png_ptr, 8);
@@ -126,8 +130,8 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 	{
 		// -- Clean up memory and close stuff
 		png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-		fclose(fp);
-		fprintf( stderr, "loadTexture() :: Failed to allocate the image data for the PNG.\n");
+		file.close();
+		std::cerr << "loadTexture() :: Failed to allocate the image data for the PNG.\n" << std::endl;
 		return false;
 	}
 
@@ -138,8 +142,8 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 		// -- Clean up memory and close stuff
 		png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 		free( image_data );
-		fclose(fp);
-		fprintf( stderr, "loadTexture() :: Failed to allocate the row pointers for the PNG.\n" );
+		file.close();
+		std::cerr << "loadTexture() :: Failed to allocate the row pointers for the PNG.\n" << std::endl;
 		return false;
 	}
 
@@ -177,7 +181,7 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 		{
 			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, twidth, theight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data );
 		}
-		else fprintf( stderr, "loadTexture() :: glTexImage2D 8-bit format is Unknown\n" );
+		else std::cerr << "loadTexture() :: glTexImage2D 8-bit format is Unknown\n" << std::endl;
 	}
 	else if ( bit_depth == 16 )
 	{
@@ -189,7 +193,7 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 		{
 			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16, twidth, theight, 0, GL_RGBA, GL_UNSIGNED_SHORT, image_data );
 		}
-		else fprintf( stderr, "loadTexture() :: glTexImage2D 16-bit format is Unknown\n" );
+		else std::cerr << "loadTexture() :: glTexImage2D 16-bit format is Unknown\n" << std::endl;
 	}
 
 	if ( GLEW_VERSION_3_0 )
@@ -200,7 +204,7 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 	png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 	delete[] row_pointers;
 	free( image_data );
-	fclose( fp );
+	file.close();
 
 	this->index_width = index_width;
 	this->index_height = index_height;
@@ -211,6 +215,14 @@ bool Texture::loadFile( string p_texturefile, uint32_t index_width, uint32_t ind
 void Texture::bind() const
 {
 	glBindTexture( GL_TEXTURE_2D, this->texid );
+}
+
+void Texture::customReadPNG(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+    // Get IO pointer from the PNG struct so we can use with fstream
+    png_voidp io_ptr = png_get_io_ptr(png_ptr);
+    // Cast io ptr to fstream and read it with std::fstream::read
+    ( (std::fstream*) io_ptr )->read( (char*) data, length );
 }
 
 float Texture::getAtlasU( int index_x, int index_y )
