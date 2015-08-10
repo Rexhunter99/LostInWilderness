@@ -19,6 +19,9 @@
 [Dd]ocs/
 [Hh]elp/
 [Mm]an/
+[Tt]arballs/
+[Tt]est-results/
+[Tt]estResults/
 
 # Binaries
 *.exe
@@ -33,12 +36,14 @@
 *.wlog
 *.o
 *.d
+Makefile.in
 
 # Visual Studio filetypes and files
 *.suo
 *.user
 *.cd
 *.sln.docstates
+*.sln.cache
 *_i.c
 *_p.c
 *.ilk
@@ -83,6 +88,10 @@ DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
 
+#Monodevelop files
+*.userprefs
+*.usertasks
+*.cache
 
 # Code::Blocks filetypes and files
 *.layout
@@ -98,10 +107,31 @@ lost_in_wilderness.layout
 ehthumbs.db
 [Dd]esktop.ini
 $RECYCLE.BIN/
+*.Zone_Identifier
 
 # Macintosh Operating System specific
-.DS_Store
+*.DS_Store
+*.dmg
+*.app
 
 # Linux Operating System specific
 .Trash
 .Trash-1000
+
+#Autosave files
+*~
+
+#Autotools
+config.log
+config.make
+config.status
+aclocal.m4
+install-sh
+autom4te.cache/
+
+#resharper
+*_Resharper.*
+*.Resharper
+
+#dotCover
+*.dotCover
