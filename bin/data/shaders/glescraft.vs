@@ -16,6 +16,7 @@ out vec4	f_rgba;
 void main(void)
 {
 	mat4 projection = mat4(1.0);
+	mat4 mvp = u_view * projection;
 
 	// -- Attribute manipulation
 	f_texcoord = v_texcoord;
