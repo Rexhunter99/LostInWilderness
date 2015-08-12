@@ -1,0 +1,84 @@
+   Version 0.1  :  (gw) First published on Google Code
+   Version 0.11 :  Making sure the 'root' variable never changes
+                   'symbol_base' added for the current base of the sybmbol table
+   Version 0.12 :  Added findChildOrCreate, changed string passing to use references
+                   Fixed broken string encoding in getJSString()
+                   Removed getInitCode and added getJSON instead
+                   Added nil
+                   Added rough JSON parsing
+                   Improved example app
+   Version 0.13 :  Added tokenEnd/tokenLastEnd to lexer to avoid parsing whitespace
+                   Ability to define functions without names
+                   Can now do "var mine = function(a,b) { ... };"
+                   Slightly better 'trace' function
+                   Added findChildOrCreateByPath function
+                   Added simple test suite
+                   Added skipping of blocks when not executing
+   Version 0.14 :  Added parsing of more number types
+                   Added parsing of string defined with '
+                   Changed nil to null as per spec, added 'undefined'
+                   Now set variables with the correct scope, and treat unknown
+                              as 'undefined' rather than failing
+                   Added proper (I hope) handling of null and undefined
+                   Added === check
+   Version 0.15 :  Fix for possible memory leaks
+   Version 0.16 :  Removal of un-needed findRecursive calls
+                   symbol_base removed and replaced with 'scopes' stack
+                   Added reference counting a proper tree structure
+                       (Allowing pass by reference)
+                   Allowed JSON output to output IDs, not strings
+                   Added get/set for array indices
+                   Changed Callbacks to include user data pointer
+                   Added some support for objects
+                   Added more Java-esque builtin functions
+   Version 0.17 :  Now we don't deepCopy the parent object of the class
+                   Added JSON.stringify and eval()
+                   Nicer JSON indenting
+                   Fixed function output in JSON
+                   Added evaluateComplex
+                   Fixed some reentrancy issues with evaluate/execute
+   Version 0.18 :  Fixed some issues with code being executed when it shouldn't
+   Version 0.19 :  Added array.length
+                   Changed '__parent' to 'prototype' to bring it more in line with javascript
+   Version 0.20 :  Added '%' operator
+   Version 0.21 :  Added array type
+                   String.length() no more - now String.length
+                   Added extra constructors to reduce confusion
+                   Fixed checks against undefined
+   Version 0.22 :  First part of ardi's changes:
+                       sprintf -> sprintf_s
+                       extra tokens parsed
+                       array memory leak fixed
+                   Fixed memory leak in evaluateComplex
+                   Fixed memory leak in FOR loops
+                   Fixed memory leak for unary minus
+   Version 0.23 :  Allowed evaluate[Complex] to take in semi-colon separated
+                     statements and then only return the value from the last one.
+                     Also checks to make sure *everything* was parsed.
+                   Ints + doubles are now stored in binary form (faster + more precise)
+   Version 0.24 :  More useful error for maths ops
+                   Don't dump everything on a match error.
+   Version 0.25 :  Better string escaping
+   Version 0.26 :  Add Var::equals
+                   Add built-in array functions
+   Version 0.27 :  Added OZLB's TinyJS.setVariable (with some tweaks)
+                   Added OZLB's Maths Functions
+   Version 0.28 :  Ternary operator
+                   Rudimentary call stack on error
+                   Added String Character functions
+                   Added shift operators
+   Version 0.29 :  Added new object via functions
+                   Fixed getString() for double on some platforms
+   Version 0.30 :  Rlyeh Mario's patch for Math Functions on VC++
+   Version 0.31 :  Add exec() to TinyJS functions
+                   Now print quoted JSON that can be read by PHP/Python parsers
+                   Fixed postfix increment operator
+   Version 0.32 :  Fixed Math.randInt on 32 bit PCs, where it was broken
+   Version 0.33 :  Fixed Memory leak + brokenness on === comparison
+   Version 0.34 :  Shifted internal class declarations to their own headers
+				   to minimize the header for inclusion with the static library
+				   which also helps readability. - Jamie Breeze
+   Version 0.35 :  Moved rand() functions to MathFunctions.cpp, changed PI and E from
+				   functions into object properties of the Math object. Added VarPtr
+				   class to handle referencing and unreferencing vars, prevents any
+				   memory leaks occuring. - Jamie Breeze
