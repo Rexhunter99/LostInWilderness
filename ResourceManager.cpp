@@ -31,7 +31,7 @@ ResourceManager::ResourceManager()
 
 	// Textures
 	Texture *t = nullptr;
-	this->addTexture( "blocks", t = new Texture( "data/textures/gc-textures.png", 16, 16 ) );
+	this->addTexture( "blocks", t = new Texture( "../data/textures/gc-textures.png", 16, 16 ) );
 
 	Renderer::blocks_texture = this->getTexture("blocks");
 	Renderer::blocks_texture->bind();
@@ -39,7 +39,7 @@ ResourceManager::ResourceManager()
 
 	// Fonts
 	TextFont *f = nullptr;
-	this->addFont( "default", f = new TextFont( "data/fonts/minecraft" ) );
+	this->addFont( "default", f = new TextFont( "../data/fonts/minecraft" ) );
 
 	Renderer::font_texture = this->getFont("default");
 	// End Fonts
@@ -48,8 +48,8 @@ ResourceManager::ResourceManager()
 	Shader *s = nullptr;
 	this->addShader( "default", new Shader() );
 	s = this->getShader("default");
-	s->addVertexShader( "data/shaders/world.150.vs" );
-	s->addFragmentShader( "data/shaders/world.150.fs" );
+	s->addVertexShader( "../data/shaders/world.150.vs" );
+	s->addFragmentShader( "../data/shaders/world.150.fs" );
 	s->compileShaders();
 	s->bind();
 

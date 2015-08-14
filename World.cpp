@@ -167,7 +167,7 @@ void World::render(const glm::mat4 &pv)
 
 					// -- If chunk exists on disk, load it instead.
 					std::stringstream name;
-					name << "world/" << x << "," << y << "," << z << ".chunk";
+					name << "../world/" << x << "," << y << "," << z << ".chunk";
 
 					// -- Open the file stream for binary output
 					std::fstream f;
