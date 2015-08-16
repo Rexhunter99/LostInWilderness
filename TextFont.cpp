@@ -91,7 +91,7 @@ bool TextFont::loadFont( string p_filename )
 	}
 	else
 	{
-		string err_str = string("OpenGL | ERROR | Failed to open font defintion file \"") + p_filename + string("\"");
+		string err_str = string("OpenGL | ERROR | Failed to open font definition file \"") + p_filename + string("\"");
 		throw custom_exception( err_str );
 		return false;
 	}
