@@ -15,7 +15,6 @@
 
 #include "Camera.h"
 #include "ResourceManager.h"
-#include "Renderer.h"
 
 
 class Chunk;
@@ -32,7 +31,7 @@ class World;
 class LostInWilderness
 {
 public:
-	static LostInWilderness					*iGaiaCraft;
+	static LostInWilderness				*iGaiaCraft;
 	Config								*config;
 	Camera								*camera;
 	std::map<std::string,std::thread>	threads;

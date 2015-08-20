@@ -116,5 +116,7 @@ public:
 	 ** @param name The name of the attribute to set the value of
 	 ** @param value The value to set the attribute to */
 	void setAttrib4f( std::string name, float value[4] );
+
+	void setDefaults();
 };
 

@@ -15,12 +15,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-using namespace std;
-
 TextFont* TextFont::active;
 
 
-TextFont::TextFont( string p_filename ) : Texture( )
+TextFont::TextFont( std::string p_filename ) : Texture( )
 {
 	this->loadFont( p_filename );
 	glGenBuffers( 1, &this->m_vbo );
@@ -31,13 +29,13 @@ TextFont::~TextFont()
 	glDeleteBuffers( 1, &this->m_vbo );
 }
 
-bool TextFont::loadFont( string p_filename )
+bool TextFont::loadFont( std::string p_filename )
 {
 	size_t		glyphs_loaded = 0;
 	FILE		*fp = nullptr;
 
-	// -- Create a C++ string of the filename/directory
-	string p_fontfilename = string( p_filename + string( ".fnt" ) );
+	// -- Create a C++ std::string of the filename/directory
+	std::string p_fontfilename = std::string( p_filename + std::string( ".fnt" ) );
 
 	// -- Read the properties file
 	if ( (fp = fopen( p_fontfilename.c_str(), "r" )) != nullptr )
@@ -87,11 +85,11 @@ bool TextFont::loadFont( string p_filename )
 
 		fclose( fp );
 
-		this->loadFile( p_filename + string(".png"), this->m_char_width, this->m_char_height );
+		this->loadFile( p_filename + std::string(".png"), this->m_char_width, this->m_char_height );
 	}
 	else
 	{
-		string err_str = string("OpenGL | ERROR | Failed to open font definition file \"") + p_filename + string("\"");
+		std::string err_str = std::string("OpenGL | ERROR | Failed to open font definition file \"") + p_filename + std::string("\"");
 		throw custom_exception( err_str );
 		return false;
 	}

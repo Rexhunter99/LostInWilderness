@@ -31,8 +31,6 @@ WSADATA		wsaData;
 #include <array>
 #include <iostream>
 
-using namespace std;
-
 
 enum {
 	NETWORK_TCPIP	= 0,
@@ -64,7 +62,7 @@ namespace Network {
 		}
 	}
 
-	void HttpRequest::open( uint32_t method, string url, bool async, string uname, string pswd )
+	void HttpRequest::open( uint32_t method, std::string url, bool async, std::string uname, std::string pswd )
 	{
 		//struct	sockaddr_in		serv_addr;
 		struct	addrinfo		host_info;
@@ -84,32 +82,32 @@ namespace Network {
 		if ( getaddrinfo( this->m_host.c_str(), "80", &host_info, &host_info_list) != 0 )
 		{
 			//int e = WSAGetLastError();
-			cerr	<< "ERROR!\n"
-					<< "Function: HttpRequest::open()\n"
-					<< "Source-Line: " << (__LINE__-4) << "\n"
-					<< "Source-File: " << __FILE__ << "\n"
-					<< "Failed to getaddrinfo\n" << endl;
+			std::cerr	<< "ERROR!\n"
+                        << "Function: HttpRequest::open()\n"
+                        << "Source-Line: " << (__LINE__-4) << "\n"
+                        << "Source-File: " << __FILE__ << "\n"
+                        << "Failed to getaddrinfo\n" << std::endl;
 
 			return;
 		}
 
 		if ( ( this->m_socket = (int)socket( host_info_list->ai_family, host_info_list->ai_socktype, host_info_list->ai_protocol ) ) < 0 )
 		{
-			cerr	<< "ERROR!\n"
-					<< "Function: HttpRequest::open()\n"
-					<< "Source-Line: " << (__LINE__-4) << "\n"
-					<< "Source-File: " << __FILE__ << "\n"
-					<< "Failed to open the socket.\n" << endl;
+			std::cerr	<< "ERROR!\n"
+                        << "Function: HttpRequest::open()\n"
+                        << "Source-Line: " << (__LINE__-4) << "\n"
+                        << "Source-File: " << __FILE__ << "\n"
+                        << "Failed to open the socket.\n" << std::endl;
 			return;
 		}
 
 		if ( connect( (socket_t)this->m_socket, host_info_list->ai_addr, host_info_list->ai_addrlen ) < 0 )
 		{
-			cerr	<< "ERROR!\n"
-					<< "Function: HttpRequest::open()\n"
-					<< "Source-Line: " << (__LINE__-4) << "\n"
-					<< "Source-File: " << __FILE__ << "\n"
-					<< "Failed connecting.\n" << endl;
+			std::cerr	<< "ERROR!\n"
+                        << "Function: HttpRequest::open()\n"
+                        << "Source-Line: " << (__LINE__-4) << "\n"
+                        << "Source-File: " << __FILE__ << "\n"
+                        << "Failed connecting.\n" << std::endl;
 			return;
 		}
 
@@ -117,31 +115,31 @@ namespace Network {
 		freeaddrinfo( host_info_list );
 
 		// -- Initialise the request header
-		string msg = "";
+		std::string msg = "";
 
 		// FIXME: SIGSEGVs on the second "msg" line if there is no trailing '/' character
 		if ( method == HTTP_GET )
 		{
-			msg += string("GET /");
+			msg += std::string("GET /");
 			msg += this->m_url.substr( this->m_url.find('/') );
-			msg += string(" HTTP/1.1\n" );
+			msg += std::string(" HTTP/1.1\n" );
 		}
 		else if ( method == HTTP_POST )
 		{
 			// TODO: Strip the query string and store it for the end of the header
-			msg += string("POST /") + this->m_url.substr( this->m_url.find('/') ) + string(" HTTP/1.1\n" );
+			msg += std::string("POST /") + this->m_url.substr( this->m_url.find('/') ) + std::string(" HTTP/1.1\n" );
 		}
 
-		msg += string("Host: ") + this->m_host + string("\n");
-		msg += string("Accept: text/html,text/xml,application/xhtml+xml,application/xml\n");
-		msg += string("User-Agent: C++ HttpRequest 1.0\n");
-		msg += string("Connection: close\n");
-		msg += string("\n");
+		msg += std::string("Host: ") + this->m_host + std::string("\n");
+		msg += std::string("Accept: text/html,text/xml,application/xhtml+xml,application/xml\n");
+		msg += std::string("User-Agent: C++ HttpRequest 1.0\n");
+		msg += std::string("Connection: close\n");
+		msg += std::string("\n");
 
 		if ( method == HTTP_POST )
 		{
-			msg += string( this->m_url.substr( this->m_url.find('?') ) ) + string("\n");
-			msg += string("\n");
+			msg += std::string( this->m_url.substr( this->m_url.find('?') ) ) + std::string("\n");
+			msg += std::string("\n");
 		}
 
 		this->m_request_header = msg;

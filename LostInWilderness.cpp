@@ -10,6 +10,7 @@
 #include "World.h"
 #include "WorldGenerator.h"
 #include "FileSystem.h"
+#include "Renderer.h"
 
 #if defined(_MSC_VER)
 #include <direct.h>
@@ -150,7 +151,6 @@ void LostInWilderness::chunkThread( void )
 	std::cout << "[THREAD:Chunks] Chunk thread finished." << std::endl;
 }
 
-
 // Calculate the forward, right and lookat vectors from the angle vector
 static void update_vectors()
 {
@@ -178,11 +178,7 @@ int init_resources()
 
 	// -- Default the uniforms/attribs
 	Shader *shader_world = ResourceManager::iResourceManager->getShader("default");
-	shader_world->setUniform1i( "texture", 0 );
-	shader_world->setUniform4f( "g_SunLightSource.position", (float*)glm::value_ptr( glm::vec4( 0, -1, 0, 0 ) ) );
-	shader_world->setUniform4f( "g_SunLightSource.diffuse", (float*)glm::value_ptr( glm::vec4( 1, 1, 1, 1 ) ) );
-	shader_world->setUniform4f( "g_SunLightSource.ambient", (float*)glm::value_ptr( glm::vec4( 0.4, 0.4, 0.4, 1 ) ) );
-	shader_world->setUniform1f( "g_SunLightSource.specular", 1.0f );
+	shader_world->setDefaults();
 
 	// -- Create the world
 	world = new World( "world" );
@@ -200,7 +196,7 @@ int init_resources()
 	return 1;
 }
 
-void resize( GLFWwindow* wnd, int w, int h)
+void resize( GLFWwindow* wnd, int w, int h )
 {
 	ww = w;
 	wh = h;

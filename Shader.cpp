@@ -2,6 +2,7 @@
 
 #include "Shader.h"
 #include "Exceptions.h"
+#include "ResourceManager.h"
 
 #include <cstdio>
 #include <cstdint>
@@ -10,8 +11,8 @@
 #include <unordered_map>
 
 #include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 
-using namespace std;
 
 
 /*********************************************************************/
@@ -32,9 +33,9 @@ void Shader::bind()
 	glUseProgram( this->program );
 }
 
-void Shader::addProgram( string &text, uint32_t type )
+void Shader::addProgram( std::string &text, uint32_t type )
 {
-	string src_str	= "";
+	std::string src_str	= "";
 	const char* src = nullptr;
 	int len			= 0;
 	int status		= 0;
@@ -44,7 +45,7 @@ void Shader::addProgram( string &text, uint32_t type )
 	// -- Validate that the shader was created
 	if ( shader == 0 )
 	{
-		cerr << "[class:Shader] Failed to create the shader!" << endl;
+		std::cerr << "[class:Shader] Failed to create the shader!" << std::endl;
 		return;
 	}
 
@@ -64,7 +65,7 @@ void Shader::addProgram( string &text, uint32_t type )
 	}
 	else
 	{
-		cerr << "[class:Shader] Failed to open the shader source \"" << text << "\" for reading!" << endl;
+		std::cerr << "[class:Shader] Failed to open the shader source \"" << text << "\" for reading!" << std::endl;
 		glDeleteShader( shader );
 		return;
 	}
@@ -82,7 +83,7 @@ void Shader::addProgram( string &text, uint32_t type )
 		char *info_log = new char [ info_log_len ];
 		glGetShaderInfoLog( shader, info_log_len, nullptr, info_log );
 
-		cerr << "[class:Shader] Failed to compile shader source:\n" << text << "\n===========================================\n" << info_log << "\n===========================================" << endl;
+		std::cerr << "[class:Shader] Failed to compile shader source:\n" << text << "\n===========================================\n" << info_log << "\n===========================================" << std::endl;
 
 		delete [] info_log;
 		glDeleteShader( shader );
@@ -108,22 +109,22 @@ void Shader::compileShaders()
 	{
 		char infolog[1024];
 		glGetProgramInfoLog( this->program, 1024, nullptr, infolog );
-        cerr << "[OPENGL ERROR] Failed to link shader program\n===========================================\n" << infolog << "\n===========================================" << endl;
+        std::cerr << "[OPENGL ERROR] Failed to link shader program\n===========================================\n" << infolog << "\n===========================================" << std::endl;
         return;
     }
 }
 
-void Shader::addVertexShader( string filename )
+void Shader::addVertexShader( std::string filename )
 {
 	this->addProgram( filename, GL_VERTEX_SHADER );
 }
 
-void Shader::addGeometryShader( string filename )
+void Shader::addGeometryShader( std::string filename )
 {
 	this->addProgram( filename, GL_GEOMETRY_SHADER );
 }
 
-void Shader::addFragmentShader( string filename )
+void Shader::addFragmentShader( std::string filename )
 {
 	this->addProgram( filename, GL_FRAGMENT_SHADER );
 }
@@ -133,7 +134,7 @@ void Shader::bindFragData( uint32_t color, std::string name )
 	glBindFragDataLocation( this->program, color, name.c_str() );
 }
 
-void Shader::addUniform( string name )
+void Shader::addUniform( std::string name )
 {
 	int uniformLoc = glGetUniformLocation( this->program, name.c_str() );
 
@@ -143,20 +144,20 @@ void Shader::addUniform( string name )
 		return;
 	}
 
-	this->uniforms.insert( unordered_map<string,int>::value_type( name, uniformLoc ) );
+	this->uniforms.insert( std::unordered_map<std::string,int>::value_type( name, uniformLoc ) );
 }
 
-void Shader::setUniform1f( string name, float value )
+void Shader::setUniform1f( std::string name, float value )
 {
 	glUniform1f( this->uniforms.find( name )->second, value );
 }
 
-void Shader::setUniform4f( string name, float value[4] )
+void Shader::setUniform4f( std::string name, float value[4] )
 {
 	glUniform4f( this->uniforms.find( name )->second, value[0], value[1], value[2], value[3] );
 }
 
-void Shader::setUniform1i( string name, int value )
+void Shader::setUniform1i( std::string name, int value )
 {
 	glUniform1i( this->uniforms.find( name )->second, value );
 }
@@ -167,7 +168,7 @@ void Shader::setUniformMatrix( std::string name, float value[16] )
 }
 
 
-void Shader::addAttrib( string name )
+void Shader::addAttrib( std::string name )
 {
 	glGetError();
 	int attribLoc = glGetAttribLocation( this->program, name.c_str() );
@@ -178,7 +179,7 @@ void Shader::addAttrib( string name )
 		return;
 	}
 
-	this->attribs.insert( unordered_map<string,int>::value_type( name, attribLoc ) );
+	this->attribs.insert( std::unordered_map<std::string,int>::value_type( name, attribLoc ) );
 }
 
 uint32_t Shader::getAttrib( std::string name )
@@ -204,6 +205,15 @@ void Shader::setAttrib3f( std::string name, float value[3] )
 void Shader::setAttrib4f( std::string name, float value[4] )
 {
 	glVertexAttrib4fv( this->attribs.find( name )->second, value );
+}
+
+void Shader::setDefaults()
+{
+    this->setUniform1i( "texture", 0 );
+	this->setUniform4f( "g_SunLightSource.position", (float*)glm::value_ptr( glm::vec4( 0, -1, 0, 0 ) ) );
+	this->setUniform4f( "g_SunLightSource.diffuse", (float*)glm::value_ptr( glm::vec4( 1, 1, 1, 1 ) ) );
+	this->setUniform4f( "g_SunLightSource.ambient", (float*)glm::value_ptr( glm::vec4( 0.4, 0.4, 0.4, 1 ) ) );
+	this->setUniform1f( "g_SunLightSource.specular", 1.0f );
 }
 
 #if defined( _SHADER_UTILS_H__ )
