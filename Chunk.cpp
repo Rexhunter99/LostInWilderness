@@ -519,7 +519,7 @@ void Chunk::generate( int seed )
 void Chunk::save()
 {
 	std::stringstream name;
-	name << "../world/" << this->ax << "," << this->ay << "," << this->az << ".chunk";
+	name << "world/" << this->ax << "," << this->ay << "," << this->az << ".chunk";
 
 	// -- Open the file stream for binary output
 	std::fstream f;
@@ -573,7 +573,7 @@ void Chunk::save()
 void Chunk::load()
 {
 	std::stringstream name;
-	name << "../world/" << this->ax << "," << this->ay << "," << this->az << ".chunk";
+	name << "world/" << this->ax << "," << this->ay << "," << this->az << ".chunk";
 
 	// -- Open the file stream for binary output
 	std::fstream f;

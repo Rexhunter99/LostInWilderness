@@ -43,7 +43,7 @@ bool Texture::loadFile( std::string p_texturefile, uint32_t index_width, uint32_
 	std::fstream file;
 
 	//open file as binary
-	file.open( p_filename, std::fstream::in);
+	file.open( p_filename, std::fstream::in | std::fstream::binary);
 	if (file.fail())
 	{
         std::cerr << "Error opening picture file\n%s\n" << p_filename << std::endl;

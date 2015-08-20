@@ -185,28 +185,6 @@ int init_resources()
 	shader_world->setUniform1f( "g_SunLightSource.specular", 1.0f );
 
 	// -- Create the world
-	glClearColor(0.0f,0.0f,0.0f, 1.0f);
-	glClearDepth(1.0f);
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
-	glm::mat4 view = glm::ortho(0.0f, (float)ww, (float)wh, 0.0f);
-	glm::mat4 projection = glm::mat4(1);
-	glm::mat4 mvp = view * projection;
-
-	Renderer::default_shader->setUniformMatrix("mvp", glm::value_ptr(mvp));
-	Renderer::default_shader->setUniform1i("b_lighting", false);
-
-	std::wostringstream overlay_s;
-	overlay_s << L"Generating the world...";
-
-	Renderer::font_texture->bind();
-	Renderer::font_texture->drawString(16, 16, 0xFFFFFFFF, 2.0f, overlay_s.str().c_str());
-	Renderer::blocks_texture->bind();
-
-
-	// -- Swap the framebuffer back and front, then poll for events in this thread
-	glfwSwapBuffers((GLFWwindow*)Renderer::getWindow("g_window"));
-
 	world = new World( "world" );
 
 	// -- Pre-generate the terrain here
