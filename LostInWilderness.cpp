@@ -230,6 +230,8 @@ static void display()
 	glm::mat4 projection = glm::perspective( fov, aspect, znear, zfar );
 	glm::mat4 mvp = projection * view;
 
+	g_camera.frustum.update(mvp);
+
 	Renderer::default_shader->setUniformMatrix( "mvp", glm::value_ptr(mvp) );
 	Renderer::default_shader->setUniform1i( "b_lighting", true );
 

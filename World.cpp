@@ -148,6 +148,12 @@ void World::render(const glm::mat4 &pv)
 		{
 			for ( int64_t z = cz - vd; z <= cz + (vd); z++)
 			{
+				// -- Is the chunk inside the view frustum?
+				if (camera->frustum.checkBox(glm::vec3(x*16.0f, y, z*16.0f), glm::vec3(0, 0, 0), glm::vec3(CHUNK_WIDTH, CHUNK_HEIGHT, CHUNK_LENGTH)) == false)
+				{
+					continue;
+				}
+
 				Chunk *chunk = this->getChunk( x, y, z );
 
 				// -- If there is no chunk then create one, assign its neighbours, and add it to the generation queue
@@ -197,12 +203,6 @@ void World::render(const glm::mat4 &pv)
 					LostInWilderness::addChunkToGenerateQueue( x, y, z, (int)this->seed, chunk );
 					continue;
 				}
-
-				// -- Is the chunk inside the view frustum?
-				//if ( camera->boxInFrustum(...) != false )
-				//{
-				//	return;
-				//}
 
 				glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(chunk->ax * CHUNK_WIDTH, chunk->ay * CHUNK_HEIGHT, chunk->az * CHUNK_LENGTH));
 				glm::mat4 mvp = pv * model;

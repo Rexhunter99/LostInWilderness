@@ -5,10 +5,12 @@
 
 #include <glm/glm.hpp>
 #include <cstdint>
+#include "Frustum.h"
 
 class Camera
 {
 public:
+	Frustum frustum;
 
 	glm::vec3 position;
 	glm::vec3 forward;

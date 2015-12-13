@@ -168,6 +168,7 @@
     <ClInclude Include="Exceptions.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="Framebuffer.h" />
+    <ClInclude Include="Frustum.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemInfo.h" />
     <ClInclude Include="LostInWilderness.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="Framebuffer.cpp" />
+    <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="LostInWilderness.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="Noise.cpp" />
@@ -211,9 +213,6 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="win32.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

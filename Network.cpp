@@ -188,11 +188,11 @@ namespace Network {
 			int n = ::recv( (socket_t)this->m_socket, &buffer[0], buffer_len-1, 0 );
 			if (n < 0)
 			{
-				cerr	<< "ERROR!\n"
+				std::cerr<< "ERROR!\n"
 						<< "Function: HttpRequest::send()\n"
 						<< "Source-Line: " << (__LINE__-4) << "\n"
 						<< "Source-File: " << __FILE__ << "\n"
-						<< "An issue arose when receiving from the socket " << this->m_socket << "\n" << endl;
+						<< "An issue arose when receiving from the socket " << this->m_socket << "\n" << std::endl;
 				break;
 			}
 			#endif
