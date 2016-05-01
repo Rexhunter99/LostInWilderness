@@ -30,7 +30,7 @@ TextFont *Renderer::font_texture;
 Shader *Renderer::default_shader;
 
 
-void APIENTRY cbOpenGLError( GLenum _source, GLenum _type, GLuint _id, GLenum _severity, GLsizei _length, const char* _message, void* _userParam)
+void APIENTRY cbOpenGLError( GLenum _source, GLenum _type, GLuint _id, GLenum _severity, GLsizei _length, const char* _message, const void* _userParam)
 {
 	if ( strstr(_message, "Clear color unsupported") ) return;
 

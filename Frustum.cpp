@@ -32,7 +32,7 @@ void Frustum::Plane::set(float a, float b, float c, float d)
 
 void Frustum::Plane::normalize()
 {
-	this->mag = std::sqrtf(A*A + B*B + C*C);
+	this->mag = sqrtf(A*A + B*B + C*C);
 	this->A /= this->mag;
 	this->B /= this->mag;
 	this->C /= this->mag;

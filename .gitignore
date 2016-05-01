@@ -29,6 +29,7 @@
 *.nix
 *.linux
 *.elf
+/[Bb]in/liw*
 
 # Loose filetypes
 *.log

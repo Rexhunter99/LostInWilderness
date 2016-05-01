@@ -15,8 +15,8 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-std=c++11" />
 					<Add option="-Wall" />
+					<Add option="-std=c++11" />
 					<Add option="-pg" />
 					<Add option="-g" />
 					<Add option="-ffast-math" />
@@ -39,6 +39,7 @@
 					<Add option="-lrt" />
 					<Add option="-lm" />
 					<Add option="-lpthread" />
+					<Add option="-ldl" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -72,6 +73,7 @@
 					<Add option="-lrt" />
 					<Add option="-lm" />
 					<Add option="-lpthread" />
+					<Add option="-ldl" />
 				</Linker>
 			</Target>
 			<Target title="Debug-Win32">
@@ -191,6 +193,14 @@
 		<Unit filename="Config.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>
+		<Unit filename="Depends/TinyJS/TinyJS.cpp" />
+		<Unit filename="Depends/TinyJS/TinyJS.h" />
+		<Unit filename="Depends/TinyJS/TinyJS_Functions.cpp" />
+		<Unit filename="Depends/TinyJS/TinyJS_Functions.h" />
+		<Unit filename="Depends/TinyJS/TinyJS_Lexer.h" />
+		<Unit filename="Depends/TinyJS/TinyJS_MathFunctions.cpp" />
+		<Unit filename="Depends/TinyJS/TinyJS_MathFunctions.h" />
+		<Unit filename="Depends/TinyJS/TinyJS_Worker.h" />
 		<Unit filename="Exceptions.h">
 			<Option virtualFolder="Utils/" />
 		</Unit>
@@ -204,6 +214,12 @@
 			<Option virtualFolder="Renderer/" />
 		</Unit>
 		<Unit filename="Framebuffer.h">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="Frustum.cpp">
+			<Option virtualFolder="Renderer/" />
+		</Unit>
+		<Unit filename="Frustum.h">
 			<Option virtualFolder="Renderer/" />
 		</Unit>
 		<Unit filename="Item.h">
@@ -311,16 +327,8 @@
 		<Unit filename="bin/data/shaders/world.150.vs">
 			<Option virtualFolder="Renderer/Resources/" />
 		</Unit>
-		<Unit filename="resource.h">
-			<Option target="Debug-Win32" />
-			<Option target="Release-Win32" />
-		</Unit>
 		<Unit filename="vectors.h">
 			<Option virtualFolder="Utils/" />
-		</Unit>
-		<Unit filename="win32.rc">
-			<Option target="Debug-Win32" />
-			<Option target="Release-Win32" />
 		</Unit>
 		<Extensions>
 			<envvars />
