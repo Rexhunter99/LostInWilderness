@@ -5,7 +5,7 @@
 		<Option title="Lost In Wilderness" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="Renderer/;Renderer/Resources/;Utils/;World/Blocks/;Client/;World/Items/;World/Biomes/;World/;World/Generators/;" />
+		<Option virtualFolders="Renderer\;Renderer\Resources\;Utils\;World\Blocks\;Client\;World\Items\;World\Biomes\;World\;World\Generators\;" />
 		<Build>
 			<Target title="Debug">
 				<Option platforms="Unix;" />
@@ -83,8 +83,8 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-std=c++11" />
 					<Add option="-Wall" />
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add option="-ffast-math" />
 					<Add option="-D_DEBUG" />
@@ -104,6 +104,7 @@
 					<Add option="-lkernel32" />
 					<Add option="-lpng" />
 					<Add option="-lws2_32" />
+					<Add option="-lz" />
 				</Linker>
 			</Target>
 			<Target title="Release-Win32">
@@ -113,6 +114,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 					<Add option="-ffast-math" />
 					<Add option="-DNDEBUG" />
@@ -132,12 +134,14 @@
 					<Add option="-lkernel32" />
 					<Add option="-lpng" />
 					<Add option="-lws2_32" />
+					<Add option="-lz" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-DGLM_FORCE_RADIANS" />
+			<Add option="-D_USE_MATH_DEFINES" />
 		</Compiler>
 		<Unit filename="Biome.h">
 			<Option virtualFolder="World/Biomes/" />
