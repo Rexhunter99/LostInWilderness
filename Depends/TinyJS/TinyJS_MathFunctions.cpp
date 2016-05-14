@@ -28,7 +28,7 @@
  * SOFTWARE.
  */
 
-#include <math.h>
+#include <cmath>
 #include <cstdlib>
 #include <sstream>
 #include "TinyJS_MathFunctions.h"
@@ -312,8 +312,8 @@ extern void registerMathFunctions(JS::Engine * tinyJS)
 	tinyJS->root->addChild( "Math", Math.getVar() );
 
 	// --- Math properties/memebrs ---
-	Math->addChild("PI", JS::VarPtr(new JS::Var(std::to_string(M_PI), JS::SCRIPTVAR_DOUBLE)).getVar());
-	Math->addChild("E", JS::VarPtr(new JS::Var(std::to_string(M_E), JS::SCRIPTVAR_DOUBLE)).getVar());
+	Math->addChild("PI", JS::VarPtr(new JS::Var(std::to_string(k_PI), JS::SCRIPTVAR_DOUBLE)).getVar());
+	Math->addChild("E", JS::VarPtr(new JS::Var(std::to_string(k_E), JS::SCRIPTVAR_DOUBLE)).getVar());
 
 	// --- Math and Trigonometry functions ---
 	tinyJS->addNative("function Math.abs(a)", scMathAbs, 0);
