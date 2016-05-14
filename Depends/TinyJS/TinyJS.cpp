@@ -64,14 +64,15 @@
 using namespace std;
 using namespace JS;
 
-#ifdef _WIN32
-#	ifdef _DEBUG
-#		ifndef DBG_NEW
-#			define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-#			define new DBG_NEW
-#		endif
-#	endif
-#endif
+/*replacing or redefining placement new is not allowed; will throw compiler error*/
+//#ifdef _WIN32
+//#	ifdef _DEBUG
+//#		ifndef DBG_NEW
+//#			define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+//#			define new DBG_NEW
+//#		endif
+//#	endif
+//#endif
 
 #ifdef __GNUC__
 #	define vsprintf_s vsnprintf

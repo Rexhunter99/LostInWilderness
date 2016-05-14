@@ -12,9 +12,6 @@
 #include "WorldGenerator.h"
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/noise.hpp>
 #include <GL/glew.h>
 
 #include <cstdlib>
@@ -26,7 +23,7 @@
 #include <memory.h>
 #include <stdint.h>
 
-typedef glm::detail::tvec4<GLbyte, glm::precision::defaultp> byte4;
+typedef glm::tvec4<GLbyte, glm::precision::defaultp> byte4;
 
 extern uint32_t chunk_update_count;
 
