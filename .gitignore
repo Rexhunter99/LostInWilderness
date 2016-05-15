@@ -98,13 +98,13 @@ win32.rc
 *.cache
 
 # Code::Blocks filetypes and files
-*.layout
+#*.layout
 *.workspace
 *.cscope_file_list
 *.depend
 lost_in_wilderness.cscope_file_list
 lost_in_wilderness.depend
-lost_in_wilderness.layout
+#lost_in_wilderness.layout
 
 # Windows Operating System specific
 [Tt]humbs.db
