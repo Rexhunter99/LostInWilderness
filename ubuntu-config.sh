@@ -3,10 +3,10 @@
 
 ##
 LIW_CWD=$(pwd)
-LIBLGFW3_DIR="glfw-3.1.1"
-LIBGLFW3_SRC="https://github.com/glfw/glfw/releases/download/3.1.1/glfw-3.1.1.zip"
-LIBPNG_DIR="libpng-1.6.18"
-LIBPNG_SRC="ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.18.tar.gz"
+LIBLGFW3_DIR="glfw-3.1.2"
+LIBGLFW3_SRC="https://github.com/glfw/glfw/releases/download/3.1.2/glfw-3.1.2.zip"
+LIBPNG_DIR="libpng-1.6.21"
+LIBPNG_SRC="ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.21.tar.gz"
 
 ## Install Utilities
 apt-get install cmake
@@ -25,8 +25,8 @@ apt-get install libgl1-mesa-dev libglu1-mesa-dev libglew-dev libglm-dev
 echo Getting the GLFW3 source-code
 wget --quiet --directory-prefix /tmp $LIBGLFW3_SRC
 echo Extracting source-code from zip
-unzip -q -d /tmp /tmp/glfw-3.1.1.zip
-cd /tmp/glfw-3.1.1
+unzip -q -d /tmp /tmp/glfw-3.1.2.zip
+cd /tmp/glfw-3.1.2
 ### Make the project files for Unix specifically
 cmake -G "Unix Makefiles"
 make
@@ -38,8 +38,8 @@ cd $LIW_CWD
 echo Getting the libPNG source-code
 wget --quiet --directory-prefix /tmp $LIBPNG_SRC
 echo Extracting source-code from tarball
-tar -xzf /tmp/libpng-1.6.18.tar.gz -C /tmp
-cd /tmp/libpng-1.6.18
+tar -xzf /tmp/libpng-1.6.21.tar.gz -C /tmp
+cd /tmp/libpng-1.6.21
 ### Configure, make and install the library
 ./configure
 make check
@@ -48,7 +48,7 @@ cp /usr/local/lib/libpng16.so.16 /usr/lib/libpng16.so.16
 cd $LIW_CWD
 
 echo Cleaning up...
-rm -r /tmp/glfw-3.1.1
-rm -r /tmp/libpng-1.6.18
-rm /tmp/glfw-3.1.1.zip*
-rm /tmp/libpng-1.6.18.tar.gz*
+rm -r /tmp/glfw-3.1.2
+rm -r /tmp/libpng-1.6.21
+rm /tmp/glfw-3.1.2.zip*
+rm /tmp/libpng-1.6.21.tar.gz*
