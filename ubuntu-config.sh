@@ -1,14 +1,18 @@
 #!/bin/bash
 # Acquire all development libraries that are needed to build the project
 
+## Install cURL and Wget (if not already installed)
+apt-get install curl wget
+
 ##
-LIW_CWD=$(pwd)
-LIBLGFW3_DIR="glfw-3.1.2"
-LIBGLFW3_SRC="https://github.com/glfw/glfw/releases/download/3.1.2/glfw-3.1.2.zip"
+LIW_CWD=$(pwd) # Current working directory
+LIBGLFW3_VER=$(curl -s https://api.github.com/repos/glfw/glfw/releases | grep tag_name | head --lines=1 | cut --delimiter='"' --fields=4)
+LIBGLFW3_FILENAME=glfw-$LIBGLFW3_VER #.tar.gz
+LIBGLFW3_SRC=$(curl -s https://api.github.com/repos/glfw/glfw/releases | grep tarball_url | head --lines=1 | cut --delimiter='"' --fields=4)
 LIBPNG_DIR="libpng-1.6.21"
 LIBPNG_SRC="ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.21.tar.gz"
 
-## Install Utilities
+## Install Build Utilities
 apt-get install cmake
 
 ## Install X Org/X11 libraries
@@ -23,10 +27,10 @@ apt-get install libgl1-mesa-dev libglu1-mesa-dev libglew-dev libglm-dev
 
 ## We have to get the GLFW3 library
 echo Getting the GLFW3 source-code
-wget --quiet --directory-prefix /tmp $LIBGLFW3_SRC
-echo Extracting source-code from zip
-unzip -q -d /tmp /tmp/glfw-3.1.2.zip
-cd /tmp/glfw-3.1.2
+wget --quiet --directory-prefix=/tmp --output-document=$LIBGLFW3_FILENAME.tar.gz $LIBGLFW3_SRC
+echo Extracting source-code from archive $LIBGLFW3_FILENAME.tar.gz
+tar -xzf /tmp /tmp/$LIBGLFW3_FILENAME.tar.gz
+cd /tmp/$LIBGLFW3_FILENAME
 ### Make the project files for Unix specifically
 cmake -G "Unix Makefiles"
 make
@@ -48,7 +52,7 @@ cp /usr/local/lib/libpng16.so.16 /usr/lib/libpng16.so.16
 cd $LIW_CWD
 
 echo Cleaning up...
-rm -r /tmp/glfw-3.1.2
+rm -r /tmp/$LIBGLFW3_FILENAME
 rm -r /tmp/libpng-1.6.21
-rm /tmp/glfw-3.1.2.zip*
+rm /tmp/$LIBGLFW3_FILENAME.tar.gz*
 rm /tmp/libpng-1.6.21.tar.gz*
