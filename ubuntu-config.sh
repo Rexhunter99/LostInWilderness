@@ -6,11 +6,13 @@ apt-get install curl wget
 
 ##
 LIW_CWD=$(pwd) # Current working directory
-LIBGLFW3_VER=$(curl -s https://api.github.com/repos/glfw/glfw/releases | grep tag_name | head --lines=1 | cut --delimiter='"' --fields=4)
-LIBGLFW3_FILENAME=glfw-$LIBGLFW3_VER #.tar.gz
-LIBGLFW3_SRC=$(curl -s https://api.github.com/repos/glfw/glfw/releases | grep tarball_url | head --lines=1 | cut --delimiter='"' --fields=4)
-LIBPNG_DIR="libpng-1.6.21"
-LIBPNG_SRC="ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.21.tar.gz"
+LIBGLFW3_VER=$(curl --silent https://api.github.com/repos/glfw/glfw/releases | grep tag_name | head --lines=1 | cut --delimiter='"' -f 4)
+LIBGLFW3_FILENAME="glfw-$LIBGLFW3_VER" #.tar.gz
+LIBGLFW3_SRC=$(curl --silent https://api.github.com/repos/glfw/glfw/releases | grep tarball_url | head --lines=1 | cut --delimiter='"' -f 4)
+
+LIBPNG_VER=${$(curl --silent ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/ | awk '/sortable_data/ && /*.tar.xz$/' | head --lines=1 | cut --delimiter='"' -f 2):1}
+LIBPNG_FILENAME="libpng-$LIBPNG_VER" #.tar.xz
+LIBPNG_SRC=$(curl --silent ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/ | awk '/sortable_data/ && /*.tar.xz$/' | head --lines=1 | cut --delimiter='"' -f 8)
 
 ## Install Build Utilities
 apt-get install cmake
@@ -40,10 +42,10 @@ cd $LIW_CWD
 
 ## We also have to get the libPNG-1.6 library manually
 echo Getting the libPNG source-code
-wget --quiet --directory-prefix /tmp $LIBPNG_SRC
-echo Extracting source-code from tarball
-tar -xzf /tmp/libpng-1.6.21.tar.gz -C /tmp
-cd /tmp/libpng-1.6.21
+wget --quiet --directory-prefix=/tmp --output-document=$LIBPNG_FILENAME.tar.xz $LIBPNG_SRC
+echo Extracting source-code from archive $LIBPNG_FILENAME.tar.xz
+xz -d /tmp/$LIBPNG_FILENAME.tar.xz
+cd /tmp/$LIBPNG_FILENAME
 ### Configure, make and install the library
 ./configure
 make check
@@ -53,6 +55,7 @@ cd $LIW_CWD
 
 echo Cleaning up...
 rm -r /tmp/$LIBGLFW3_FILENAME
-rm -r /tmp/libpng-1.6.21
+rm -r /tmp/$LIBPNG_FILENAME
 rm /tmp/$LIBGLFW3_FILENAME.tar.gz*
-rm /tmp/libpng-1.6.21.tar.gz*
+# Note: xz does this automatically on successful decompress unless -k or --keep is specified
+#rm /tmp/$LIBPNG_FILENAME.tar.xz*
