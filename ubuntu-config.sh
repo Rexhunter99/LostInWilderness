@@ -27,6 +27,9 @@ apt-get install libgl1-mesa-dev libglu1-mesa-dev libglew-dev libglm-dev
 # Note: this script will download and configure the libpng16 library
 #apt-get install libpng12-dev
 
+## Install Archive Utilities
+apt-get install xz-utils
+
 ## We have to get the GLFW3 library
 echo Getting the GLFW3 source-code
 wget --quiet --directory-prefix=/tmp --output-document=$LIBGLFW3_FILENAME.tar.gz $LIBGLFW3_SRC
@@ -44,7 +47,7 @@ cd $LIW_CWD
 echo Getting the libPNG source-code
 wget --quiet --directory-prefix=/tmp --output-document=$LIBPNG_FILENAME.tar.xz $LIBPNG_SRC
 echo Extracting source-code from archive $LIBPNG_FILENAME.tar.xz
-xz -d /tmp/$LIBPNG_FILENAME.tar.xz
+tar -xJf /tmp/$LIBPNG_FILENAME.tar.xz
 cd /tmp/$LIBPNG_FILENAME
 ### Configure, make and install the library
 ./configure
@@ -57,5 +60,5 @@ echo Cleaning up...
 rm -r /tmp/$LIBGLFW3_FILENAME
 rm -r /tmp/$LIBPNG_FILENAME
 rm /tmp/$LIBGLFW3_FILENAME.tar.gz*
-# Note: xz does this automatically on successful decompress unless -k or --keep is specified
-#rm /tmp/$LIBPNG_FILENAME.tar.xz*
+# Note: if using xz (or bzip2), does this automatically on successful decompress unless -k or --keep is specified
+rm /tmp/$LIBPNG_FILENAME.tar.xz*
