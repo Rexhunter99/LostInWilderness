@@ -13,10 +13,10 @@ LIBGLFW3_SRC=$(curl --silent https://api.github.com/repos/glfw/glfw/releases | g
 
 LIBPNG_SRC="ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/"
 # This will output something like "libpng-1.6.21.tar.xz"
-LIBPNG_FILENAME=$(curl --silent $LIBPNG_SRC | grep 'tar.xz$' | awk '{print $9}')
-LIBPNG_SRC+=$LIBPNG_FILENAME
+LIBPNG_FILENAME=$(curl --silent "$LIBPNG_SRC" | grep 'tar.xz$' | awk '{print $9}')
+LIBPNG_SRC+="$LIBPNG_FILENAME"
 # Remove extension to use as folder name
-LIBPNG_NAME=${LIBPNG_FILENAME%%'.tar.xz'}
+LIBPNG_NAME="${LIBPNG_FILENAME%%'.tar.xz'}"
 
 ## Install Build Utilities
 apt-get install cmake
